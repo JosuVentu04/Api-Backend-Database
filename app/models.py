@@ -82,58 +82,45 @@ class Empleado(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     nombre: Mapped[str] = mapped_column(String(120), nullable=False)
-    is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    fecha_verificacion: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    # ---- verificación de correo ----
+    is_verified: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default=text("false"), nullable=False
+    )
+    fecha_verificacion: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
     estado_usuario: Mapped[EstadoUsuario] = mapped_column(
-        SqlEnum(
-            EstadoUsuario,
-            name="estado_usuario_enum",
-            native_enum=False,
-            validate_strings=True
-        ),
+        SqlEnum(EstadoUsuario, name="estado_usuario_enum",
+                native_enum=False, validate_strings=True),
         default=EstadoUsuario.ACTIVO,
         server_default=text("'ACTIVO'"),
         nullable=False
     )
 
-    correo: Mapped[str] = mapped_column(
-        String(120), unique=True, nullable=False, index=True
-    )
-
-    _password_hash: Mapped[str] = mapped_column(
-        "password_hash", String(500), nullable=False
-    )
+    correo: Mapped[str] = mapped_column(String(120), unique=True, nullable=False, index=True)
+    _password_hash: Mapped[str] = mapped_column("password_hash", String(128), nullable=False)
 
     sucursal_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("sucursal.id", ondelete="CASCADE"),
-        nullable=False,
-        index=True
+        Integer, ForeignKey("sucursal.id", ondelete="CASCADE"), nullable=False, index=True
     )
+    sucursal = relationship("Sucursal", back_populates="empleados", lazy="joined")
 
-    # Relación ↔ sucursal
-    sucursal: Mapped[Sucursal] = relationship(
-        "Sucursal",
-        back_populates="empleados",
-        lazy="joined"
-    )
-
-    # ── helpers de seguridad ──
+    # ------------------------------- helpers -------------------------------
     def set_password(self, raw: str) -> None:
         self._password_hash = generate_password_hash(raw)
 
     def check_password(self, raw: str) -> bool:
         return check_password_hash(self._password_hash, raw)
 
-    # ── serializador simple ──
     def serialize(self) -> dict:
         return {
             "id": self.id,
             "nombre": self.nombre,
-            "estado_usuario": self.estado_usuario.value,
             "correo": self.correo,
-            "sucursal_id": self.sucursal_id
+            "estado_usuario": self.estado_usuario.value,
+            "sucursal_id": self.sucursal_id,
+            "is_verified": self.is_verified           # ← ahora sí lo expones
         }
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f"<Empleado {self.id} – {self.correo}>"
