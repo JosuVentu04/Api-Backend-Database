@@ -1,21 +1,28 @@
-# app/routes/main.py
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, jsonify, request, current_app, redirect
 from sqlalchemy.exc import SQLAlchemyError
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from app import db
 from app.models import Empleado, EstadoUsuario, Sucursal, EstadoSucursal
 
 main = Blueprint("main", __name__)
 
-# ──────────────────────────────────────────────
+# ──────────────────────────────
+# Helper para el serializer
+# ──────────────────────────────
+def get_serializer() -> URLSafeTimedSerializer:
+    secret = current_app.config["JWT_SECRET_KEY"]
+    return URLSafeTimedSerializer(secret, salt="verify-email")
+
+# ──────────────────────────────
 # 0. Hello World
-# ──────────────────────────────────────────────
+# ──────────────────────────────
 @main.get("/")
 def index():
     return jsonify(mensaje="Hola mundo desde Flask!")
 
-# ──────────────────────────────────────────────
-# 1.  CRUD  S U C U R S A L
-# ──────────────────────────────────────────────
+# ──────────────────────────────
+# 1. CRUD SUCURSAL
+# ──────────────────────────────
 @main.post("/sucursal")
 def crear_sucursal():
     data = request.get_json() or {}
@@ -61,28 +68,29 @@ def obtener_sucursales():
     ]
     return jsonify(lista)
 
-# ──────────────────────────────────────────────
-# 2.  CRUD  E M P L E A D O
-# ──────────────────────────────────────────────
+# ──────────────────────────────
+# 2. CRUD EMPLEADO
+# ──────────────────────────────
 @main.post("/empleado")
 def crear_empleado():
     data = request.get_json() or {}
 
+    # --- Validaciones mínimas ----------------------
     if not data.get("password"):
         return {"error": "password es requerido"}, 400
     if not data.get("correo"):
         return {"error": "correo es requerido"}, 400
-
-    # correo duplicado
     if Empleado.query.filter_by(correo=data["correo"]).first():
         return {"error": "correo ya registrado"}, 409
+    # -----------------------------------------------
 
     try:
         nuevo = Empleado(
             nombre=data.get("nombre"),
             estado_usuario=EstadoUsuario[data.get("estado_usuario", "ACTIVO")],
             correo=data["correo"],
-            sucursal_id=data.get("sucursal_id")
+            sucursal_id=data.get("sucursal_id"),
+            is_verified=False           # queda NO verificado
         )
         nuevo.set_password(data["password"])
         db.session.add(nuevo)
@@ -92,30 +100,39 @@ def crear_empleado():
         current_app.logger.exception("Fallo al crear empleado")
         return {"error": "error interno del servidor"}, 500
 
-    return jsonify(mensaje="Usuario creado", id=nuevo.id), 201
+    # ---- generar token y enviar correo ------------
+    ts = get_serializer()
+    token = ts.dumps(nuevo.correo)
+    origin = current_app.config.get('FRONTEND_URL') \
+             or request.host_url.rstrip('/')
+
+    link = f"{origin}/confirmar-correo/{token}"
+    link  = f"{current_app.config['DEV_FRONTEND_URL']}/confirmar-correo/{token}"
+
+    current_app.logger.info("LINK DEV ➜ %s", link)   # desarrollo
+    # send_email(nuevo.correo, "Confirma tu cuenta", link)  # producción
+    # -----------------------------------------------
+
+    return jsonify(
+        mensaje="Empleado creado. Revisa tu correo para confirmar la cuenta.",
+        id=nuevo.id
+    ), 201
 
 
 @main.get("/empleados")
 def obtener_empleados():
     empleados = Empleado.query.all()
-    lista = [
-        {
-            "id": e.id,
-            "nombre": e.nombre,
-            "estado_usuario": e.estado_usuario.value,
-            "correo": e.correo,
-            "is_verified": e.is_verified
-        }
-        for e in empleados
-    ]
+    lista = [e.serialize() for e in empleados]
     return jsonify(lista)
 
-# ──────────────────────────────────────────────
-# 3.  End-point de demostración
-# ──────────────────────────────────────────────
+# ──────────────────────────────
+# 3. Confirmación de correo
+# ──────────────────────────────
+# ──────────────────────────────
+# 4. Demo
+# ──────────────────────────────
 @main.get("/empleado-demo")
 def empleado_demo():
     return jsonify(nombre="Ana", estado_usuario="ACTIVO")
-
 
 

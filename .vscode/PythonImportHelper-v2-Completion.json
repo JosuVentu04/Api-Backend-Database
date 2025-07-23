@@ -1,0 +1,1494 @@
+[
+    {
+        "label": "Blueprint",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "url_for",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "current_app",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Blueprint",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "current_app",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "current_app",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "current_app",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "current_app",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "create_access_token",
+        "importPath": "flask_jwt_extended",
+        "description": "flask_jwt_extended",
+        "isExtraImport": true,
+        "detail": "flask_jwt_extended",
+        "documentation": {}
+    },
+    {
+        "label": "SQLAlchemyError",
+        "importPath": "sqlalchemy.exc",
+        "description": "sqlalchemy.exc",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.exc",
+        "documentation": {}
+    },
+    {
+        "label": "SQLAlchemyError",
+        "importPath": "sqlalchemy.exc",
+        "description": "sqlalchemy.exc",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.exc",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "generate_email_token",
+        "importPath": "app.utils",
+        "description": "app.utils",
+        "isExtraImport": true,
+        "detail": "app.utils",
+        "documentation": {}
+    },
+    {
+        "label": "confirm_email_token",
+        "importPath": "app.utils",
+        "description": "app.utils",
+        "isExtraImport": true,
+        "detail": "app.utils",
+        "documentation": {}
+    },
+    {
+        "label": "send_email",
+        "importPath": "app.utils",
+        "description": "app.utils",
+        "isExtraImport": true,
+        "detail": "app.utils",
+        "documentation": {}
+    },
+    {
+        "label": "Empleado",
+        "importPath": "app.models",
+        "description": "app.models",
+        "isExtraImport": true,
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "importPath": "app.models",
+        "description": "app.models",
+        "isExtraImport": true,
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "Empleado",
+        "importPath": "app.models",
+        "description": "app.models",
+        "isExtraImport": true,
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "EstadoUsuario",
+        "importPath": "app.models",
+        "description": "app.models",
+        "isExtraImport": true,
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "Sucursal",
+        "importPath": "app.models",
+        "description": "app.models",
+        "isExtraImport": true,
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "EstadoSucursal",
+        "importPath": "app.models",
+        "description": "app.models",
+        "isExtraImport": true,
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "URLSafeTimedSerializer",
+        "importPath": "itsdangerous",
+        "description": "itsdangerous",
+        "isExtraImport": true,
+        "detail": "itsdangerous",
+        "documentation": {}
+    },
+    {
+        "label": "SignatureExpired",
+        "importPath": "itsdangerous",
+        "description": "itsdangerous",
+        "isExtraImport": true,
+        "detail": "itsdangerous",
+        "documentation": {}
+    },
+    {
+        "label": "BadSignature",
+        "importPath": "itsdangerous",
+        "description": "itsdangerous",
+        "isExtraImport": true,
+        "detail": "itsdangerous",
+        "documentation": {}
+    },
+    {
+        "label": "URLSafeTimedSerializer",
+        "importPath": "itsdangerous",
+        "description": "itsdangerous",
+        "isExtraImport": true,
+        "detail": "itsdangerous",
+        "documentation": {}
+    },
+    {
+        "label": "BadSignature",
+        "importPath": "itsdangerous",
+        "description": "itsdangerous",
+        "isExtraImport": true,
+        "detail": "itsdangerous",
+        "documentation": {}
+    },
+    {
+        "label": "SignatureExpired",
+        "importPath": "itsdangerous",
+        "description": "itsdangerous",
+        "isExtraImport": true,
+        "detail": "itsdangerous",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "importPath": "app",
+        "description": "app",
+        "isExtraImport": true,
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "importPath": "app",
+        "description": "app",
+        "isExtraImport": true,
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "create_app",
+        "importPath": "app",
+        "description": "app",
+        "isExtraImport": true,
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "create_app",
+        "importPath": "app",
+        "description": "app",
+        "isExtraImport": true,
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "Enum",
+        "importPath": "enum",
+        "description": "enum",
+        "isExtraImport": true,
+        "detail": "enum",
+        "documentation": {}
+    },
+    {
+        "label": "sqlalchemy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Enum",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "String",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "DateTime",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Integer",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "ForeignKey",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Boolean",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "text",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "func",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Mapped",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "mapped_column",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "relationship",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "generate_password_hash",
+        "importPath": "werkzeug.security",
+        "description": "werkzeug.security",
+        "isExtraImport": true,
+        "detail": "werkzeug.security",
+        "documentation": {}
+    },
+    {
+        "label": "check_password_hash",
+        "importPath": "werkzeug.security",
+        "description": "werkzeug.security",
+        "isExtraImport": true,
+        "detail": "werkzeug.security",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "smtplib,",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "smtplib.",
+        "description": "smtplib.",
+        "detail": "smtplib.",
+        "documentation": {}
+    },
+    {
+        "label": "EmailMessage",
+        "importPath": "email.message",
+        "description": "email.message",
+        "isExtraImport": true,
+        "detail": "email.message",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "context",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "postgresql",
+        "importPath": "sqlalchemy.dialects",
+        "description": "sqlalchemy.dialects",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.dialects",
+        "documentation": {}
+    },
+    {
+        "label": "postgresql",
+        "importPath": "sqlalchemy.dialects",
+        "description": "sqlalchemy.dialects",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.dialects",
+        "documentation": {}
+    },
+    {
+        "label": "postgresql",
+        "importPath": "sqlalchemy.dialects",
+        "description": "sqlalchemy.dialects",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.dialects",
+        "documentation": {}
+    },
+    {
+        "label": "postgresql",
+        "importPath": "sqlalchemy.dialects",
+        "description": "sqlalchemy.dialects",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.dialects",
+        "documentation": {}
+    },
+    {
+        "label": "postgresql",
+        "importPath": "sqlalchemy.dialects",
+        "description": "sqlalchemy.dialects",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.dialects",
+        "documentation": {}
+    },
+    {
+        "label": "postgresql",
+        "importPath": "sqlalchemy.dialects",
+        "description": "sqlalchemy.dialects",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.dialects",
+        "documentation": {}
+    },
+    {
+        "label": "postgresql",
+        "importPath": "sqlalchemy.dialects",
+        "description": "sqlalchemy.dialects",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.dialects",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "fileConfig",
+        "importPath": "logging.config",
+        "description": "logging.config",
+        "isExtraImport": true,
+        "detail": "logging.config",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "enviar_verificacion",
+        "kind": 2,
+        "importPath": "app.routes.auth",
+        "description": "app.routes.auth",
+        "peekOfCode": "def enviar_verificacion():\n    data = request.get_json() or {}\n    correo = data.get(\"correo\")\n    if not correo:\n        return {\"error\": \"correo requerido\"}, 400\n    empleado = Empleado.query.filter_by(correo=correo).first()\n    if not empleado:\n        return {\"error\": \"usuario no encontrado\"}, 404\n    token = generate_email_token(correo)\n    link  = url_for(\"auth.confirmar_correo\", token=token, _external=True)",
+        "detail": "app.routes.auth",
+        "documentation": {}
+    },
+    {
+        "label": "confirmar_correo",
+        "kind": 2,
+        "importPath": "app.routes.auth",
+        "description": "app.routes.auth",
+        "peekOfCode": "def confirmar_correo(token):\n    correo = confirm_email_token(token)\n    if not correo:\n        return {\"error\": \"token inválido o expirado\"}, 400\n    empleado = Empleado.query.filter_by(correo=correo).first()\n    if not empleado:\n        return {\"error\": \"usuario no encontrado\"}, 404\n    if empleado.is_verified:                       # ← usa el campo real\n        return {\"msg\": \"ya estaba verificado\"}, 200\n    empleado.is_verified = True",
+        "detail": "app.routes.auth",
+        "documentation": {}
+    },
+    {
+        "label": "login",
+        "kind": 2,
+        "importPath": "app.routes.auth",
+        "description": "app.routes.auth",
+        "peekOfCode": "def login():\n    data = request.get_json() or {}\n    correo   = data.get(\"correo\")\n    password = data.get(\"password\")\n    if not correo or not password:\n        return {\"msg\": \"correo y password requeridos\"}, 400\n    emp = Empleado.query.filter_by(correo=correo).first()\n    if not emp or not emp.check_password(password):\n        return {\"msg\": \"credenciales inválidas\"}, 401\n    if not emp.is_verified:",
+        "detail": "app.routes.auth",
+        "documentation": {}
+    },
+    {
+        "label": "bp",
+        "kind": 5,
+        "importPath": "app.routes.auth",
+        "description": "app.routes.auth",
+        "peekOfCode": "bp = Blueprint(\"auth\", __name__, url_prefix=\"/auth\")   # ← prefijo único\n# ────────────────────────────\n# 1) Enviar link de verificación\n# ────────────────────────────\n@bp.post(\"/enviar-verificacion\")\ndef enviar_verificacion():\n    data = request.get_json() or {}\n    correo = data.get(\"correo\")\n    if not correo:\n        return {\"error\": \"correo requerido\"}, 400",
+        "detail": "app.routes.auth",
+        "documentation": {}
+    },
+    {
+        "label": "get_serializer",
+        "kind": 2,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "def get_serializer() -> URLSafeTimedSerializer:\n    secret = current_app.config[\"JWT_SECRET_KEY\"]\n    return URLSafeTimedSerializer(secret, salt=\"verify-email\")\n# ──────────────────────────────\n# 0. Hello World\n# ──────────────────────────────\n@main.get(\"/\")\ndef index():\n    return jsonify(mensaje=\"Hola mundo desde Flask!\")\n# ──────────────────────────────",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "index",
+        "kind": 2,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "def index():\n    return jsonify(mensaje=\"Hola mundo desde Flask!\")\n# ──────────────────────────────\n# 1. CRUD SUCURSAL\n# ──────────────────────────────\n@main.post(\"/sucursal\")\ndef crear_sucursal():\n    data = request.get_json() or {}\n    if not data.get(\"nombre\"):\n        return {\"error\": \"El nombre de la sucursal es requerido\"}, 400",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "crear_sucursal",
+        "kind": 2,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "def crear_sucursal():\n    data = request.get_json() or {}\n    if not data.get(\"nombre\"):\n        return {\"error\": \"El nombre de la sucursal es requerido\"}, 400\n    if not data.get(\"direccion\"):\n        return {\"error\": \"La dirección es requerida\"}, 400\n    if not data.get(\"numero_telefono\"):\n        return {\"error\": \"El teléfono es requerido\"}, 400\n    try:\n        nueva = Sucursal(",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_sucursales",
+        "kind": 2,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "def obtener_sucursales():\n    sucursales = Sucursal.query.all()\n    lista = [\n        {\n            \"id\": s.id,\n            \"nombre\": s.nombre,\n            \"estado_sucursal\": s.estado_sucursal.value,\n            \"direccion\": s.direccion,\n            \"numero_telefonico\": s.numero_telefonico,\n            \"fecha_apertura\": s.fecha_apertura.isoformat() if s.fecha_apertura else None,",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "crear_empleado",
+        "kind": 2,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "def crear_empleado():\n    data = request.get_json() or {}\n    # --- Validaciones mínimas ----------------------\n    if not data.get(\"password\"):\n        return {\"error\": \"password es requerido\"}, 400\n    if not data.get(\"correo\"):\n        return {\"error\": \"correo es requerido\"}, 400\n    if Empleado.query.filter_by(correo=data[\"correo\"]).first():\n        return {\"error\": \"correo ya registrado\"}, 409\n    # -----------------------------------------------",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_empleados",
+        "kind": 2,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "def obtener_empleados():\n    empleados = Empleado.query.all()\n    lista = [e.serialize() for e in empleados]\n    return jsonify(lista)\n# ──────────────────────────────\n# 3. Confirmación de correo\n# ──────────────────────────────\n# ──────────────────────────────\n# 4. Demo\n# ──────────────────────────────",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "empleado_demo",
+        "kind": 2,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "def empleado_demo():\n    return jsonify(nombre=\"Ana\", estado_usuario=\"ACTIVO\")",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 5,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "main = Blueprint(\"main\", __name__)\n# ──────────────────────────────\n# Helper para el serializer\n# ──────────────────────────────\ndef get_serializer() -> URLSafeTimedSerializer:\n    secret = current_app.config[\"JWT_SECRET_KEY\"]\n    return URLSafeTimedSerializer(secret, salt=\"verify-email\")\n# ──────────────────────────────\n# 0. Hello World\n# ──────────────────────────────",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "EstadoUsuario",
+        "kind": 6,
+        "importPath": "app.models",
+        "description": "app.models",
+        "peekOfCode": "class EstadoUsuario(PyEnum):\n    ACTIVO   = \"ACTIVO\"\n    INACTIVO = \"INACTIVO\"\nclass EstadoSucursal(PyEnum):\n    ACTIVA     = \"ACTIVA\"\n    CERRADA    = \"CERRADA\"\n    SUSPENDIDA = \"SUSPENDIDA\"\n# ──────────────────────────────────────────────\n#  Modelo Sucursal\n# ──────────────────────────────────────────────",
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "EstadoSucursal",
+        "kind": 6,
+        "importPath": "app.models",
+        "description": "app.models",
+        "peekOfCode": "class EstadoSucursal(PyEnum):\n    ACTIVA     = \"ACTIVA\"\n    CERRADA    = \"CERRADA\"\n    SUSPENDIDA = \"SUSPENDIDA\"\n# ──────────────────────────────────────────────\n#  Modelo Sucursal\n# ──────────────────────────────────────────────\nclass Sucursal(db.Model):\n    __tablename__ = \"sucursal\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)",
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "Sucursal",
+        "kind": 6,
+        "importPath": "app.models",
+        "description": "app.models",
+        "peekOfCode": "class Sucursal(db.Model):\n    __tablename__ = \"sucursal\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    nombre: Mapped[str] = mapped_column(\n        String(120), nullable=False, index=True\n    )\n    estado_sucursal: Mapped[EstadoSucursal] = mapped_column(\n        SqlEnum(\n            EstadoSucursal,\n            name=\"estado_sucursal_enum\",",
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "Empleado",
+        "kind": 6,
+        "importPath": "app.models",
+        "description": "app.models",
+        "peekOfCode": "class Empleado(db.Model):\n    __tablename__ = \"empleado\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    nombre: Mapped[str] = mapped_column(String(120), nullable=False)\n    # ---- verificación de correo ----\n    is_verified: Mapped[bool] = mapped_column(\n        Boolean, default=False, server_default=text(\"false\"), nullable=False\n    )\n    fecha_verificacion: Mapped[datetime] = mapped_column(DateTime(timezone=True))\n    estado_usuario: Mapped[EstadoUsuario] = mapped_column(",
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "generate_email_token",
+        "kind": 2,
+        "importPath": "app.utils",
+        "description": "app.utils",
+        "peekOfCode": "def generate_email_token(email: str) -> str:\n    \"\"\"\n    Cifra y firma el correo, devolviendo un token seguro que incluye timestamp.\n    \"\"\"\n    return _get_serializer().dumps(email)\ndef confirm_email_token(token: str, max_age: int = 3600) -> Optional[str]:\n    \"\"\"\n    Valida el token. Si es correcto y no ha expirado, devuelve el email;\n    en caso contrario, devuelve None.\n    Parámetros",
+        "detail": "app.utils",
+        "documentation": {}
+    },
+    {
+        "label": "confirm_email_token",
+        "kind": 2,
+        "importPath": "app.utils",
+        "description": "app.utils",
+        "peekOfCode": "def confirm_email_token(token: str, max_age: int = 3600) -> Optional[str]:\n    \"\"\"\n    Valida el token. Si es correcto y no ha expirado, devuelve el email;\n    en caso contrario, devuelve None.\n    Parámetros\n    ----------\n    token : str\n        Token recibido, típicamente vía link de verificación.\n    max_age : int\n        Tiempo máximo de validez en segundos (por defecto 1 h).",
+        "detail": "app.utils",
+        "documentation": {}
+    },
+    {
+        "label": "send_email",
+        "kind": 2,
+        "importPath": "app.utils",
+        "description": "app.utils",
+        "peekOfCode": "def send_email(subject: str, body: str, to: str):\n    cfg = current_app.config\n    msg = EmailMessage()\n    msg[\"Subject\"] = subject\n    msg[\"From\"] = cfg[\"MAIL_USERNAME\"]\n    msg[\"To\"]   = to\n    msg.set_content(body, subtype=\"html\")\n    context = ssl.create_default_context()\n    with smtplib.SMTP(cfg[\"MAIL_SERVER\"], cfg[\"MAIL_PORT\"]) as smtp:\n        if cfg[\"MAIL_USE_TLS\"]:",
+        "detail": "app.utils",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.1aeb40bbe4cf_",
+        "description": "migrations.versions.1aeb40bbe4cf_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=255),\n               type_=sa.String(length=255),\n               existing_nullable=False)",
+        "detail": "migrations.versions.1aeb40bbe4cf_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.1aeb40bbe4cf_",
+        "description": "migrations.versions.1aeb40bbe4cf_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('password_hash',\n               existing_type=sa.String(length=128),\n               type_=sa.VARCHAR(length=255),\n               existing_nullable=True)\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)",
+        "detail": "migrations.versions.1aeb40bbe4cf_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.1aeb40bbe4cf_",
+        "description": "migrations.versions.1aeb40bbe4cf_",
+        "peekOfCode": "revision = '1aeb40bbe4cf'\ndown_revision = '5b16f1b229b0'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)",
+        "detail": "migrations.versions.1aeb40bbe4cf_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.1aeb40bbe4cf_",
+        "description": "migrations.versions.1aeb40bbe4cf_",
+        "peekOfCode": "down_revision = '5b16f1b229b0'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',",
+        "detail": "migrations.versions.1aeb40bbe4cf_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.1aeb40bbe4cf_",
+        "description": "migrations.versions.1aeb40bbe4cf_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=255),",
+        "detail": "migrations.versions.1aeb40bbe4cf_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.1aeb40bbe4cf_",
+        "description": "migrations.versions.1aeb40bbe4cf_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=255),\n               type_=sa.String(length=255),",
+        "detail": "migrations.versions.1aeb40bbe4cf_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.3602271406fd_",
+        "description": "migrations.versions.3602271406fd_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('email_verificado', sa.Boolean(), server_default=sa.text('false'), nullable=False))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.drop_column('email_verificado')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.3602271406fd_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.3602271406fd_",
+        "description": "migrations.versions.3602271406fd_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.drop_column('email_verificado')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.3602271406fd_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.3602271406fd_",
+        "description": "migrations.versions.3602271406fd_",
+        "peekOfCode": "revision = '3602271406fd'\ndown_revision = '8251dd184efd'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('email_verificado', sa.Boolean(), server_default=sa.text('false'), nullable=False))\n    # ### end Alembic commands ###\ndef downgrade():",
+        "detail": "migrations.versions.3602271406fd_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.3602271406fd_",
+        "description": "migrations.versions.3602271406fd_",
+        "peekOfCode": "down_revision = '8251dd184efd'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('email_verificado', sa.Boolean(), server_default=sa.text('false'), nullable=False))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###",
+        "detail": "migrations.versions.3602271406fd_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.3602271406fd_",
+        "description": "migrations.versions.3602271406fd_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('email_verificado', sa.Boolean(), server_default=sa.text('false'), nullable=False))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:",
+        "detail": "migrations.versions.3602271406fd_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.3602271406fd_",
+        "description": "migrations.versions.3602271406fd_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('email_verificado', sa.Boolean(), server_default=sa.text('false'), nullable=False))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.drop_column('email_verificado')",
+        "detail": "migrations.versions.3602271406fd_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "description": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_sucursal', sa.Enum('ACTIVA', 'CERRADA', 'SUSPENDIDA', name='estado_sucursal_enum', native_enum=False), server_default=sa.text(\"'ACTIVA'\"), nullable=False),\n    sa.Column('direccion', sa.String(length=255), nullable=False),\n    sa.Column('numero_telefonico', sa.String(length=12), nullable=False),\n    sa.Column('fecha_apertura', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),\n    sa.Column('fecha_clausura', sa.DateTime(timezone=True), nullable=False),",
+        "detail": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "description": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_sucursal',\n    sa.Column('id', sa.INTEGER(), autoincrement=True, nullable=False),\n    sa.Column('nombre', sa.VARCHAR(length=120), autoincrement=False, nullable=False),\n    sa.Column('estado_usuario', postgresql.ENUM('ACTIVO', 'INACTIVO', name='estado_usuario_enum'), autoincrement=False, nullable=False),\n    sa.Column('correo', sa.VARCHAR(length=120), autoincrement=False, nullable=False),\n    sa.Column('password', sa.VARCHAR(length=128), autoincrement=False, nullable=False),\n    sa.PrimaryKeyConstraint('id', name=op.f('empleado_sucursal_pkey'))\n    )",
+        "detail": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "description": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "peekOfCode": "revision = '51c2375b82ef'\ndown_revision = '5ac3a84ed671'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_sucursal', sa.Enum('ACTIVA', 'CERRADA', 'SUSPENDIDA', name='estado_sucursal_enum', native_enum=False), server_default=sa.text(\"'ACTIVA'\"), nullable=False),",
+        "detail": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "description": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "peekOfCode": "down_revision = '5ac3a84ed671'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_sucursal', sa.Enum('ACTIVA', 'CERRADA', 'SUSPENDIDA', name='estado_sucursal_enum', native_enum=False), server_default=sa.text(\"'ACTIVA'\"), nullable=False),\n    sa.Column('direccion', sa.String(length=255), nullable=False),",
+        "detail": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "description": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_sucursal', sa.Enum('ACTIVA', 'CERRADA', 'SUSPENDIDA', name='estado_sucursal_enum', native_enum=False), server_default=sa.text(\"'ACTIVA'\"), nullable=False),\n    sa.Column('direccion', sa.String(length=255), nullable=False),\n    sa.Column('numero_telefonico', sa.String(length=12), nullable=False),",
+        "detail": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "description": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_sucursal', sa.Enum('ACTIVA', 'CERRADA', 'SUSPENDIDA', name='estado_sucursal_enum', native_enum=False), server_default=sa.text(\"'ACTIVA'\"), nullable=False),\n    sa.Column('direccion', sa.String(length=255), nullable=False),\n    sa.Column('numero_telefonico', sa.String(length=12), nullable=False),\n    sa.Column('fecha_apertura', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),",
+        "detail": "migrations.versions.51c2375b82ef_modelo_de_sucursal_y_de_empleado_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.53da6b12b55f_migración_limpia",
+        "description": "migrations.versions.53da6b12b55f_migración_limpia",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_usuario',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estadousuario'), nullable=False),\n    sa.PrimaryKeyConstraint('id')\n    )\n    # ### end Alembic commands ###\ndef downgrade():",
+        "detail": "migrations.versions.53da6b12b55f_migración_limpia",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.53da6b12b55f_migración_limpia",
+        "description": "migrations.versions.53da6b12b55f_migración_limpia",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.drop_table('empleado_usuario')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.53da6b12b55f_migración_limpia",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.53da6b12b55f_migración_limpia",
+        "description": "migrations.versions.53da6b12b55f_migración_limpia",
+        "peekOfCode": "revision = '53da6b12b55f'\ndown_revision = None\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_usuario',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estadousuario'), nullable=False),",
+        "detail": "migrations.versions.53da6b12b55f_migración_limpia",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.53da6b12b55f_migración_limpia",
+        "description": "migrations.versions.53da6b12b55f_migración_limpia",
+        "peekOfCode": "down_revision = None\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_usuario',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estadousuario'), nullable=False),\n    sa.PrimaryKeyConstraint('id')",
+        "detail": "migrations.versions.53da6b12b55f_migración_limpia",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.53da6b12b55f_migración_limpia",
+        "description": "migrations.versions.53da6b12b55f_migración_limpia",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_usuario',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estadousuario'), nullable=False),\n    sa.PrimaryKeyConstraint('id')\n    )",
+        "detail": "migrations.versions.53da6b12b55f_migración_limpia",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.53da6b12b55f_migración_limpia",
+        "description": "migrations.versions.53da6b12b55f_migración_limpia",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_usuario',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estadousuario'), nullable=False),\n    sa.PrimaryKeyConstraint('id')\n    )\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.53da6b12b55f_migración_limpia",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.5ac3a84ed671_",
+        "description": "migrations.versions.5ac3a84ed671_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estado_usuario_enum'), nullable=False),\n    sa.Column('correo', sa.String(length=120), nullable=False),\n    sa.Column('password', sa.String(length=128), nullable=False),\n    sa.PrimaryKeyConstraint('id')\n    )",
+        "detail": "migrations.versions.5ac3a84ed671_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.5ac3a84ed671_",
+        "description": "migrations.versions.5ac3a84ed671_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_usuario',\n    sa.Column('id', sa.INTEGER(), autoincrement=True, nullable=False),\n    sa.Column('nombre', sa.VARCHAR(length=120), autoincrement=False, nullable=False),\n    sa.Column('estado_usuario', postgresql.ENUM('ACTIVO', 'INACTIVO', name='estadousuario'), autoincrement=False, nullable=False),\n    sa.PrimaryKeyConstraint('id', name=op.f('empleado_usuario_pkey'))\n    )\n    op.drop_table('empleado_sucursal')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.5ac3a84ed671_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.5ac3a84ed671_",
+        "description": "migrations.versions.5ac3a84ed671_",
+        "peekOfCode": "revision = '5ac3a84ed671'\ndown_revision = '53da6b12b55f'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estado_usuario_enum'), nullable=False),",
+        "detail": "migrations.versions.5ac3a84ed671_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.5ac3a84ed671_",
+        "description": "migrations.versions.5ac3a84ed671_",
+        "peekOfCode": "down_revision = '53da6b12b55f'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estado_usuario_enum'), nullable=False),\n    sa.Column('correo', sa.String(length=120), nullable=False),",
+        "detail": "migrations.versions.5ac3a84ed671_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.5ac3a84ed671_",
+        "description": "migrations.versions.5ac3a84ed671_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estado_usuario_enum'), nullable=False),\n    sa.Column('correo', sa.String(length=120), nullable=False),\n    sa.Column('password', sa.String(length=128), nullable=False),",
+        "detail": "migrations.versions.5ac3a84ed671_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.5ac3a84ed671_",
+        "description": "migrations.versions.5ac3a84ed671_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('empleado_sucursal',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('nombre', sa.String(length=120), nullable=False),\n    sa.Column('estado_usuario', sa.Enum('ACTIVO', 'INACTIVO', name='estado_usuario_enum'), nullable=False),\n    sa.Column('correo', sa.String(length=120), nullable=False),\n    sa.Column('password', sa.String(length=128), nullable=False),\n    sa.PrimaryKeyConstraint('id')",
+        "detail": "migrations.versions.5ac3a84ed671_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.5b16f1b229b0_",
+        "description": "migrations.versions.5b16f1b229b0_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=500),\n               type_=sa.String(length=255),\n               existing_nullable=False)",
+        "detail": "migrations.versions.5b16f1b229b0_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.5b16f1b229b0_",
+        "description": "migrations.versions.5b16f1b229b0_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('password_hash',\n               existing_type=sa.String(length=128),\n               type_=sa.VARCHAR(length=500),\n               existing_nullable=False)\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)",
+        "detail": "migrations.versions.5b16f1b229b0_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.5b16f1b229b0_",
+        "description": "migrations.versions.5b16f1b229b0_",
+        "peekOfCode": "revision = '5b16f1b229b0'\ndown_revision = 'dd5a117c2fca'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)",
+        "detail": "migrations.versions.5b16f1b229b0_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.5b16f1b229b0_",
+        "description": "migrations.versions.5b16f1b229b0_",
+        "peekOfCode": "down_revision = 'dd5a117c2fca'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',",
+        "detail": "migrations.versions.5b16f1b229b0_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.5b16f1b229b0_",
+        "description": "migrations.versions.5b16f1b229b0_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=500),",
+        "detail": "migrations.versions.5b16f1b229b0_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.5b16f1b229b0_",
+        "description": "migrations.versions.5b16f1b229b0_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=500),\n               type_=sa.String(length=255),",
+        "detail": "migrations.versions.5b16f1b229b0_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.6ccf51ad1887_",
+        "description": "migrations.versions.6ccf51ad1887_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=500),\n               type_=sa.String(length=500),\n               existing_nullable=False)",
+        "detail": "migrations.versions.6ccf51ad1887_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.6ccf51ad1887_",
+        "description": "migrations.versions.6ccf51ad1887_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('email_verificado', sa.BOOLEAN(), server_default=sa.text('false'), autoincrement=False, nullable=False))\n        batch_op.alter_column('password_hash',\n               existing_type=sa.String(length=500),\n               type_=sa.VARCHAR(length=500),\n               existing_nullable=False)\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),",
+        "detail": "migrations.versions.6ccf51ad1887_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.6ccf51ad1887_",
+        "description": "migrations.versions.6ccf51ad1887_",
+        "peekOfCode": "revision = '6ccf51ad1887'\ndown_revision = '3602271406fd'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)",
+        "detail": "migrations.versions.6ccf51ad1887_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.6ccf51ad1887_",
+        "description": "migrations.versions.6ccf51ad1887_",
+        "peekOfCode": "down_revision = '3602271406fd'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',",
+        "detail": "migrations.versions.6ccf51ad1887_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.6ccf51ad1887_",
+        "description": "migrations.versions.6ccf51ad1887_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=500),",
+        "detail": "migrations.versions.6ccf51ad1887_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.6ccf51ad1887_",
+        "description": "migrations.versions.6ccf51ad1887_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=500),\n               type_=sa.String(length=500),",
+        "detail": "migrations.versions.6ccf51ad1887_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.8251dd184efd_",
+        "description": "migrations.versions.8251dd184efd_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('is_verified', sa.Boolean(), nullable=False, server_default=sa.text('false')))\n        batch_op.add_column(sa.Column('fecha_verificacion', sa.DateTime(timezone=True), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.drop_column('fecha_verificacion')",
+        "detail": "migrations.versions.8251dd184efd_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.8251dd184efd_",
+        "description": "migrations.versions.8251dd184efd_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.drop_column('fecha_verificacion')\n        batch_op.drop_column('is_verified')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.8251dd184efd_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.8251dd184efd_",
+        "description": "migrations.versions.8251dd184efd_",
+        "peekOfCode": "revision = '8251dd184efd'\ndown_revision = 'cd9a75c738c6'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('is_verified', sa.Boolean(), nullable=False, server_default=sa.text('false')))\n        batch_op.add_column(sa.Column('fecha_verificacion', sa.DateTime(timezone=True), nullable=True))\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.8251dd184efd_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.8251dd184efd_",
+        "description": "migrations.versions.8251dd184efd_",
+        "peekOfCode": "down_revision = 'cd9a75c738c6'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('is_verified', sa.Boolean(), nullable=False, server_default=sa.text('false')))\n        batch_op.add_column(sa.Column('fecha_verificacion', sa.DateTime(timezone=True), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():",
+        "detail": "migrations.versions.8251dd184efd_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.8251dd184efd_",
+        "description": "migrations.versions.8251dd184efd_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('is_verified', sa.Boolean(), nullable=False, server_default=sa.text('false')))\n        batch_op.add_column(sa.Column('fecha_verificacion', sa.DateTime(timezone=True), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###",
+        "detail": "migrations.versions.8251dd184efd_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.8251dd184efd_",
+        "description": "migrations.versions.8251dd184efd_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('is_verified', sa.Boolean(), nullable=False, server_default=sa.text('false')))\n        batch_op.add_column(sa.Column('fecha_verificacion', sa.DateTime(timezone=True), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:",
+        "detail": "migrations.versions.8251dd184efd_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.cd9a75c738c6_",
+        "description": "migrations.versions.cd9a75c738c6_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('sucursal', schema=None) as batch_op:\n        batch_op.alter_column('fecha_apertura',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True,\n               existing_server_default=sa.text('now()'))\n        batch_op.alter_column('fecha_clausura',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)",
+        "detail": "migrations.versions.cd9a75c738c6_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.cd9a75c738c6_",
+        "description": "migrations.versions.cd9a75c738c6_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('sucursal', schema=None) as batch_op:\n        batch_op.alter_column('fecha_clausura',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=False)\n        batch_op.alter_column('fecha_apertura',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=False,\n               existing_server_default=sa.text('now()'))",
+        "detail": "migrations.versions.cd9a75c738c6_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.cd9a75c738c6_",
+        "description": "migrations.versions.cd9a75c738c6_",
+        "peekOfCode": "revision = 'cd9a75c738c6'\ndown_revision = 'd2deb4db4111'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('sucursal', schema=None) as batch_op:\n        batch_op.alter_column('fecha_apertura',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True,",
+        "detail": "migrations.versions.cd9a75c738c6_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.cd9a75c738c6_",
+        "description": "migrations.versions.cd9a75c738c6_",
+        "peekOfCode": "down_revision = 'd2deb4db4111'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('sucursal', schema=None) as batch_op:\n        batch_op.alter_column('fecha_apertura',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True,\n               existing_server_default=sa.text('now()'))",
+        "detail": "migrations.versions.cd9a75c738c6_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.cd9a75c738c6_",
+        "description": "migrations.versions.cd9a75c738c6_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('sucursal', schema=None) as batch_op:\n        batch_op.alter_column('fecha_apertura',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True,\n               existing_server_default=sa.text('now()'))\n        batch_op.alter_column('fecha_clausura',",
+        "detail": "migrations.versions.cd9a75c738c6_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.cd9a75c738c6_",
+        "description": "migrations.versions.cd9a75c738c6_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('sucursal', schema=None) as batch_op:\n        batch_op.alter_column('fecha_apertura',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True,\n               existing_server_default=sa.text('now()'))\n        batch_op.alter_column('fecha_clausura',\n               existing_type=postgresql.TIMESTAMP(timezone=True),",
+        "detail": "migrations.versions.cd9a75c738c6_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.d2deb4db4111_",
+        "description": "migrations.versions.d2deb4db4111_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=128),\n               type_=sa.String(length=500),\n               existing_nullable=False)\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###",
+        "detail": "migrations.versions.d2deb4db4111_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.d2deb4db4111_",
+        "description": "migrations.versions.d2deb4db4111_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('password_hash',\n               existing_type=sa.String(length=500),\n               type_=sa.VARCHAR(length=128),\n               existing_nullable=False)\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.d2deb4db4111_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.d2deb4db4111_",
+        "description": "migrations.versions.d2deb4db4111_",
+        "peekOfCode": "revision = 'd2deb4db4111'\ndown_revision = '51c2375b82ef'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=128),\n               type_=sa.String(length=500),",
+        "detail": "migrations.versions.d2deb4db4111_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.d2deb4db4111_",
+        "description": "migrations.versions.d2deb4db4111_",
+        "peekOfCode": "down_revision = '51c2375b82ef'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=128),\n               type_=sa.String(length=500),\n               existing_nullable=False)",
+        "detail": "migrations.versions.d2deb4db4111_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.d2deb4db4111_",
+        "description": "migrations.versions.d2deb4db4111_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=128),\n               type_=sa.String(length=500),\n               existing_nullable=False)\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.d2deb4db4111_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.d2deb4db4111_",
+        "description": "migrations.versions.d2deb4db4111_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=128),\n               type_=sa.String(length=500),\n               existing_nullable=False)\n    # ### end Alembic commands ###\ndef downgrade():",
+        "detail": "migrations.versions.d2deb4db4111_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.dd5a117c2fca_",
+        "description": "migrations.versions.dd5a117c2fca_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=500),\n               type_=sa.String(length=500),\n               existing_nullable=False)",
+        "detail": "migrations.versions.dd5a117c2fca_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.dd5a117c2fca_",
+        "description": "migrations.versions.dd5a117c2fca_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('password_hash',\n               existing_type=sa.String(length=128),\n               type_=sa.VARCHAR(length=500),\n               existing_nullable=False)\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)",
+        "detail": "migrations.versions.dd5a117c2fca_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.dd5a117c2fca_",
+        "description": "migrations.versions.dd5a117c2fca_",
+        "peekOfCode": "revision = 'dd5a117c2fca'\ndown_revision = '6ccf51ad1887'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)",
+        "detail": "migrations.versions.dd5a117c2fca_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.dd5a117c2fca_",
+        "description": "migrations.versions.dd5a117c2fca_",
+        "peekOfCode": "down_revision = '6ccf51ad1887'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',",
+        "detail": "migrations.versions.dd5a117c2fca_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.dd5a117c2fca_",
+        "description": "migrations.versions.dd5a117c2fca_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=500),",
+        "detail": "migrations.versions.dd5a117c2fca_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.dd5a117c2fca_",
+        "description": "migrations.versions.dd5a117c2fca_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=500),\n               type_=sa.String(length=500),",
+        "detail": "migrations.versions.dd5a117c2fca_",
+        "documentation": {}
+    },
+    {
+        "label": "get_engine",
+        "kind": 2,
+        "importPath": "migrations.env",
+        "description": "migrations.env",
+        "peekOfCode": "def get_engine():\n    try:\n        # this works with Flask-SQLAlchemy<3 and Alchemical\n        return current_app.extensions['migrate'].db.get_engine()\n    except (TypeError, AttributeError):\n        # this works with Flask-SQLAlchemy>=3\n        return current_app.extensions['migrate'].db.engine\ndef get_engine_url():\n    try:\n        return get_engine().url.render_as_string(hide_password=False).replace(",
+        "detail": "migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "get_engine_url",
+        "kind": 2,
+        "importPath": "migrations.env",
+        "description": "migrations.env",
+        "peekOfCode": "def get_engine_url():\n    try:\n        return get_engine().url.render_as_string(hide_password=False).replace(\n            '%', '%%')\n    except AttributeError:\n        return str(get_engine().url).replace('%', '%%')\n# add your model's MetaData object here\n# for 'autogenerate' support\n# from myapp import mymodel\n# target_metadata = mymodel.Base.metadata",
+        "detail": "migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "get_metadata",
+        "kind": 2,
+        "importPath": "migrations.env",
+        "description": "migrations.env",
+        "peekOfCode": "def get_metadata():\n    if hasattr(target_db, 'metadatas'):\n        return target_db.metadatas[None]\n    return target_db.metadata\ndef run_migrations_offline():\n    \"\"\"Run migrations in 'offline' mode.\n    This configures the context with just a URL\n    and not an Engine, though an Engine is acceptable\n    here as well.  By skipping the Engine creation\n    we don't even need a DBAPI to be available.",
+        "detail": "migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "run_migrations_offline",
+        "kind": 2,
+        "importPath": "migrations.env",
+        "description": "migrations.env",
+        "peekOfCode": "def run_migrations_offline():\n    \"\"\"Run migrations in 'offline' mode.\n    This configures the context with just a URL\n    and not an Engine, though an Engine is acceptable\n    here as well.  By skipping the Engine creation\n    we don't even need a DBAPI to be available.\n    Calls to context.execute() here emit the given string to the\n    script output.\n    \"\"\"\n    url = config.get_main_option(\"sqlalchemy.url\")",
+        "detail": "migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "run_migrations_online",
+        "kind": 2,
+        "importPath": "migrations.env",
+        "description": "migrations.env",
+        "peekOfCode": "def run_migrations_online():\n    \"\"\"Run migrations in 'online' mode.\n    In this scenario we need to create an Engine\n    and associate a connection with the context.\n    \"\"\"\n    # this callback is used to prevent an auto-migration from being generated\n    # when there are no changes to the schema\n    # reference: http://alembic.zzzcomputing.com/en/latest/cookbook.html\n    def process_revision_directives(context, revision, directives):\n        if getattr(config.cmd_opts, 'autogenerate', False):",
+        "detail": "migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "kind": 5,
+        "importPath": "migrations.env",
+        "description": "migrations.env",
+        "peekOfCode": "config = context.config\n# Interpret the config file for Python logging.\n# This line sets up loggers basically.\nfileConfig(config.config_file_name)\nlogger = logging.getLogger('alembic.env')\ndef get_engine():\n    try:\n        # this works with Flask-SQLAlchemy<3 and Alchemical\n        return current_app.extensions['migrate'].db.get_engine()\n    except (TypeError, AttributeError):",
+        "detail": "migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "migrations.env",
+        "description": "migrations.env",
+        "peekOfCode": "logger = logging.getLogger('alembic.env')\ndef get_engine():\n    try:\n        # this works with Flask-SQLAlchemy<3 and Alchemical\n        return current_app.extensions['migrate'].db.get_engine()\n    except (TypeError, AttributeError):\n        # this works with Flask-SQLAlchemy>=3\n        return current_app.extensions['migrate'].db.engine\ndef get_engine_url():\n    try:",
+        "detail": "migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "target_db",
+        "kind": 5,
+        "importPath": "migrations.env",
+        "description": "migrations.env",
+        "peekOfCode": "target_db = current_app.extensions['migrate'].db\n# other values from the config, defined by the needs of env.py,\n# can be acquired:\n# my_important_option = config.get_main_option(\"my_important_option\")\n# ... etc.\ndef get_metadata():\n    if hasattr(target_db, 'metadatas'):\n        return target_db.metadatas[None]\n    return target_db.metadata\ndef run_migrations_offline():",
+        "detail": "migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "Config",
+        "kind": 6,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "class Config:\n    SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key')\n    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')\n    SQLALCHEMY_TRACK_MODIFICATIONS = False\n    ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY')\n    MAIL_SERVER = os.getenv(\"MAIL_SERVER\")\n    MAIL_PORT   = int(os.getenv(\"MAIL_PORT\", 587))\n    MAIL_USERNAME = os.getenv(\"MAIL_USERNAME\")\n    MAIL_PASSWORD = os.getenv(\"MAIL_PASSWORD\")\n    MAIL_USE_TLS  = os.getenv(\"MAIL_USE_TLS\", \"True\") == \"True\"",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "run",
+        "description": "run",
+        "peekOfCode": "app = create_app()\nif __name__ == '__main__':\n    app.run(debug=True)",
+        "detail": "run",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "wsgi",
+        "description": "wsgi",
+        "peekOfCode": "app = create_app()",
+        "detail": "wsgi",
+        "documentation": {}
+    }
+]
