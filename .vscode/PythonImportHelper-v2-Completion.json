@@ -16,14 +16,6 @@
         "documentation": {}
     },
     {
-        "label": "url_for",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
         "label": "jsonify",
         "importPath": "flask",
         "description": "flask",
@@ -33,6 +25,22 @@
     },
     {
         "label": "current_app",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "url_for",
         "importPath": "flask",
         "description": "flask",
         "isExtraImport": true,
@@ -96,15 +104,23 @@
         "documentation": {}
     },
     {
-        "label": "current_app",
-        "importPath": "flask",
-        "description": "flask",
+        "label": "create_access_token",
+        "importPath": "flask_jwt_extended",
+        "description": "flask_jwt_extended",
         "isExtraImport": true,
-        "detail": "flask",
+        "detail": "flask_jwt_extended",
         "documentation": {}
     },
     {
-        "label": "create_access_token",
+        "label": "jwt_required",
+        "importPath": "flask_jwt_extended",
+        "description": "flask_jwt_extended",
+        "isExtraImport": true,
+        "detail": "flask_jwt_extended",
+        "documentation": {}
+    },
+    {
+        "label": "get_jwt_identity",
         "importPath": "flask_jwt_extended",
         "description": "flask_jwt_extended",
         "isExtraImport": true,
@@ -248,6 +264,14 @@
         "documentation": {}
     },
     {
+        "label": "SignatureExpired",
+        "importPath": "itsdangerous",
+        "description": "itsdangerous",
+        "isExtraImport": true,
+        "detail": "itsdangerous",
+        "documentation": {}
+    },
+    {
         "label": "BadSignature",
         "importPath": "itsdangerous",
         "description": "itsdangerous",
@@ -256,7 +280,23 @@
         "documentation": {}
     },
     {
+        "label": "URLSafeTimedSerializer",
+        "importPath": "itsdangerous",
+        "description": "itsdangerous",
+        "isExtraImport": true,
+        "detail": "itsdangerous",
+        "documentation": {}
+    },
+    {
         "label": "SignatureExpired",
+        "importPath": "itsdangerous",
+        "description": "itsdangerous",
+        "isExtraImport": true,
+        "detail": "itsdangerous",
+        "documentation": {}
+    },
+    {
+        "label": "BadSignature",
         "importPath": "itsdangerous",
         "description": "itsdangerous",
         "isExtraImport": true,
@@ -425,20 +465,20 @@
         "documentation": {}
     },
     {
+        "label": "EmailMessage",
+        "importPath": "email.message",
+        "description": "email.message",
+        "isExtraImport": true,
+        "detail": "email.message",
+        "documentation": {}
+    },
+    {
         "label": "smtplib,",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "smtplib.",
         "description": "smtplib.",
         "detail": "smtplib.",
-        "documentation": {}
-    },
-    {
-        "label": "EmailMessage",
-        "importPath": "email.message",
-        "description": "email.message",
-        "isExtraImport": true,
-        "detail": "email.message",
         "documentation": {}
     },
     {
@@ -641,7 +681,7 @@
         "kind": 2,
         "importPath": "app.routes.auth",
         "description": "app.routes.auth",
-        "peekOfCode": "def confirmar_correo(token):\n    correo = confirm_email_token(token)\n    if not correo:\n        return {\"error\": \"token inválido o expirado\"}, 400\n    empleado = Empleado.query.filter_by(correo=correo).first()\n    if not empleado:\n        return {\"error\": \"usuario no encontrado\"}, 404\n    if empleado.is_verified:                       # ← usa el campo real\n        return {\"msg\": \"ya estaba verificado\"}, 200\n    empleado.is_verified = True",
+        "peekOfCode": "def confirmar_correo(token):\n    # 1. Validar el token ---------------------------------------------\n    correo = confirm_email_token(token)            # None si expira / inválido\n    if not correo:                                 # redirige al frontend\n        url = f\"{current_app.config['DEV_FRONTEND_URL']}/correo-verificado?status=invalid\"\n        return redirect(url, 302)\n    # 2. Marcar la cuenta como verificada ------------------------------\n    emp = Empleado.query.filter_by(correo=correo).first_or_404()\n    if not emp.is_verified:\n        emp.is_verified = True",
         "detail": "app.routes.auth",
         "documentation": {}
     },
@@ -651,6 +691,15 @@
         "importPath": "app.routes.auth",
         "description": "app.routes.auth",
         "peekOfCode": "def login():\n    data = request.get_json() or {}\n    correo   = data.get(\"correo\")\n    password = data.get(\"password\")\n    if not correo or not password:\n        return {\"msg\": \"correo y password requeridos\"}, 400\n    emp = Empleado.query.filter_by(correo=correo).first()\n    if not emp or not emp.check_password(password):\n        return {\"msg\": \"credenciales inválidas\"}, 401\n    if not emp.is_verified:",
+        "detail": "app.routes.auth",
+        "documentation": {}
+    },
+    {
+        "label": "me",
+        "kind": 2,
+        "importPath": "app.routes.auth",
+        "description": "app.routes.auth",
+        "peekOfCode": "def me():\n    \"\"\"\n    Devuelve el empleado asociado al JWT:\n        Authorization: Bearer <access_token>\n    \"\"\"\n    emp_id = get_jwt_identity()                              # valor que grabaste en create_access_token\n    emp = Empleado.query.get_or_404(emp_id)                  # 404 si el id no existe\n    # método serialize() ya lo usas en /empleados\n    return jsonify(emp.serialize()), 200",
         "detail": "app.routes.auth",
         "documentation": {}
     },
@@ -776,7 +825,7 @@
         "kind": 2,
         "importPath": "app.utils",
         "description": "app.utils",
-        "peekOfCode": "def generate_email_token(email: str) -> str:\n    \"\"\"\n    Cifra y firma el correo, devolviendo un token seguro que incluye timestamp.\n    \"\"\"\n    return _get_serializer().dumps(email)\ndef confirm_email_token(token: str, max_age: int = 3600) -> Optional[str]:\n    \"\"\"\n    Valida el token. Si es correcto y no ha expirado, devuelve el email;\n    en caso contrario, devuelve None.\n    Parámetros",
+        "peekOfCode": "def generate_email_token(email: str) -> str:\n    \"\"\"Devuelve un token firmado que contiene el correo y timestamp.\"\"\"\n    return _get_serializer().dumps(email)\ndef confirm_email_token(token: str, max_age: int = 86400) -> Optional[str]:\n    \"\"\"\n    Valida el token.  Si es correcto y no ha expirado, devuelve el correo.\n    Si falla devuelve None.\n    \"\"\"\n    try:\n        return _get_serializer().loads(token, max_age=max_age)",
         "detail": "app.utils",
         "documentation": {}
     },
@@ -785,7 +834,7 @@
         "kind": 2,
         "importPath": "app.utils",
         "description": "app.utils",
-        "peekOfCode": "def confirm_email_token(token: str, max_age: int = 3600) -> Optional[str]:\n    \"\"\"\n    Valida el token. Si es correcto y no ha expirado, devuelve el email;\n    en caso contrario, devuelve None.\n    Parámetros\n    ----------\n    token : str\n        Token recibido, típicamente vía link de verificación.\n    max_age : int\n        Tiempo máximo de validez en segundos (por defecto 1 h).",
+        "peekOfCode": "def confirm_email_token(token: str, max_age: int = 86400) -> Optional[str]:\n    \"\"\"\n    Valida el token.  Si es correcto y no ha expirado, devuelve el correo.\n    Si falla devuelve None.\n    \"\"\"\n    try:\n        return _get_serializer().loads(token, max_age=max_age)\n    except SignatureExpired:\n        current_app.logger.info(\"Token expirado\")\n    except BadSignature:",
         "detail": "app.utils",
         "documentation": {}
     },
@@ -794,7 +843,16 @@
         "kind": 2,
         "importPath": "app.utils",
         "description": "app.utils",
-        "peekOfCode": "def send_email(subject: str, body: str, to: str):\n    cfg = current_app.config\n    msg = EmailMessage()\n    msg[\"Subject\"] = subject\n    msg[\"From\"] = cfg[\"MAIL_USERNAME\"]\n    msg[\"To\"]   = to\n    msg.set_content(body, subtype=\"html\")\n    context = ssl.create_default_context()\n    with smtplib.SMTP(cfg[\"MAIL_SERVER\"], cfg[\"MAIL_PORT\"]) as smtp:\n        if cfg[\"MAIL_USE_TLS\"]:",
+        "peekOfCode": "def send_email(subject: str, html_body: str, to: str):\n    \"\"\"\n    Envía un e-mail HTML usando los parámetros de configuración SMTP:\n        MAIL_SERVER\n        MAIL_PORT\n        MAIL_USERNAME\n        MAIL_PASSWORD\n        MAIL_USE_TLS (bool)\n    Si estás en desarrollo y no tienes SMTP, reemplaza el bloque\n    `with smtplib…` por un simple `current_app.logger.info(...)`.",
+        "detail": "app.utils",
+        "documentation": {}
+    },
+    {
+        "label": "_SALT",
+        "kind": 5,
+        "importPath": "app.utils",
+        "description": "app.utils",
+        "peekOfCode": "_SALT = \"email-verification\"          # usa el mismo en dumps y loads\ndef _get_serializer() -> URLSafeTimedSerializer:\n    \"\"\"\n    Serializer configurado con SECRET_KEY y salt fijo.\n    Llamar SIEMPRE a esta función, no crear instancias manualmente.\n    \"\"\"\n    secret = current_app.config[\"SECRET_KEY\"]     # clave única de la app\n    return URLSafeTimedSerializer(secret, salt=_SALT)\ndef generate_email_token(email: str) -> str:\n    \"\"\"Devuelve un token firmado que contiene el correo y timestamp.\"\"\"",
         "detail": "app.utils",
         "documentation": {}
     },
@@ -1469,7 +1527,7 @@
         "kind": 6,
         "importPath": "config",
         "description": "config",
-        "peekOfCode": "class Config:\n    SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key')\n    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')\n    SQLALCHEMY_TRACK_MODIFICATIONS = False\n    ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY')\n    MAIL_SERVER = os.getenv(\"MAIL_SERVER\")\n    MAIL_PORT   = int(os.getenv(\"MAIL_PORT\", 587))\n    MAIL_USERNAME = os.getenv(\"MAIL_USERNAME\")\n    MAIL_PASSWORD = os.getenv(\"MAIL_PASSWORD\")\n    MAIL_USE_TLS  = os.getenv(\"MAIL_USE_TLS\", \"True\") == \"True\"",
+        "peekOfCode": "class Config:\n    SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key')\n    SQLALCHEMY_TRACK_MODIFICATIONS = False\n    ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY')\n    MAIL_SERVER = os.getenv(\"MAIL_SERVER\")\n    MAIL_PORT   = int(os.getenv(\"MAIL_PORT\", 587))\n    MAIL_USERNAME = os.getenv(\"MAIL_USERNAME\")\n    MAIL_PASSWORD = os.getenv(\"MAIL_PASSWORD\")\n    MAIL_USE_TLS  = os.getenv(\"MAIL_USE_TLS\", \"True\") == \"True\"\n    EMAIL_TOKEN_SALT = os.getenv(\"EMAIL_TOKEN_SALT\", \"verificacion-email\")",
         "detail": "config",
         "documentation": {}
     },

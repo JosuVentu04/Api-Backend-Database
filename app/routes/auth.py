@@ -1,9 +1,10 @@
-from flask import Blueprint, request, url_for, jsonify, current_app
-from flask_jwt_extended import create_access_token
+from flask import Blueprint, request, jsonify, current_app, redirect, url_for
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 from app.utils import generate_email_token, confirm_email_token, send_email
 from app.models import Empleado, db
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")   # ← prefijo único
 
@@ -42,24 +43,24 @@ def enviar_verificacion():
 # ────────────────────────────
 # 2) Confirmar correo
 # ────────────────────────────
-@bp.get("/confirmar-correo/<token>")
+@bp.get("/confirmar-correo/<path:token>")
 def confirmar_correo(token):
-    correo = confirm_email_token(token)
-    if not correo:
-        return {"error": "token inválido o expirado"}, 400
+    # 1. Validar el token ---------------------------------------------
+    correo = confirm_email_token(token)            # None si expira / inválido
+    if not correo:                                 # redirige al frontend
+        url = f"{current_app.config['DEV_FRONTEND_URL']}/correo-verificado?status=invalid"
+        return redirect(url, 302)
 
-    empleado = Empleado.query.filter_by(correo=correo).first()
-    if not empleado:
-        return {"error": "usuario no encontrado"}, 404
-    if empleado.is_verified:                       # ← usa el campo real
-        return {"msg": "ya estaba verificado"}, 200
+    # 2. Marcar la cuenta como verificada ------------------------------
+    emp = Empleado.query.filter_by(correo=correo).first_or_404()
+    if not emp.is_verified:
+        emp.is_verified = True
+        emp.fecha_verificacion = db.func.now()
+        db.session.commit()
 
-    empleado.is_verified = True
-    empleado.fecha_verificacion = datetime.utcnow()
-    db.session.commit()
-
-    return {"msg": "correo verificado con éxito"}, 200
-
+    # 3. Redirigir con éxito -------------------------------------------
+    url = f"{current_app.config['DEV_FRONTEND_URL']}/correo-verificado?status=ok"
+    return redirect(url, 302)
 
 
 # ────────────────────────────
@@ -80,5 +81,18 @@ def login():
     if not emp.is_verified:
         return {"msg": "verifica tu correo antes de iniciar sesión"}, 403
 
-    token = create_access_token(identity=emp.id)
+    token = create_access_token(identity=str(emp.id))
+    
     return {"access_token": token}, 200
+
+@bp.get("/me")
+@jwt_required()                                              # requiere JWT en el header
+def me():
+    """
+    Devuelve el empleado asociado al JWT:
+        Authorization: Bearer <access_token>
+    """
+    emp_id = get_jwt_identity()                              # valor que grabaste en create_access_token
+    emp = Empleado.query.get_or_404(emp_id)                  # 404 si el id no existe
+    # método serialize() ya lo usas en /empleados
+    return jsonify(emp.serialize()), 200

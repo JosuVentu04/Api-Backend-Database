@@ -1,7 +1,6 @@
 from __future__ import annotations
-
 import os
-from flask import Flask, request           # ← importa request para debug
+from flask import Flask, request, current_app          # ← importa request para debug
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
@@ -68,13 +67,23 @@ def create_app(config_obj: type | object = Config) -> Flask:
         supports_credentials=True,
         expose_headers=["Authorization"],
         allow_headers=["Content-Type", "Authorization"],
-        methods=["GET", "POST", "OPTIONS"]
+        methods=["GET", "POST", "OPTIONS", "PUT"]
     )
 
     # 4) Inicializar extensiones
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    
+    @jwt.unauthorized_loader
+    def missing(msg):
+        current_app.logger.error("JWT missing/invalid → %s", msg)
+        return {"msg": msg}, 401
+
+    @jwt.invalid_token_loader
+    def invalid(msg):
+        current_app.logger.error("JWT inválido → %s", msg)
+        return {"msg": msg}, 422
 
     # 5) Registrar blueprints
     from app.routes.main import main

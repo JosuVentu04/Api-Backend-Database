@@ -1,76 +1,71 @@
 from typing import Optional
 
 from flask import current_app
-from itsdangerous import (
-    URLSafeTimedSerializer,
-    BadSignature,
-    SignatureExpired
-)
-import smtplib, ssl
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from email.message import EmailMessage
-from flask import current_app
+import smtplib, ssl
+
+# ──────────────────────────────────────────────
+# 1.  TOKENS DE VERIFICACIÓN
+# ──────────────────────────────────────────────
+_SALT = "email-verification"          # usa el mismo en dumps y loads
 
 
-# ──────────────────────────────────────────────────────────────
-# Helpers internos
-# ──────────────────────────────────────────────────────────────
 def _get_serializer() -> URLSafeTimedSerializer:
     """
-    Devuelve una instancia única de URLSafeTimedSerializer configurada con
-    SECRET_KEY y el salt definido en la configuración.
+    Serializer configurado con SECRET_KEY y salt fijo.
+    Llamar SIEMPRE a esta función, no crear instancias manualmente.
     """
-    secret_key: str = current_app.config["SECRET_KEY"]
-    salt: str = current_app.config.get("EMAIL_TOKEN_SALT", "email-verification")
-    return URLSafeTimedSerializer(secret_key=secret_key, salt=salt)
+    secret = current_app.config["SECRET_KEY"]     # clave única de la app
+    return URLSafeTimedSerializer(secret, salt=_SALT)
 
 
-# ──────────────────────────────────────────────────────────────
-# API pública
-# ──────────────────────────────────────────────────────────────
 def generate_email_token(email: str) -> str:
-    """
-    Cifra y firma el correo, devolviendo un token seguro que incluye timestamp.
-    """
+    """Devuelve un token firmado que contiene el correo y timestamp."""
     return _get_serializer().dumps(email)
 
 
-def confirm_email_token(token: str, max_age: int = 3600) -> Optional[str]:
+def confirm_email_token(token: str, max_age: int = 86400) -> Optional[str]:
     """
-    Valida el token. Si es correcto y no ha expirado, devuelve el email;
-    en caso contrario, devuelve None.
-
-    Parámetros
-    ----------
-    token : str
-        Token recibido, típicamente vía link de verificación.
-    max_age : int
-        Tiempo máximo de validez en segundos (por defecto 1 h).
-
-    Returns
-    -------
-    str | None
-        El correo extraído o None si el token es inválido/expirado.
+    Valida el token.  Si es correcto y no ha expirado, devuelve el correo.
+    Si falla devuelve None.
     """
-    s = _get_serializer()
     try:
-        return s.loads(token, max_age=max_age)
+        return _get_serializer().loads(token, max_age=max_age)
     except SignatureExpired:
-        current_app.logger.info("Token de verificación expirado")
+        current_app.logger.info("Token expirado")
     except BadSignature:
-        current_app.logger.warning("Token manipulado o clave incorrecta")
+        current_app.logger.warning("Token inválido/manipulado")
     return None
 
-def send_email(subject: str, body: str, to: str):
+
+# ──────────────────────────────────────────────
+# 2.  ENVÍO DE CORREO
+# ──────────────────────────────────────────────
+def send_email(subject: str, html_body: str, to: str):
+    """
+    Envía un e-mail HTML usando los parámetros de configuración SMTP:
+
+        MAIL_SERVER
+        MAIL_PORT
+        MAIL_USERNAME
+        MAIL_PASSWORD
+        MAIL_USE_TLS (bool)
+
+    Si estás en desarrollo y no tienes SMTP, reemplaza el bloque
+    `with smtplib…` por un simple `current_app.logger.info(...)`.
+    """
     cfg = current_app.config
+
     msg = EmailMessage()
     msg["Subject"] = subject
     msg["From"] = cfg["MAIL_USERNAME"]
-    msg["To"]   = to
-    msg.set_content(body, subtype="html")
+    msg["To"] = to
+    msg.set_content(html_body, subtype="html")
 
     context = ssl.create_default_context()
     with smtplib.SMTP(cfg["MAIL_SERVER"], cfg["MAIL_PORT"]) as smtp:
-        if cfg["MAIL_USE_TLS"]:
+        if cfg.get("MAIL_USE_TLS", False):
             smtp.starttls(context=context)
         smtp.login(cfg["MAIL_USERNAME"], cfg["MAIL_PASSWORD"])
         smtp.send_message(msg)
