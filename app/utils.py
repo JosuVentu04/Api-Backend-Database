@@ -55,6 +55,7 @@ def send_email(subject: str, html_body: str, to: str):
     Si estás en desarrollo y no tienes SMTP, reemplaza el bloque
     `with smtplib…` por un simple `current_app.logger.info(...)`.
     """
+    import logging
     cfg = current_app.config
 
     msg = EmailMessage()
@@ -63,9 +64,31 @@ def send_email(subject: str, html_body: str, to: str):
     msg["To"] = to
     msg.set_content(html_body, subtype="html")
 
+    print(f"Tratando de enviar email a {to} con asunto '{subject}'")
+
     context = ssl.create_default_context()
-    with smtplib.SMTP(cfg["MAIL_SERVER"], cfg["MAIL_PORT"]) as smtp:
-        if cfg.get("MAIL_USE_TLS", False):
-            smtp.starttls(context=context)
-        smtp.login(cfg["MAIL_USERNAME"], cfg["MAIL_PASSWORD"])
-        smtp.send_message(msg)
+    try:
+        with smtplib.SMTP(cfg["MAIL_SERVER"], cfg["MAIL_PORT"]) as smtp:
+            if cfg.get("MAIL_USE_TLS", False):
+                smtp.starttls(context=context)
+            smtp.login(cfg["MAIL_USERNAME"], cfg["MAIL_PASSWORD"])
+            smtp.send_message(msg)
+        print("Correo enviado correctamente.")
+    except Exception as e:
+        logging.error(f"Error enviando email a {to}: {e}", exc_info=True)
+        print(f"[ERROR SEND_EMAIL]: {e}")
+        # Opcional: lanzar la excepción para que el endpoint capture y maneje el error
+        raise
+
+        
+def generate_email_change_token(email, purpose):
+    s = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+    return s.dumps(email, salt=f"email-change-{purpose}")
+
+def confirm_email_change_token(token, purpose, max_age=86400):
+    s = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+    try:
+        email = s.loads(token, salt=f"email-change-{purpose}", max_age=max_age)
+        return email
+    except (SignatureExpired, BadSignature):
+        return None

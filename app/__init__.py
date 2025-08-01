@@ -8,6 +8,7 @@ from flask_cors import CORS
 from cryptography.fernet import Fernet
 from config import Config
 
+
 # ── extensiones globales ───────────────────────────────
 db      = SQLAlchemy()
 migrate = Migrate()
@@ -34,6 +35,7 @@ def create_app(config_obj: type | object = Config) -> Flask:
 
     # 3) CORS
     frontend_url = os.getenv('DEV_FRONTEND_URL')
+    print("Frontend URL from env:", frontend_url)
 
 # Verificar que exista
     if not frontend_url:
@@ -63,11 +65,11 @@ def create_app(config_obj: type | object = Config) -> Flask:
 
     CORS(
         app,
-        resources={r"/*": {"origins": allowed_origins}},
+        origins= "*",
         supports_credentials=True,
         expose_headers=["Authorization"],
         allow_headers=["Content-Type", "Authorization"],
-        methods=["GET", "POST", "OPTIONS", "PUT"]
+        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     )
 
     # 4) Inicializar extensiones
@@ -88,8 +90,10 @@ def create_app(config_obj: type | object = Config) -> Flask:
     # 5) Registrar blueprints
     from app.routes.main import main
     from app.routes.auth import bp as auth_bp
+    from app.routes.users import bp as users_bp    
     app.register_blueprint(main)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(users_bp) 
 
     # 6) Debug opcional: muestra cada respuesta que pasa por Flask
     @app.after_request

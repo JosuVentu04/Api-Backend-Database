@@ -71,7 +71,7 @@ def obtener_sucursales():
 # ──────────────────────────────
 # 2. CRUD EMPLEADO
 # ──────────────────────────────
-@main.post("/empleado")
+@main.post("/crear-empleado")
 def crear_empleado():
     data = request.get_json() or {}
 

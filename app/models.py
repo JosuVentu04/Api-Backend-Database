@@ -18,6 +18,11 @@ class EstadoUsuario(PyEnum):
     ACTIVO   = "ACTIVO"
     INACTIVO = "INACTIVO"
 
+class RolesEmpleado(PyEnum):
+    ADMIN = "ADMIN"
+    SOPORTE = "SOPORTE"
+    GERENTE = "GERENTE"
+    VENDEDOR = "VENDEDOR"
 
 class EstadoSucursal(PyEnum):
     ACTIVA     = "ACTIVA"
@@ -87,7 +92,12 @@ class Empleado(db.Model):
     is_verified: Mapped[bool] = mapped_column(
         Boolean, default=False, server_default=text("false"), nullable=False
     )
-    fecha_verificacion: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    rol: Mapped[RolesEmpleado] = mapped_column(
+        SqlEnum(RolesEmpleado, name="roles_empleado", native_enum=False, validate_strings=True), 
+        default=RolesEmpleado.VENDEDOR, 
+        server_default=text("VENDEDOR"),
+        nullable=False)
+    fecha_verificacion: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     estado_usuario: Mapped[EstadoUsuario] = mapped_column(
         SqlEnum(EstadoUsuario, name="estado_usuario_enum",
@@ -96,9 +106,21 @@ class Empleado(db.Model):
         server_default=text("'ACTIVO'"),
         nullable=False
     )
-
+    correo_pendiente: Mapped[str] = mapped_column(String(120), unique=True, nullable=True, index=True)
+    
+    correo_token_antiguo: Mapped[str] = mapped_column(String(255), nullable=True)
+    
+    correo_token_nuevo: Mapped[str] = mapped_column(String(255), nullable=True)
+    
+    correo_antiguo_confirmado: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
+    
+    correo_nuevo_confirmado: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
+    
+    correo_token_expira: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    
     correo: Mapped[str] = mapped_column(String(120), unique=True, nullable=False, index=True)
-    _password_hash: Mapped[str] = mapped_column("password_hash", String(128), nullable=False)
+    
+    _password_hash: Mapped[str] = mapped_column("password_hash", String(255), nullable=False)
 
     sucursal_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("sucursal.id", ondelete="CASCADE"), nullable=False, index=True
@@ -119,7 +141,8 @@ class Empleado(db.Model):
             "correo": self.correo,
             "estado_usuario": self.estado_usuario.value,
             "sucursal_id": self.sucursal_id,
-            "is_verified": self.is_verified           # ← ahora sí lo expones
+            "is_verified": self.is_verified,           # ← ahora sí lo expones
+            "rol": self.rol.value
         }
 
     def __repr__(self):
