@@ -723,6 +723,14 @@
         "documentation": {}
     },
     {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
         "label": "context",
         "importPath": "alembic",
         "description": "alembic",
@@ -859,7 +867,7 @@
         "kind": 2,
         "importPath": "app.routes.auth",
         "description": "app.routes.auth",
-        "peekOfCode": "def login():\n    data = request.get_json() or {}\n    correo   = data.get(\"correo\")\n    password = data.get(\"password\")\n    if not correo or not password:\n        return {\"msg\": \"correo y password requeridos\"}, 400\n    emp = Empleado.query.filter_by(correo=correo).first()\n    if not emp or not emp.check_password(password):\n        return {\"msg\": \"credenciales inválidas\"}, 401\n    if not emp.is_verified:",
+        "peekOfCode": "def login():\n    data = request.get_json() or {}\n    correo   = data.get(\"correo\")\n    password = data.get(\"password\")\n    sucursal_id = data.get(\"sucursal_id\")\n    if not correo or not password:\n        return {\"msg\": \"correo y password requeridos\"}, 400\n    emp = Empleado.query.filter_by(correo=correo, sucursal_id=sucursal_id).first()\n    if not emp or not emp.check_password(password):\n        return {\"msg\": \"Correo, contraseña o sucursal inválida\"}, 401",
         "detail": "app.routes.auth",
         "documentation": {}
     },
@@ -895,7 +903,7 @@
         "kind": 2,
         "importPath": "app.routes.main",
         "description": "app.routes.main",
-        "peekOfCode": "def index():\n    return jsonify(mensaje=\"Hola mundo desde Flask!\")\n# ──────────────────────────────\n# 1. CRUD SUCURSAL\n# ──────────────────────────────\n@main.post(\"/sucursal\")\ndef crear_sucursal():\n    data = request.get_json() or {}\n    if not data.get(\"nombre\"):\n        return {\"error\": \"El nombre de la sucursal es requerido\"}, 400",
+        "peekOfCode": "def index():\n    return jsonify(mensaje=\"Hola mundo desde Flask!\")\n# ──────────────────────────────\n# 1. CRUD SUCURSAL\n# ──────────────────────────────\n@main.post(\"/crear-sucursal\")\ndef crear_sucursal():\n    data = request.get_json() or {}\n    if not data.get(\"nombre\"):\n        return {\"error\": \"El nombre de la sucursal es requerido\"}, 400",
         "detail": "app.routes.main",
         "documentation": {}
     },
@@ -909,11 +917,20 @@
         "documentation": {}
     },
     {
-        "label": "obtener_sucursales",
+        "label": "obtener_sucursal",
         "kind": 2,
         "importPath": "app.routes.main",
         "description": "app.routes.main",
-        "peekOfCode": "def obtener_sucursales():\n    sucursales = Sucursal.query.all()\n    lista = [\n        {\n            \"id\": s.id,\n            \"nombre\": s.nombre,\n            \"estado_sucursal\": s.estado_sucursal.value,\n            \"direccion\": s.direccion,\n            \"numero_telefonico\": s.numero_telefonico,\n            \"fecha_apertura\": s.fecha_apertura.isoformat() if s.fecha_apertura else None,",
+        "peekOfCode": "def obtener_sucursal(id):\n    sucursal = Sucursal.query.get_or_404(id)\n    resultado = {\n        \"id\": sucursal.id,\n        \"nombre\": sucursal.nombre,\n        \"estado_sucursal\": sucursal.estado_sucursal.value,\n        \"direccion\": sucursal.direccion,\n        \"numero_telefonico\": sucursal.numero_telefonico,\n        \"fecha_apertura\": sucursal.fecha_apertura.isoformat() if sucursal.fecha_apertura else None,\n        \"fecha_clausura\": sucursal.fecha_clausura.isoformat() if sucursal.fecha_clausura else None,",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_todas_sucursales",
+        "kind": 2,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "def obtener_todas_sucursales():\n    sucursales = Sucursal.query.all()\n    lista = [\n        {\n            \"id\": s.id,\n            \"nombre\": s.nombre,\n            \"estado_sucursal\": s.estado_sucursal.value,\n            \"direccion\": s.direccion,\n            \"numero_telefonico\": s.numero_telefonico,\n            \"fecha_apertura\": s.fecha_apertura.isoformat() if s.fecha_apertura else None,",
         "detail": "app.routes.main",
         "documentation": {}
     },
@@ -1053,6 +1070,15 @@
         "documentation": {}
     },
     {
+        "label": "Catalogo_Modelos",
+        "kind": 6,
+        "importPath": "app.models",
+        "description": "app.models",
+        "peekOfCode": "class Catalogo_Modelos(db.Model):\n    __tablename__ = \"catalogo_modelos\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    marca: Mapped[str] = mapped_column(String(120), nullable=False)\n    modelo: Mapped[str] = mapped_column(String(120), nullable=False)\n    almacenamiento: Mapped[str] = mapped_column(String(120), nullable=False)\n    anio: Mapped[str] = mapped_column(String(120), nullable= False)\n    ram: Mapped[str] = mapped_column(String(120), nullable=False)\n    descripcion: Mapped[str] = mapped_column(String(120), nullable=True, default=\"Celular de alta calidad\")\n    fecha_creacion: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False, default=func.now())",
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
         "label": "generate_email_token",
         "kind": 2,
         "importPath": "app.utils",
@@ -1104,6 +1130,60 @@
         "description": "app.utils",
         "peekOfCode": "_SALT = \"email-verification\"          # usa el mismo en dumps y loads\ndef _get_serializer() -> URLSafeTimedSerializer:\n    \"\"\"\n    Serializer configurado con SECRET_KEY y salt fijo.\n    Llamar SIEMPRE a esta función, no crear instancias manualmente.\n    \"\"\"\n    secret = current_app.config[\"SECRET_KEY\"]     # clave única de la app\n    return URLSafeTimedSerializer(secret, salt=_SALT)\ndef generate_email_token(email: str) -> str:\n    \"\"\"Devuelve un token firmado que contiene el correo y timestamp.\"\"\"",
         "detail": "app.utils",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.077ba0f8f7dd_",
+        "description": "migrations.versions.077ba0f8f7dd_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('catalogo_modelos',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('marca', sa.String(length=120), nullable=False),\n    sa.Column('modelo', sa.String(length=120), nullable=False),\n    sa.Column('almacenamiento', sa.String(length=120), nullable=False),\n    sa.Column('anio', sa.String(length=120), nullable=False),\n    sa.Column('ram', sa.String(length=120), nullable=False),\n    sa.Column('descripcion', sa.String(length=120), nullable=True),",
+        "detail": "migrations.versions.077ba0f8f7dd_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.077ba0f8f7dd_",
+        "description": "migrations.versions.077ba0f8f7dd_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.drop_table('catalogo_modelos')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.077ba0f8f7dd_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.077ba0f8f7dd_",
+        "description": "migrations.versions.077ba0f8f7dd_",
+        "peekOfCode": "revision = '077ba0f8f7dd'\ndown_revision = 'e7d17459afa8'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('catalogo_modelos',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('marca', sa.String(length=120), nullable=False),\n    sa.Column('modelo', sa.String(length=120), nullable=False),",
+        "detail": "migrations.versions.077ba0f8f7dd_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.077ba0f8f7dd_",
+        "description": "migrations.versions.077ba0f8f7dd_",
+        "peekOfCode": "down_revision = 'e7d17459afa8'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('catalogo_modelos',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('marca', sa.String(length=120), nullable=False),\n    sa.Column('modelo', sa.String(length=120), nullable=False),\n    sa.Column('almacenamiento', sa.String(length=120), nullable=False),",
+        "detail": "migrations.versions.077ba0f8f7dd_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.077ba0f8f7dd_",
+        "description": "migrations.versions.077ba0f8f7dd_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('catalogo_modelos',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('marca', sa.String(length=120), nullable=False),\n    sa.Column('modelo', sa.String(length=120), nullable=False),\n    sa.Column('almacenamiento', sa.String(length=120), nullable=False),\n    sa.Column('anio', sa.String(length=120), nullable=False),",
+        "detail": "migrations.versions.077ba0f8f7dd_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.077ba0f8f7dd_",
+        "description": "migrations.versions.077ba0f8f7dd_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table('catalogo_modelos',\n    sa.Column('id', sa.Integer(), nullable=False),\n    sa.Column('marca', sa.String(length=120), nullable=False),\n    sa.Column('modelo', sa.String(length=120), nullable=False),\n    sa.Column('almacenamiento', sa.String(length=120), nullable=False),\n    sa.Column('anio', sa.String(length=120), nullable=False),\n    sa.Column('ram', sa.String(length=120), nullable=False),",
+        "detail": "migrations.versions.077ba0f8f7dd_",
         "documentation": {}
     },
     {

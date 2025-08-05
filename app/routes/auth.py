@@ -71,18 +71,20 @@ def login():
     data = request.get_json() or {}
     correo   = data.get("correo")
     password = data.get("password")
+    sucursal_id = data.get("sucursal_id")
 
     if not correo or not password:
         return {"msg": "correo y password requeridos"}, 400
 
-    emp = Empleado.query.filter_by(correo=correo).first()
+    emp = Empleado.query.filter_by(correo=correo, sucursal_id=sucursal_id).first()
     if not emp or not emp.check_password(password):
-        return {"msg": "credenciales inválidas"}, 401
+        return {"msg": "Correo, contraseña o sucursal inválida"}, 401
     if not emp.is_verified:
         return {"msg": "verifica tu correo antes de iniciar sesión"}, 403
 
     token = create_access_token(identity=str(emp.id))
     
+    print(sucursal_id)
     return {"access_token": token}, 200
 
 @bp.get("/me")

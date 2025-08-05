@@ -23,7 +23,7 @@ def index():
 # ──────────────────────────────
 # 1. CRUD SUCURSAL
 # ──────────────────────────────
-@main.post("/sucursal")
+@main.post("/crear-sucursal")
 def crear_sucursal():
     data = request.get_json() or {}
 
@@ -51,8 +51,22 @@ def crear_sucursal():
     return jsonify(mensaje="Sucursal creada exitosamente", id=nueva.id), 201
 
 
+@main.get("/sucursales/<int:id>")
+def obtener_sucursal(id):
+    sucursal = Sucursal.query.get_or_404(id)
+    resultado = {
+        "id": sucursal.id,
+        "nombre": sucursal.nombre,
+        "estado_sucursal": sucursal.estado_sucursal.value,
+        "direccion": sucursal.direccion,
+        "numero_telefonico": sucursal.numero_telefonico,
+        "fecha_apertura": sucursal.fecha_apertura.isoformat() if sucursal.fecha_apertura else None,
+        "fecha_clausura": sucursal.fecha_clausura.isoformat() if sucursal.fecha_clausura else None,
+    }
+    return jsonify(resultado)
+
 @main.get("/sucursales")
-def obtener_sucursales():
+def obtener_todas_sucursales():
     sucursales = Sucursal.query.all()
     lista = [
         {

@@ -147,3 +147,36 @@ class Empleado(db.Model):
 
     def __repr__(self):
         return f"<Empleado {self.id} – {self.correo}>"
+    
+class Catalogo_Modelos(db.Model):
+    __tablename__ = "catalogo_modelos"
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    marca: Mapped[str] = mapped_column(String(120), nullable=False)
+    modelo: Mapped[str] = mapped_column(String(120), nullable=False)
+    almacenamiento: Mapped[str] = mapped_column(String(120), nullable=False)
+    anio: Mapped[str] = mapped_column(String(120), nullable= False)
+    ram: Mapped[str] = mapped_column(String(120), nullable=False)
+    descripcion: Mapped[str] = mapped_column(String(120), nullable=True, default="Celular de alta calidad")
+    fecha_creacion: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False, default=func.now())
+    fecha_actualizacion: Mapped[DateTime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+        onupdate=func.now()
+    ) 
+    
+    def serialize(self) -> dict:
+        return {
+            "id": self.id,
+            "marca": self.marca,
+            "modelo": self.modelo,
+            "almacenamiento": self.almacenamiento,
+            "anio": self.anio,
+            "ram": self.ram,           # ← ahora sí lo expones
+            "descripcion": self.descripcion
+        }
+        
+    def __repr__(self):
+        return f"<Dispositivo {self.id} – {self.modelo}>"
+    
+    
