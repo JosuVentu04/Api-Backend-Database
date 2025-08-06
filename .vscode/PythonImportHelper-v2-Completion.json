@@ -944,11 +944,11 @@
         "documentation": {}
     },
     {
-        "label": "obtener_empleados",
+        "label": "empleados_por_sucursal",
         "kind": 2,
         "importPath": "app.routes.main",
         "description": "app.routes.main",
-        "peekOfCode": "def obtener_empleados():\n    empleados = Empleado.query.all()\n    lista = [e.serialize() for e in empleados]\n    return jsonify(lista)\n# ──────────────────────────────\n# 3. Confirmación de correo\n# ──────────────────────────────\n# ──────────────────────────────\n# 4. Demo\n# ──────────────────────────────",
+        "peekOfCode": "def empleados_por_sucursal():\n    sucursal_id = request.args.get(\"sucursal_id\")\n    if not sucursal_id:\n        return {\"msg\": \"Falta parámetro sucursal_id\"}, 400\n    empleados = Empleado.query.filter_by(sucursal_id=sucursal_id).all()\n    return jsonify([e.serialize() for e in empleados])\n# ──────────────────────────────\n# 3. Confirmación de correo\n# ──────────────────────────────\n# ──────────────────────────────",
         "detail": "app.routes.main",
         "documentation": {}
     },

@@ -134,10 +134,14 @@ def crear_empleado():
 
 
 @main.get("/empleados")
-def obtener_empleados():
-    empleados = Empleado.query.all()
-    lista = [e.serialize() for e in empleados]
-    return jsonify(lista)
+def empleados_por_sucursal():
+    sucursal_id = request.args.get("sucursal_id")
+    if not sucursal_id:
+        return {"msg": "Falta parámetro sucursal_id"}, 400
+    
+    empleados = Empleado.query.filter_by(sucursal_id=sucursal_id).all()
+    return jsonify([e.serialize() for e in empleados])
+
 
 # ──────────────────────────────
 # 3. Confirmación de correo

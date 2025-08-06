@@ -74,6 +74,17 @@ class Sucursal(db.Model):
         cascade="all, delete-orphan",
         lazy="selectin"
     )
+    
+    def serialize(self) -> dict:
+        return {
+        "id": self.id,
+        "nombre": self.nombre,
+        "estado_sucursal": self.estado_sucursal.value,
+        "direccion": self.direccion,
+        "numero_telefonico": self.numero_telefonico,
+        "fecha_apertura": self.fecha_apertura.isoformat() if self.fecha_apertura else None,
+        "fecha_clausura": self.fecha_clausura.isoformat() if self.fecha_clausura else None,
+    }
 
     def __repr__(self) -> str:
         return f"<Sucursal {self.id} – {self.nombre}>"
