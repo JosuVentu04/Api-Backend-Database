@@ -96,6 +96,54 @@
         "documentation": {}
     },
     {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "current_app",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "abort",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Blueprint",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
         "label": "request",
         "importPath": "flask",
         "description": "flask",
@@ -176,6 +224,14 @@
         "documentation": {}
     },
     {
+        "label": "create_access_token",
+        "importPath": "flask_jwt_extended",
+        "description": "flask_jwt_extended",
+        "isExtraImport": true,
+        "detail": "flask_jwt_extended",
+        "documentation": {}
+    },
+    {
         "label": "jwt_required",
         "importPath": "flask_jwt_extended",
         "description": "flask_jwt_extended",
@@ -189,6 +245,47 @@
         "description": "flask_jwt_extended",
         "isExtraImport": true,
         "detail": "flask_jwt_extended",
+        "documentation": {}
+    },
+    {
+        "label": "get_jwt",
+        "importPath": "flask_jwt_extended",
+        "description": "flask_jwt_extended",
+        "isExtraImport": true,
+        "detail": "flask_jwt_extended",
+        "documentation": {}
+    },
+    {
+        "label": "jwt_required",
+        "importPath": "flask_jwt_extended",
+        "description": "flask_jwt_extended",
+        "isExtraImport": true,
+        "detail": "flask_jwt_extended",
+        "documentation": {}
+    },
+    {
+        "label": "get_jwt_identity",
+        "importPath": "flask_jwt_extended",
+        "description": "flask_jwt_extended",
+        "isExtraImport": true,
+        "detail": "flask_jwt_extended",
+        "documentation": {}
+    },
+    {
+        "label": "sqlalchemy.exc",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlalchemy.exc",
+        "description": "sqlalchemy.exc",
+        "detail": "sqlalchemy.exc",
+        "documentation": {}
+    },
+    {
+        "label": "SQLAlchemyError",
+        "importPath": "sqlalchemy.exc",
+        "description": "sqlalchemy.exc",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.exc",
         "documentation": {}
     },
     {
@@ -297,6 +394,14 @@
     },
     {
         "label": "db",
+        "importPath": "app.models",
+        "description": "app.models",
+        "isExtraImport": true,
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
+        "label": "Catalogo_Modelos",
         "importPath": "app.models",
         "description": "app.models",
         "isExtraImport": true,
@@ -440,6 +545,14 @@
         "documentation": {}
     },
     {
+        "label": "db",
+        "importPath": "app",
+        "description": "app",
+        "isExtraImport": true,
+        "detail": "app",
+        "documentation": {}
+    },
+    {
         "label": "create_app",
         "importPath": "app",
         "description": "app",
@@ -453,6 +566,14 @@
         "description": "app",
         "isExtraImport": true,
         "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "wraps",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
         "documentation": {}
     },
     {
@@ -731,6 +852,30 @@
         "documentation": {}
     },
     {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
         "label": "context",
         "importPath": "alembic",
         "description": "alembic",
@@ -867,7 +1012,7 @@
         "kind": 2,
         "importPath": "app.routes.auth",
         "description": "app.routes.auth",
-        "peekOfCode": "def login():\n    data = request.get_json() or {}\n    correo   = data.get(\"correo\")\n    password = data.get(\"password\")\n    sucursal_id = data.get(\"sucursal_id\")\n    if not correo or not password:\n        return {\"msg\": \"correo y password requeridos\"}, 400\n    emp = Empleado.query.filter_by(correo=correo, sucursal_id=sucursal_id).first()\n    if not emp or not emp.check_password(password):\n        return {\"msg\": \"Correo, contraseña o sucursal inválida\"}, 401",
+        "peekOfCode": "def login():\n    data = request.get_json() or {}\n    correo = data.get(\"correo\")\n    password = data.get(\"password\")\n    sucursal_id = data.get(\"sucursal_id\")\n    if not correo or not password:\n        return {\"msg\": \"correo y password requeridos\"}, 400\n    emp = Empleado.query.filter_by(correo=correo, sucursal_id=sucursal_id).first()\n    if not emp or not emp.check_password(password):\n        return {\"msg\": \"Correo, contraseña o sucursal inválida\"}, 401",
         "detail": "app.routes.auth",
         "documentation": {}
     },
@@ -890,11 +1035,65 @@
         "documentation": {}
     },
     {
+        "label": "crear_modelo",
+        "kind": 2,
+        "importPath": "app.routes.devices_models",
+        "description": "app.routes.devices_models",
+        "peekOfCode": "def crear_modelo():\n    data = request.get_json() or {}\n    campos_obligatorios = [\"marca\", \"modelo\", \"almacenamiento\", \"anio\", \"ram\"]\n    errores = [\n        f\"El campo '{campo}' es requerido\" for campo in campos_obligatorios if not data.get(campo)\n    ]\n    if errores:\n        return {\"error\": errores}, 400\n    try:\n        nuevo_modelo = Catalogo_Modelos(",
+        "detail": "app.routes.devices_models",
+        "documentation": {}
+    },
+    {
+        "label": "editar_modelo",
+        "kind": 2,
+        "importPath": "app.routes.devices_models",
+        "description": "app.routes.devices_models",
+        "peekOfCode": "def editar_modelo(modelo_id):\n    modelo = Catalogo_Modelos.query.get_or_404(modelo_id)\n    data = request.get_json() or {}\n    # Actualiza solo los campos recibidos en el JSON,\n    # Sin tocar los que no vienen.\n    atributos_actualizables = [\n        \"marca\", \"modelo\", \"almacenamiento\", \"anio\", \"ram\", \"descripcion\", \"imagen\",\n        \"color\", \"dual_sim\", \"red_movil\", \"version_android\", \"procesador\",\n        \"velocidad_procesador\", \"cantidad_nucleos\", \"tamanio_pantalla\",\n        \"tipo_resolucion\", \"frecuencia_actualizacion_pantalla\",",
+        "detail": "app.routes.devices_models",
+        "documentation": {}
+    },
+    {
+        "label": "listar_modelos",
+        "kind": 2,
+        "importPath": "app.routes.devices_models",
+        "description": "app.routes.devices_models",
+        "peekOfCode": "def listar_modelos():\n    modelos = Catalogo_Modelos.query.all()\n    return jsonify([m.serialize_basic() for m in modelos])\n@dispositivos.get(\"/catalogo-modelos/<int:modelo_id>\")\ndef obtener_modelo(modelo_id):\n    modelo = Catalogo_Modelos.query.get_or_404(modelo_id)\n    return jsonify(modelo.serialize())",
+        "detail": "app.routes.devices_models",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_modelo",
+        "kind": 2,
+        "importPath": "app.routes.devices_models",
+        "description": "app.routes.devices_models",
+        "peekOfCode": "def obtener_modelo(modelo_id):\n    modelo = Catalogo_Modelos.query.get_or_404(modelo_id)\n    return jsonify(modelo.serialize())",
+        "detail": "app.routes.devices_models",
+        "documentation": {}
+    },
+    {
+        "label": "dispositivos",
+        "kind": 5,
+        "importPath": "app.routes.devices_models",
+        "description": "app.routes.devices_models",
+        "peekOfCode": "dispositivos = Blueprint(\"dispositivos\", __name__, url_prefix=\"/devices\")\n@dispositivos.post(\"/nuevo-modelo\")\ndef crear_modelo():\n    data = request.get_json() or {}\n    campos_obligatorios = [\"marca\", \"modelo\", \"almacenamiento\", \"anio\", \"ram\"]\n    errores = [\n        f\"El campo '{campo}' es requerido\" for campo in campos_obligatorios if not data.get(campo)\n    ]\n    if errores:\n        return {\"error\": errores}, 400",
+        "detail": "app.routes.devices_models",
+        "documentation": {}
+    },
+    {
         "label": "get_serializer",
         "kind": 2,
         "importPath": "app.routes.main",
         "description": "app.routes.main",
-        "peekOfCode": "def get_serializer() -> URLSafeTimedSerializer:\n    secret = current_app.config[\"JWT_SECRET_KEY\"]\n    return URLSafeTimedSerializer(secret, salt=\"verify-email\")\n# ──────────────────────────────\n# 0. Hello World\n# ──────────────────────────────\n@main.get(\"/\")\ndef index():\n    return jsonify(mensaje=\"Hola mundo desde Flask!\")\n# ──────────────────────────────",
+        "peekOfCode": "def get_serializer() -> URLSafeTimedSerializer:\n    secret = current_app.config[\"JWT_SECRET_KEY\"]\n    return URLSafeTimedSerializer(secret, salt=\"verify-email\")\ndef roles_required(roles_permitidos):\n    def wrapper(fn):\n        @wraps(fn)\n        @jwt_required()\n        def decorator(*args, **kwargs):\n            claims = get_jwt()\n            current_app.logger.info(f\"Payload completo JWT: {claims}\")",
+        "detail": "app.routes.main",
+        "documentation": {}
+    },
+    {
+        "label": "roles_required",
+        "kind": 2,
+        "importPath": "app.routes.main",
+        "description": "app.routes.main",
+        "peekOfCode": "def roles_required(roles_permitidos):\n    def wrapper(fn):\n        @wraps(fn)\n        @jwt_required()\n        def decorator(*args, **kwargs):\n            claims = get_jwt()\n            current_app.logger.info(f\"Payload completo JWT: {claims}\")\n            rol_usuario = claims.get(\"role\", \"\").upper()\n            current_app.logger.info(f\"Rol extraído del JWT: {rol_usuario}\")\n            if rol_usuario not in roles_permitidos:",
         "detail": "app.routes.main",
         "documentation": {}
     },
@@ -966,7 +1165,7 @@
         "kind": 5,
         "importPath": "app.routes.main",
         "description": "app.routes.main",
-        "peekOfCode": "main = Blueprint(\"main\", __name__)\n# ──────────────────────────────\n# Helper para el serializer\n# ──────────────────────────────\ndef get_serializer() -> URLSafeTimedSerializer:\n    secret = current_app.config[\"JWT_SECRET_KEY\"]\n    return URLSafeTimedSerializer(secret, salt=\"verify-email\")\n# ──────────────────────────────\n# 0. Hello World\n# ──────────────────────────────",
+        "peekOfCode": "main = Blueprint(\"main\", __name__)\n# ──────────────────────────────\n# Helper para el serializer\n# ──────────────────────────────\ndef get_serializer() -> URLSafeTimedSerializer:\n    secret = current_app.config[\"JWT_SECRET_KEY\"]\n    return URLSafeTimedSerializer(secret, salt=\"verify-email\")\ndef roles_required(roles_permitidos):\n    def wrapper(fn):\n        @wraps(fn)",
         "detail": "app.routes.main",
         "documentation": {}
     },
@@ -1074,7 +1273,7 @@
         "kind": 6,
         "importPath": "app.models",
         "description": "app.models",
-        "peekOfCode": "class Catalogo_Modelos(db.Model):\n    __tablename__ = \"catalogo_modelos\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    marca: Mapped[str] = mapped_column(String(120), nullable=False)\n    modelo: Mapped[str] = mapped_column(String(120), nullable=False)\n    almacenamiento: Mapped[str] = mapped_column(String(120), nullable=False)\n    anio: Mapped[str] = mapped_column(String(120), nullable= False)\n    ram: Mapped[str] = mapped_column(String(120), nullable=False)\n    descripcion: Mapped[str] = mapped_column(String(120), nullable=True, default=\"Celular de alta calidad\")\n    fecha_creacion: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False, default=func.now())",
+        "peekOfCode": "class Catalogo_Modelos(db.Model):\n    __tablename__ = \"catalogo_modelos\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    marca: Mapped[str] = mapped_column(String(120), nullable=False)\n    modelo: Mapped[str] = mapped_column(String(120), nullable=False)\n    almacenamiento: Mapped[str] = mapped_column(String(120), nullable=False)\n    anio: Mapped[str] = mapped_column(String(120), nullable= False)\n    ram: Mapped[str] = mapped_column(String(120), nullable=False)\n    descripcion: Mapped[str] = mapped_column(String(1500), nullable=True, default=\"Celular de alta calidad\")\n    color: Mapped[str] = mapped_column(String(120), nullable=True)",
         "detail": "app.models",
         "documentation": {}
     },
@@ -1189,6 +1388,60 @@
     {
         "label": "upgrade",
         "kind": 2,
+        "importPath": "migrations.versions.09ab989b92e9_",
+        "description": "migrations.versions.09ab989b92e9_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('color', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('dual_sim', sa.Boolean(), server_default=sa.text('false'), nullable=True))\n        batch_op.add_column(sa.Column('red_movil', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('version_android', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('procesador', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('velocidad_procesador', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('cantidad_nucleos', sa.String(length=120), nullable=True))",
+        "detail": "migrations.versions.09ab989b92e9_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.09ab989b92e9_",
+        "description": "migrations.versions.09ab989b92e9_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.drop_column('resistencia_caidas')\n        batch_op.drop_column('resistencia_polvo')\n        batch_op.drop_column('resistencia_agua')\n        batch_op.drop_column('resistencia_salpicaduras')\n        batch_op.drop_column('huella_dactilar')\n        batch_op.drop_column('carga_rapida')\n        batch_op.drop_column('capacidad_bateria')",
+        "detail": "migrations.versions.09ab989b92e9_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.09ab989b92e9_",
+        "description": "migrations.versions.09ab989b92e9_",
+        "peekOfCode": "revision = '09ab989b92e9'\ndown_revision = '8407ecfd6181'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('color', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('dual_sim', sa.Boolean(), server_default=sa.text('false'), nullable=True))\n        batch_op.add_column(sa.Column('red_movil', sa.String(length=120), nullable=True))",
+        "detail": "migrations.versions.09ab989b92e9_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.09ab989b92e9_",
+        "description": "migrations.versions.09ab989b92e9_",
+        "peekOfCode": "down_revision = '8407ecfd6181'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('color', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('dual_sim', sa.Boolean(), server_default=sa.text('false'), nullable=True))\n        batch_op.add_column(sa.Column('red_movil', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('version_android', sa.String(length=120), nullable=True))",
+        "detail": "migrations.versions.09ab989b92e9_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.09ab989b92e9_",
+        "description": "migrations.versions.09ab989b92e9_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('color', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('dual_sim', sa.Boolean(), server_default=sa.text('false'), nullable=True))\n        batch_op.add_column(sa.Column('red_movil', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('version_android', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('procesador', sa.String(length=120), nullable=True))",
+        "detail": "migrations.versions.09ab989b92e9_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.09ab989b92e9_",
+        "description": "migrations.versions.09ab989b92e9_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('color', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('dual_sim', sa.Boolean(), server_default=sa.text('false'), nullable=True))\n        batch_op.add_column(sa.Column('red_movil', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('version_android', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('procesador', sa.String(length=120), nullable=True))\n        batch_op.add_column(sa.Column('velocidad_procesador', sa.String(length=120), nullable=True))",
+        "detail": "migrations.versions.09ab989b92e9_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
         "importPath": "migrations.versions.1aeb40bbe4cf_",
         "description": "migrations.versions.1aeb40bbe4cf_",
         "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n        batch_op.alter_column('password_hash',\n               existing_type=sa.VARCHAR(length=255),\n               type_=sa.String(length=255),\n               existing_nullable=False)",
@@ -1292,6 +1545,60 @@
         "description": "migrations.versions.3458aa715262_",
         "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('rol', sa.Enum('SOPORTE', 'ADMIN', 'VENDEDOR', name='roles_empleado', native_enum=False), server_default=sa.text(\"'VENDEDOR'\"), nullable=False))\n        batch_op.alter_column('fecha_verificacion',\n               existing_type=postgresql.TIMESTAMP(timezone=True),\n               nullable=True)\n    # ### end Alembic commands ###\ndef downgrade():",
         "detail": "migrations.versions.3458aa715262_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.359f51fc78de_",
+        "description": "migrations.versions.359f51fc78de_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.alter_column('descripcion',\n               existing_type=sa.VARCHAR(length=120),\n               type_=sa.String(length=1500),\n               existing_nullable=True)\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###",
+        "detail": "migrations.versions.359f51fc78de_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.359f51fc78de_",
+        "description": "migrations.versions.359f51fc78de_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.alter_column('descripcion',\n               existing_type=sa.String(length=1500),\n               type_=sa.VARCHAR(length=120),\n               existing_nullable=True)\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.359f51fc78de_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.359f51fc78de_",
+        "description": "migrations.versions.359f51fc78de_",
+        "peekOfCode": "revision = '359f51fc78de'\ndown_revision = '09ab989b92e9'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.alter_column('descripcion',\n               existing_type=sa.VARCHAR(length=120),\n               type_=sa.String(length=1500),",
+        "detail": "migrations.versions.359f51fc78de_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.359f51fc78de_",
+        "description": "migrations.versions.359f51fc78de_",
+        "peekOfCode": "down_revision = '09ab989b92e9'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.alter_column('descripcion',\n               existing_type=sa.VARCHAR(length=120),\n               type_=sa.String(length=1500),\n               existing_nullable=True)",
+        "detail": "migrations.versions.359f51fc78de_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.359f51fc78de_",
+        "description": "migrations.versions.359f51fc78de_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.alter_column('descripcion',\n               existing_type=sa.VARCHAR(length=120),\n               type_=sa.String(length=1500),\n               existing_nullable=True)\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.359f51fc78de_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.359f51fc78de_",
+        "description": "migrations.versions.359f51fc78de_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.alter_column('descripcion',\n               existing_type=sa.VARCHAR(length=120),\n               type_=sa.String(length=1500),\n               existing_nullable=True)\n    # ### end Alembic commands ###\ndef downgrade():",
+        "detail": "migrations.versions.359f51fc78de_",
         "documentation": {}
     },
     {
@@ -1724,6 +2031,60 @@
         "description": "migrations.versions.8251dd184efd_",
         "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('is_verified', sa.Boolean(), nullable=False, server_default=sa.text('false')))\n        batch_op.add_column(sa.Column('fecha_verificacion', sa.DateTime(timezone=True), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:",
         "detail": "migrations.versions.8251dd184efd_",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.8407ecfd6181_",
+        "description": "migrations.versions.8407ecfd6181_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('imagen', sa.String(length=550), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.drop_column('imagen')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.8407ecfd6181_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.8407ecfd6181_",
+        "description": "migrations.versions.8407ecfd6181_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.drop_column('imagen')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.8407ecfd6181_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.8407ecfd6181_",
+        "description": "migrations.versions.8407ecfd6181_",
+        "peekOfCode": "revision = '8407ecfd6181'\ndown_revision = '077ba0f8f7dd'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('imagen', sa.String(length=550), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():",
+        "detail": "migrations.versions.8407ecfd6181_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.8407ecfd6181_",
+        "description": "migrations.versions.8407ecfd6181_",
+        "peekOfCode": "down_revision = '077ba0f8f7dd'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('imagen', sa.String(length=550), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###",
+        "detail": "migrations.versions.8407ecfd6181_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.8407ecfd6181_",
+        "description": "migrations.versions.8407ecfd6181_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('imagen', sa.String(length=550), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:",
+        "detail": "migrations.versions.8407ecfd6181_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.8407ecfd6181_",
+        "description": "migrations.versions.8407ecfd6181_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('imagen', sa.String(length=550), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('catalogo_modelos', schema=None) as batch_op:\n        batch_op.drop_column('imagen')",
+        "detail": "migrations.versions.8407ecfd6181_",
         "documentation": {}
     },
     {

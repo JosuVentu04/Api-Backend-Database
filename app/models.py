@@ -168,26 +168,79 @@ class Catalogo_Modelos(db.Model):
     almacenamiento: Mapped[str] = mapped_column(String(120), nullable=False)
     anio: Mapped[str] = mapped_column(String(120), nullable= False)
     ram: Mapped[str] = mapped_column(String(120), nullable=False)
-    descripcion: Mapped[str] = mapped_column(String(120), nullable=True, default="Celular de alta calidad")
+    descripcion: Mapped[str] = mapped_column(String(1500), nullable=True, default="Celular de alta calidad")
+    color: Mapped[str] = mapped_column(String(120), nullable=True)
+    dual_sim: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
+    red_movil: Mapped[str] = mapped_column(String(120), nullable=True)
+    version_android: Mapped[str] = mapped_column(String(120), nullable=True)
+    procesador: Mapped[str] = mapped_column(String(120), nullable=True)
+    velocidad_procesador: Mapped[str] = mapped_column(String(120), nullable=True)
+    cantidad_nucleos: Mapped[str] = mapped_column(String(120), nullable=True)
+    tamanio_pantalla: Mapped[str] = mapped_column(String(120), nullable=True)
+    tipo_resolucion: Mapped[str] = mapped_column(String(120), nullable=True)
+    frecuencia_actualizacion_pantalla: Mapped[str] = mapped_column(String(120), nullable=True)
+    resolucion_camara_trasera_principal: Mapped[str] = mapped_column(String(120), nullable=True)
+    resolucion_camara_frontal_principal: Mapped[str] = mapped_column(String(120), nullable=True)
+    capacidad_bateria: Mapped[str] = mapped_column(String(120), nullable=True)
+    carga_rapida: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
+    huella_dactilar: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
+    resistencia_salpicaduras: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
+    resistencia_agua: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
+    resistencia_polvo: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
+    resistencia_caidas: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
+    imagen: Mapped[str] = mapped_column(String(550), nullable=True)
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False, default=func.now())
     fecha_actualizacion: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
         onupdate=func.now()
     ) 
-    
-    def serialize(self) -> dict:
+    def serialize_basic(self) -> dict:
+        """Serialización básica para listado"""
         return {
             "id": self.id,
             "marca": self.marca,
             "modelo": self.modelo,
             "almacenamiento": self.almacenamiento,
             "anio": self.anio,
-            "ram": self.ram,           # ← ahora sí lo expones
-            "descripcion": self.descripcion
+            "ram": self.ram,
+            "descripcion": self.descripcion,
+            "imagen": self.imagen,
         }
-        
+
+    def serialize(self) -> dict:
+        """Serialización completa para detalle"""
+        return {
+            "id": self.id,
+            "marca": self.marca,
+            "modelo": self.modelo,
+            "almacenamiento": self.almacenamiento,
+            "anio": self.anio,
+            "ram": self.ram,
+            "descripcion": self.descripcion,
+            "color": self.color,
+            "dual_sim": self.dual_sim,
+            "red_movil": self.red_movil,
+            "version_android": self.version_android,
+            "procesador": self.procesador,
+            "velocidad_procesador": self.velocidad_procesador,
+            "cantidad_nucleos": self.cantidad_nucleos,
+            "tamanio_pantalla": self.tamanio_pantalla,
+            "tipo_resolucion": self.tipo_resolucion,
+            "frecuencia_actualizacion_pantalla": self.frecuencia_actualizacion_pantalla,
+            "resolucion_camara_trasera_principal": self.resolucion_camara_trasera_principal,
+            "resolucion_camara_frontal_principal": self.resolucion_camara_frontal_principal,
+            "capacidad_bateria": self.capacidad_bateria,
+            "carga_rapida": self.carga_rapida,
+            "huella_dactilar": self.huella_dactilar,
+            "resistencia_salpicaduras": self.resistencia_salpicaduras,
+            "resistencia_agua": self.resistencia_agua,
+            "resistencia_polvo": self.resistencia_polvo,
+            "resistencia_caidas": self.resistencia_caidas,
+            "imagen": self.imagen,
+            "fecha_creacion": self.fecha_creacion.isoformat() if self.fecha_creacion else None,
+            "fecha_actualizacion": self.fecha_actualizacion.isoformat() if self.fecha_actualizacion else None,
+        }
+
     def __repr__(self):
         return f"<Dispositivo {self.id} – {self.modelo}>"
-    
-    

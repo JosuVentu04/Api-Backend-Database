@@ -66,10 +66,12 @@ def confirmar_correo(token):
 # ────────────────────────────
 # 3) Login protegido
 # ────────────────────────────
+from flask_jwt_extended import create_access_token
+
 @bp.post("/login")
 def login():
     data = request.get_json() or {}
-    correo   = data.get("correo")
+    correo = data.get("correo")
     password = data.get("password")
     sucursal_id = data.get("sucursal_id")
 
@@ -82,8 +84,12 @@ def login():
     if not emp.is_verified:
         return {"msg": "verifica tu correo antes de iniciar sesión"}, 403
 
-    token = create_access_token(identity=str(emp.id))
-    
+    # AGREGAR EL ROL AL JWT
+    claims = {
+    "role": str(emp.rol.name).upper() if emp.rol else ""
+    }
+    token = create_access_token(identity=str(emp.id), additional_claims=claims)
+
     print(sucursal_id)
     return {"access_token": token}, 200
 

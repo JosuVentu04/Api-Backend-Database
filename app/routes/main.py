@@ -1,8 +1,10 @@
-from flask import Blueprint, jsonify, request, current_app, redirect
+from flask import Blueprint, jsonify, request, current_app, redirect, abort
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from sqlalchemy.exc import SQLAlchemyError
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from app import db
 from app.models import Empleado, EstadoUsuario, Sucursal, EstadoSucursal
+from functools import wraps
 
 main = Blueprint("main", __name__)
 
@@ -12,6 +14,21 @@ main = Blueprint("main", __name__)
 def get_serializer() -> URLSafeTimedSerializer:
     secret = current_app.config["JWT_SECRET_KEY"]
     return URLSafeTimedSerializer(secret, salt="verify-email")
+
+def roles_required(roles_permitidos):
+    def wrapper(fn):
+        @wraps(fn)
+        @jwt_required()
+        def decorator(*args, **kwargs):
+            claims = get_jwt()
+            current_app.logger.info(f"Payload completo JWT: {claims}")
+            rol_usuario = claims.get("role", "").upper()
+            current_app.logger.info(f"Rol extraído del JWT: {rol_usuario}")
+            if rol_usuario not in roles_permitidos:
+                abort(403)
+            return fn(*args, **kwargs)
+        return decorator
+    return wrapper
 
 # ──────────────────────────────
 # 0. Hello World
@@ -86,6 +103,7 @@ def obtener_todas_sucursales():
 # 2. CRUD EMPLEADO
 # ──────────────────────────────
 @main.post("/crear-empleado")
+@roles_required({"GERENTE", "ADMIN", "SOPORTE"})
 def crear_empleado():
     data = request.get_json() or {}
 

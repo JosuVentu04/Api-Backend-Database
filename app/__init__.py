@@ -90,10 +90,13 @@ def create_app(config_obj: type | object = Config) -> Flask:
     # 5) Registrar blueprints
     from app.routes.main import main
     from app.routes.auth import bp as auth_bp
-    from app.routes.users import bp as users_bp    
+    from app.routes.users import bp as users_bp 
+    from app.routes.devices_models import dispositivos   
     app.register_blueprint(main)
     app.register_blueprint(auth_bp)
     app.register_blueprint(users_bp) 
+    app.register_blueprint(dispositivos)
+    
 
     # 6) Debug opcional: muestra cada respuesta que pasa por Flask
     @app.after_request
