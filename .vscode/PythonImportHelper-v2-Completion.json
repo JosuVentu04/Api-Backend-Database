@@ -184,6 +184,22 @@
         "documentation": {}
     },
     {
+        "label": "abort",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "current_app",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
         "label": "current_app",
         "importPath": "flask",
         "description": "flask",
@@ -272,11 +288,35 @@
         "documentation": {}
     },
     {
+        "label": "jwt_required",
+        "importPath": "flask_jwt_extended",
+        "description": "flask_jwt_extended",
+        "isExtraImport": true,
+        "detail": "flask_jwt_extended",
+        "documentation": {}
+    },
+    {
+        "label": "get_jwt",
+        "importPath": "flask_jwt_extended",
+        "description": "flask_jwt_extended",
+        "isExtraImport": true,
+        "detail": "flask_jwt_extended",
+        "documentation": {}
+    },
+    {
         "label": "sqlalchemy.exc",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "sqlalchemy.exc",
         "description": "sqlalchemy.exc",
+        "detail": "sqlalchemy.exc",
+        "documentation": {}
+    },
+    {
+        "label": "SQLAlchemyError",
+        "importPath": "sqlalchemy.exc",
+        "description": "sqlalchemy.exc",
+        "isExtraImport": true,
         "detail": "sqlalchemy.exc",
         "documentation": {}
     },
@@ -457,6 +497,14 @@
         "documentation": {}
     },
     {
+        "label": "EstadoUsuario",
+        "importPath": "app.models",
+        "description": "app.models",
+        "isExtraImport": true,
+        "detail": "app.models",
+        "documentation": {}
+    },
+    {
         "label": "URLSafeTimedSerializer",
         "importPath": "itsdangerous",
         "description": "itsdangerous",
@@ -566,6 +614,30 @@
         "description": "app",
         "isExtraImport": true,
         "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "roles_required",
+        "importPath": "app.decoradores",
+        "description": "app.decoradores",
+        "isExtraImport": true,
+        "detail": "app.decoradores",
+        "documentation": {}
+    },
+    {
+        "label": "roles_required",
+        "importPath": "app.decoradores",
+        "description": "app.decoradores",
+        "isExtraImport": true,
+        "detail": "app.decoradores",
+        "documentation": {}
+    },
+    {
+        "label": "wraps",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
         "documentation": {}
     },
     {
@@ -729,6 +801,14 @@
         "importPath": "smtplib.",
         "description": "smtplib.",
         "detail": "smtplib.",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
         "documentation": {}
     },
     {
@@ -1053,6 +1133,15 @@
         "documentation": {}
     },
     {
+        "label": "eliminar_modelo",
+        "kind": 2,
+        "importPath": "app.routes.devices_models",
+        "description": "app.routes.devices_models",
+        "peekOfCode": "def eliminar_modelo(modelo_id):\n    try:\n        modelo = Catalogo_Modelos.query.get_or_404(modelo_id)\n        if not modelo:\n            return jsonify({\"error\": \"No se encontró el modelo\"}), 404\n        db.session.delete(modelo)\n        db.session.commit()\n        return jsonify({\"ok\": True, \"msg\": \"Modelo eliminada correctamente\"}), 200\n    except Exception as e:\n        db.session.rollback()",
+        "detail": "app.routes.devices_models",
+        "documentation": {}
+    },
+    {
         "label": "listar_modelos",
         "kind": 2,
         "importPath": "app.routes.devices_models",
@@ -1075,7 +1164,7 @@
         "kind": 5,
         "importPath": "app.routes.devices_models",
         "description": "app.routes.devices_models",
-        "peekOfCode": "dispositivos = Blueprint(\"dispositivos\", __name__, url_prefix=\"/devices\")\n@dispositivos.post(\"/nuevo-modelo\")\ndef crear_modelo():\n    data = request.get_json() or {}\n    campos_obligatorios = [\"marca\", \"modelo\", \"almacenamiento\", \"anio\", \"ram\"]\n    errores = [\n        f\"El campo '{campo}' es requerido\" for campo in campos_obligatorios if not data.get(campo)\n    ]\n    if errores:\n        return {\"error\": errores}, 400",
+        "peekOfCode": "dispositivos = Blueprint(\"dispositivos\", __name__, url_prefix=\"/devices\")\n@dispositivos.post(\"/nuevo-modelo\")\n@roles_required({\"ADMIN\", \"SOPORTE\"})\ndef crear_modelo():\n    data = request.get_json() or {}\n    campos_obligatorios = [\"marca\", \"modelo\", \"almacenamiento\", \"anio\", \"ram\"]\n    errores = [\n        f\"El campo '{campo}' es requerido\" for campo in campos_obligatorios if not data.get(campo)\n    ]\n    if errores:",
         "detail": "app.routes.devices_models",
         "documentation": {}
     },
@@ -1138,7 +1227,7 @@
         "kind": 2,
         "importPath": "app.routes.main",
         "description": "app.routes.main",
-        "peekOfCode": "def crear_empleado():\n    data = request.get_json() or {}\n    # --- Validaciones mínimas ----------------------\n    if not data.get(\"password\"):\n        return {\"error\": \"password es requerido\"}, 400\n    if not data.get(\"correo\"):\n        return {\"error\": \"correo es requerido\"}, 400\n    if Empleado.query.filter_by(correo=data[\"correo\"]).first():\n        return {\"error\": \"correo ya registrado\"}, 409\n    # -----------------------------------------------",
+        "peekOfCode": "def crear_empleado():\n    data = request.get_json() or {}\n    if not data.get(\"password\"):\n        return {\"error\": \"password es requerido\"}, 400\n    if not data.get(\"correo\"):\n        return {\"error\": \"correo es requerido\"}, 400\n    if Empleado.query.filter_by(correo=data[\"correo\"]).first():\n        return {\"error\": \"correo ya registrado\"}, 409\n    rol_nuevo = data.get(\"rol\", \"VENDEDOR\").upper()\n    claims = get_jwt()",
         "detail": "app.routes.main",
         "documentation": {}
     },
@@ -1147,7 +1236,7 @@
         "kind": 2,
         "importPath": "app.routes.main",
         "description": "app.routes.main",
-        "peekOfCode": "def empleados_por_sucursal():\n    sucursal_id = request.args.get(\"sucursal_id\")\n    if not sucursal_id:\n        return {\"msg\": \"Falta parámetro sucursal_id\"}, 400\n    empleados = Empleado.query.filter_by(sucursal_id=sucursal_id).all()\n    return jsonify([e.serialize() for e in empleados])\n# ──────────────────────────────\n# 3. Confirmación de correo\n# ──────────────────────────────\n# ──────────────────────────────",
+        "peekOfCode": "def empleados_por_sucursal():\n    sucursal_id = request.args.get(\"sucursal_id\")\n    if not sucursal_id:\n        return {\"msg\": \"Falta parámetro sucursal_id\"}, 400\n    empleados = Empleado.query.filter_by(sucursal_id=sucursal_id).all()\n    return jsonify([e.serialize() for e in empleados])\n# ──────────────────────────────\n# 4. Demo\n# ──────────────────────────────\n@main.get(\"/empleado-demo\")",
         "detail": "app.routes.main",
         "documentation": {}
     },
@@ -1210,7 +1299,16 @@
         "kind": 2,
         "importPath": "app.routes.users",
         "description": "app.routes.users",
-        "peekOfCode": "def actualizar_perfil():\n    user_id = get_jwt_identity()\n    datos = request.get_json()\n    empleado = Empleado.query.get_or_404(user_id)\n    # Actualiza solo campos permitidos. NO permitimos cambiar correo aquí para mantener flujo seguro\n    if \"nombre\" in datos:\n        empleado.nombre = datos[\"nombre\"]\n    # Puedes agregar campos adicionales seguros aquí.\n    db.session.commit()\n    return jsonify({",
+        "peekOfCode": "def actualizar_perfil():\n    user_id = get_jwt_identity()\n    datos = request.get_json()\n    empleado = Empleado.query.get_or_404(user_id)\n    # Actualiza solo campos permitidos. NO permitimos cambiar correo aquí para mantener flujo seguro\n    if \"nombre\" in datos:\n        empleado.nombre = datos[\"nombre\"]\n    if \"numero_telefonico\" in datos:\n        empleado.numero_telefonico = datos[\"numero_telefonico\"]\n    # Puedes agregar campos adicionales seguros aquí.",
+        "detail": "app.routes.users",
+        "documentation": {}
+    },
+    {
+        "label": "modificar_empleado",
+        "kind": 2,
+        "importPath": "app.routes.users",
+        "description": "app.routes.users",
+        "peekOfCode": "def modificar_empleado(empleado_id):\n    data = request.get_json() or {}\n    empleado = Empleado.query.get_or_404(empleado_id)\n    # 🔹 Modificar solo campos permitidos\n    if \"rol\" in data:\n        empleado.rol = data[\"rol\"].upper()\n    if \"sucursal_id\" in data:\n        empleado.sucursal_id = data[\"sucursal_id\"]\n    if \"estado_usuario\" in data:\n        try:",
         "detail": "app.routes.users",
         "documentation": {}
     },
@@ -1221,6 +1319,15 @@
         "description": "app.routes.users",
         "peekOfCode": "bp = Blueprint(\"users\", __name__, url_prefix=\"/users\")\n# Función para enviar email en hilo con contexto Flask bien gestionado\ndef send_email_thread(app, subject, html_body, to):\n    with app.app_context():\n        send_email(subject, html_body, to)\n@bp.post(\"/solicitar-cambio-correo\")\n@jwt_required()\ndef solicitar_cambio_correo():\n    user_id = get_jwt_identity()\n    nuevo_correo = request.json.get(\"nuevo_correo\")",
         "detail": "app.routes.users",
+        "documentation": {}
+    },
+    {
+        "label": "roles_required",
+        "kind": 2,
+        "importPath": "app.decoradores",
+        "description": "app.decoradores",
+        "peekOfCode": "def roles_required(roles_permitidos):\n    def wrapper(fn):\n        @wraps(fn)\n        @jwt_required()\n        def decorator(*args, **kwargs):\n            claims = get_jwt()\n            current_app.logger.info(f\"Payload completo JWT: {claims}\")\n            rol_usuario = claims.get(\"role\", \"\").upper()\n            current_app.logger.info(f\"Rol extraído del JWT: {rol_usuario}\")\n            if rol_usuario not in roles_permitidos:",
+        "detail": "app.decoradores",
         "documentation": {}
     },
     {
@@ -1237,7 +1344,7 @@
         "kind": 6,
         "importPath": "app.models",
         "description": "app.models",
-        "peekOfCode": "class RolesEmpleado(PyEnum):\n    ADMIN = \"ADMIN\"\n    SOPORTE = \"SOPORTE\"\n    GERENTE = \"GERENTE\"\n    VENDEDOR = \"VENDEDOR\"\nclass EstadoSucursal(PyEnum):\n    ACTIVA     = \"ACTIVA\"\n    CERRADA    = \"CERRADA\"\n    SUSPENDIDA = \"SUSPENDIDA\"\n# ──────────────────────────────────────────────",
+        "peekOfCode": "class RolesEmpleado(PyEnum):\n    ADMIN = \"ADMIN\"\n    SOPORTE = \"SOPORTE\"\n    GERENTE = \"GERENTE\"\n    VENDEDOR = \"VENDEDOR\"\nclass EstadoSucursal(PyEnum):\n    ACTIVA     = \"ACTIVA\"\n    CERRADA    = \"CERRADA\"\n    SUSPENDIDA = \"SUSPENDIDA\" \n# ──────────────────────────────────────────────",
         "detail": "app.models",
         "documentation": {}
     },
@@ -1246,7 +1353,7 @@
         "kind": 6,
         "importPath": "app.models",
         "description": "app.models",
-        "peekOfCode": "class EstadoSucursal(PyEnum):\n    ACTIVA     = \"ACTIVA\"\n    CERRADA    = \"CERRADA\"\n    SUSPENDIDA = \"SUSPENDIDA\"\n# ──────────────────────────────────────────────\n#  Modelo Sucursal\n# ──────────────────────────────────────────────\nclass Sucursal(db.Model):\n    __tablename__ = \"sucursal\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)",
+        "peekOfCode": "class EstadoSucursal(PyEnum):\n    ACTIVA     = \"ACTIVA\"\n    CERRADA    = \"CERRADA\"\n    SUSPENDIDA = \"SUSPENDIDA\" \n# ──────────────────────────────────────────────\n#  Modelo Sucursal\n# ──────────────────────────────────────────────\nclass Sucursal(db.Model):\n    __tablename__ = \"sucursal\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)",
         "detail": "app.models",
         "documentation": {}
     },
@@ -1264,7 +1371,7 @@
         "kind": 6,
         "importPath": "app.models",
         "description": "app.models",
-        "peekOfCode": "class Empleado(db.Model):\n    __tablename__ = \"empleado\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    nombre: Mapped[str] = mapped_column(String(120), nullable=False)\n    # ---- verificación de correo ----\n    is_verified: Mapped[bool] = mapped_column(\n        Boolean, default=False, server_default=text(\"false\"), nullable=False\n    )\n    rol: Mapped[RolesEmpleado] = mapped_column(\n        SqlEnum(RolesEmpleado, name=\"roles_empleado\", native_enum=False, validate_strings=True), ",
+        "peekOfCode": "class Empleado(db.Model):\n    __tablename__ = \"empleado\"\n    id: Mapped[int] = mapped_column(Integer, primary_key=True)\n    nombre: Mapped[str] = mapped_column(String(120), nullable=False)\n    numero_telefonico: Mapped[str] = mapped_column(String(12), nullable=True)\n    # ---- verificación de correo ----\n    is_verified: Mapped[bool] = mapped_column(\n        Boolean, default=False, server_default=text(\"false\"), nullable=False\n    )\n    rol: Mapped[RolesEmpleado] = mapped_column(",
         "detail": "app.models",
         "documentation": {}
     },
@@ -1329,6 +1436,60 @@
         "description": "app.utils",
         "peekOfCode": "_SALT = \"email-verification\"          # usa el mismo en dumps y loads\ndef _get_serializer() -> URLSafeTimedSerializer:\n    \"\"\"\n    Serializer configurado con SECRET_KEY y salt fijo.\n    Llamar SIEMPRE a esta función, no crear instancias manualmente.\n    \"\"\"\n    secret = current_app.config[\"SECRET_KEY\"]     # clave única de la app\n    return URLSafeTimedSerializer(secret, salt=_SALT)\ndef generate_email_token(email: str) -> str:\n    \"\"\"Devuelve un token firmado que contiene el correo y timestamp.\"\"\"",
         "detail": "app.utils",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.01d296963b37_",
+        "description": "migrations.versions.01d296963b37_",
+        "peekOfCode": "def upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('numero_telefonico', sa.String(length=12), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.drop_column('numero_telefonico')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.01d296963b37_",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "migrations.versions.01d296963b37_",
+        "description": "migrations.versions.01d296963b37_",
+        "peekOfCode": "def downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.drop_column('numero_telefonico')\n    # ### end Alembic commands ###",
+        "detail": "migrations.versions.01d296963b37_",
+        "documentation": {}
+    },
+    {
+        "label": "revision",
+        "kind": 5,
+        "importPath": "migrations.versions.01d296963b37_",
+        "description": "migrations.versions.01d296963b37_",
+        "peekOfCode": "revision = '01d296963b37'\ndown_revision = '359f51fc78de'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('numero_telefonico', sa.String(length=12), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():",
+        "detail": "migrations.versions.01d296963b37_",
+        "documentation": {}
+    },
+    {
+        "label": "down_revision",
+        "kind": 5,
+        "importPath": "migrations.versions.01d296963b37_",
+        "description": "migrations.versions.01d296963b37_",
+        "peekOfCode": "down_revision = '359f51fc78de'\nbranch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('numero_telefonico', sa.String(length=12), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###",
+        "detail": "migrations.versions.01d296963b37_",
+        "documentation": {}
+    },
+    {
+        "label": "branch_labels",
+        "kind": 5,
+        "importPath": "migrations.versions.01d296963b37_",
+        "description": "migrations.versions.01d296963b37_",
+        "peekOfCode": "branch_labels = None\ndepends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('numero_telefonico', sa.String(length=12), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:",
+        "detail": "migrations.versions.01d296963b37_",
+        "documentation": {}
+    },
+    {
+        "label": "depends_on",
+        "kind": 5,
+        "importPath": "migrations.versions.01d296963b37_",
+        "description": "migrations.versions.01d296963b37_",
+        "peekOfCode": "depends_on = None\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.add_column(sa.Column('numero_telefonico', sa.String(length=12), nullable=True))\n    # ### end Alembic commands ###\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    with op.batch_alter_table('empleado', schema=None) as batch_op:\n        batch_op.drop_column('numero_telefonico')",
+        "detail": "migrations.versions.01d296963b37_",
         "documentation": {}
     },
     {

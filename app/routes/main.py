@@ -6,6 +6,7 @@ from app import db
 from app.models import Empleado, EstadoUsuario, Sucursal, EstadoSucursal
 from functools import wraps
 
+
 main = Blueprint("main", __name__)
 
 # ──────────────────────────────
@@ -107,22 +108,33 @@ def obtener_todas_sucursales():
 def crear_empleado():
     data = request.get_json() or {}
 
-    # --- Validaciones mínimas ----------------------
     if not data.get("password"):
         return {"error": "password es requerido"}, 400
     if not data.get("correo"):
         return {"error": "correo es requerido"}, 400
     if Empleado.query.filter_by(correo=data["correo"]).first():
         return {"error": "correo ya registrado"}, 409
-    # -----------------------------------------------
+
+    rol_nuevo = data.get("rol", "VENDEDOR").upper()
+
+    claims = get_jwt()
+    rol_actual = claims.get("role", "").upper()
+
+    if rol_nuevo == "GERENTE" and rol_actual != "ADMIN":
+        return {"error": "No tienes permisos para crear gerentes"}, 403
+
+    if rol_actual == "SOPORTE" and rol_nuevo != "EMPLEADO":
+        return {"error": "SOPORTE solo puede crear empleados básicos"}, 403
 
     try:
         nuevo = Empleado(
             nombre=data.get("nombre"),
             estado_usuario=EstadoUsuario[data.get("estado_usuario", "ACTIVO")],
             correo=data["correo"],
+            numero_telefonico=data.get("numero_telefonico"),
             sucursal_id=data.get("sucursal_id"),
-            is_verified=False           # queda NO verificado
+            rol=rol_nuevo,
+            is_verified=False
         )
         nuevo.set_password(data["password"])
         db.session.add(nuevo)
@@ -132,24 +144,16 @@ def crear_empleado():
         current_app.logger.exception("Fallo al crear empleado")
         return {"error": "error interno del servidor"}, 500
 
-    # ---- generar token y enviar correo ------------
     ts = get_serializer()
     token = ts.dumps(nuevo.correo)
-    origin = current_app.config.get('FRONTEND_URL') \
-             or request.host_url.rstrip('/')
-
+    origin = current_app.config.get('FRONTEND_URL') or request.host_url.rstrip('/')
     link = f"{origin}/confirmar-correo/{token}"
-    link  = f"{current_app.config['DEV_FRONTEND_URL']}/confirmar-correo/{token}"
-
-    current_app.logger.info("LINK DEV ➜ %s", link)   # desarrollo
-    # send_email(nuevo.correo, "Confirma tu cuenta", link)  # producción
-    # -----------------------------------------------
+    current_app.logger.info("LINK DEV ➜ %s", link)
 
     return jsonify(
         mensaje="Empleado creado. Revisa tu correo para confirmar la cuenta.",
         id=nuevo.id
     ), 201
-
 
 @main.get("/empleados")
 def empleados_por_sucursal():
@@ -161,9 +165,6 @@ def empleados_por_sucursal():
     return jsonify([e.serialize() for e in empleados])
 
 
-# ──────────────────────────────
-# 3. Confirmación de correo
-# ──────────────────────────────
 # ──────────────────────────────
 # 4. Demo
 # ──────────────────────────────

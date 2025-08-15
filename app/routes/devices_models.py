@@ -3,10 +3,12 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.models import Catalogo_Modelos
 from app import db
 import sqlalchemy.exc
+from app.decoradores import roles_required
 
 dispositivos = Blueprint("dispositivos", __name__, url_prefix="/devices")
 
 @dispositivos.post("/nuevo-modelo")
+@roles_required({"ADMIN", "SOPORTE"})
 def crear_modelo():
     data = request.get_json() or {}
 
@@ -57,6 +59,7 @@ def crear_modelo():
     return jsonify(mensaje="Modelo creado exitosamente", id=nuevo_modelo.id), 201
 
 @dispositivos.put("/editar-modelo/<int:modelo_id>")
+@roles_required({"ADMIN", "SOPORTE"})
 def editar_modelo(modelo_id):
     modelo = Catalogo_Modelos.query.get_or_404(modelo_id)
     data = request.get_json() or {}
@@ -85,7 +88,7 @@ def editar_modelo(modelo_id):
         db.session.commit()
         db.session.refresh(modelo)
     except SQLAlchemyError:
-        db.session.rollback()
+        db.session.rollback() 
         current_app.logger.exception("Fallo al editar el modelo")
         return {"error": "Error interno del servidor"}, 500
 
@@ -93,6 +96,22 @@ def editar_modelo(modelo_id):
         "mensaje": "Modelo editado exitosamente",
         "modelo": modelo.serialize()   # Retorna el modelo actualizado
     }), 200
+    
+@dispositivos.delete("/eliminar-modelo/<int:modelo_id>")
+@roles_required({"ADMIN", "SOPORTE"})
+def eliminar_modelo(modelo_id):
+    try:
+        modelo = Catalogo_Modelos.query.get_or_404(modelo_id)
+        if not modelo:
+            return jsonify({"error": "No se encontró el modelo"}), 404
+        
+        db.session.delete(modelo)
+        db.session.commit()
+        
+        return jsonify({"ok": True, "msg": "Modelo eliminada correctamente"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"ok": False, "msg": str(e)}), 500
         
 
 @dispositivos.get("/catalogo-modelos")

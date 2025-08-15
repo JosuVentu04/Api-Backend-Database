@@ -2,8 +2,10 @@ from flask import Blueprint, request, jsonify, current_app,redirect, url_for
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
 import threading
-from app.models import Empleado, db
+from sqlalchemy.exc import SQLAlchemyError
+from app.models import Empleado, db, EstadoUsuario
 from app.utils import generate_email_change_token, confirm_email_change_token, send_email
+from app.decoradores import roles_required
 
 bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -137,7 +139,9 @@ def confirmar_email_nuevo(token):
     return redirect(url, 302)
 
 
+
 @bp.put("/perfil")
+@roles_required({"VENDEDOR"})
 @jwt_required()
 def actualizar_perfil():
     
@@ -149,6 +153,8 @@ def actualizar_perfil():
     # Actualiza solo campos permitidos. NO permitimos cambiar correo aquí para mantener flujo seguro
     if "nombre" in datos:
         empleado.nombre = datos["nombre"]
+    if "numero_telefonico" in datos:
+        empleado.numero_telefonico = datos["numero_telefonico"]
 
     # Puedes agregar campos adicionales seguros aquí.
 
@@ -158,3 +164,40 @@ def actualizar_perfil():
         "msg": "Perfil actualizado correctamente",
         "empleado": empleado.serialize()
     }), 200
+    
+@bp.put("/modificar-empleado/<int:empleado_id>")
+@jwt_required()
+def modificar_empleado(empleado_id):
+    data = request.get_json() or {}
+
+    empleado = Empleado.query.get_or_404(empleado_id)
+
+    # 🔹 Modificar solo campos permitidos
+    if "rol" in data:
+        empleado.rol = data["rol"].upper()
+
+    if "sucursal_id" in data:
+        empleado.sucursal_id = data["sucursal_id"]
+
+    if "estado_usuario" in data:
+        try:
+            empleado.estado_usuario = EstadoUsuario[data["estado_usuario"].upper()]
+        except KeyError:
+            return jsonify({"error": "Estado de usuario inválido"}), 400
+
+    campos_permitidos = {"rol", "sucursal_id", "estado_usuario"}
+    for campo in data.keys():
+        if campo not in campos_permitidos:
+            return jsonify({"error": f"No está permitido modificar el campo '{campo}'"}), 400
+
+    try:
+        db.session.commit()
+    except SQLAlchemyError:
+        db.session.rollback()
+        current_app.logger.exception("Error modificando empleado")
+        return jsonify({"error": "Error al modificar el empleado"}), 500
+
+    return jsonify({ 
+        "msg": "Empleado modificado correctamente",
+        "empleado": empleado.serialize()
+    }), 200       

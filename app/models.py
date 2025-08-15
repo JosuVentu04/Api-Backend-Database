@@ -6,9 +6,9 @@ from sqlalchemy import (
     text, func
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash  
 
-from app import db   # importa la instancia creada en app/__init__.py
+from app import db   # importa la instancia creada en app/__init__.py 
 
 
 # ──────────────────────────────────────────────
@@ -27,7 +27,7 @@ class RolesEmpleado(PyEnum):
 class EstadoSucursal(PyEnum):
     ACTIVA     = "ACTIVA"
     CERRADA    = "CERRADA"
-    SUSPENDIDA = "SUSPENDIDA"
+    SUSPENDIDA = "SUSPENDIDA" 
 
 
 # ──────────────────────────────────────────────
@@ -98,6 +98,7 @@ class Empleado(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     nombre: Mapped[str] = mapped_column(String(120), nullable=False)
+    numero_telefonico: Mapped[str] = mapped_column(String(12), nullable=True)
 
     # ---- verificación de correo ----
     is_verified: Mapped[bool] = mapped_column(
@@ -150,6 +151,7 @@ class Empleado(db.Model):
             "id": self.id,
             "nombre": self.nombre,
             "correo": self.correo,
+            "numero_telefonico": self.numero_telefonico,
             "estado_usuario": self.estado_usuario.value,
             "sucursal_id": self.sucursal_id,
             "is_verified": self.is_verified,           # ← ahora sí lo expones
