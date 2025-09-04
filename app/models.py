@@ -28,7 +28,21 @@ class EstadoSucursal(PyEnum):
     ACTIVA     = "ACTIVA"
     CERRADA    = "CERRADA"
     SUSPENDIDA = "SUSPENDIDA" 
+    
+class TipoIdentificacion(PyEnum):
+    
+    passport = "passport"
+    id_card = "id_card"  
+    driver_license = "driver_license"
+    residence_permit = "residence_permit"
+    identity_card = "identity_card"
 
+class EstadoUsuario(PyEnum):
+    ACTIVO   = "ACTIVO"
+    INACTIVO = "INACTIVO"
+    MOROSO  = "MOROSO"
+    BLOQUEADO = "BLOQUEADO"
+    ELIMINADO = "ELIMINADO"
 
 # ──────────────────────────────────────────────
 #  Modelo Sucursal
@@ -88,8 +102,30 @@ class Sucursal(db.Model):
 
     def __repr__(self) -> str:
         return f"<Sucursal {self.id} – {self.nombre}>"
+    
 
-
+class Usuario(db.Model):
+    __tablename__ = "usuario"
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    nombre: Mapped[str] = mapped_column(String(120), nullable=False)    
+    apellido: Mapped[str] = mapped_column(String(120), nullable=False)
+    correo: Mapped[str] = mapped_column(String(120), unique=True, nullable=True, index=True)
+    numero_telefonico_adicional: Mapped[str] = mapped_column(String(12), nullable=True)
+    numero_telefonico: Mapped[str] = mapped_column(String(12), nullable=True)
+    tipo_identificacion: Mapped[TipoIdentificacion] = mapped_column(
+        SqlEnum(TipoIdentificacion, name="tipo_identificacion_enum", native_enum=False, validate_strings=True), 
+        nullable=False)
+    numero_identificacion: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    direccion: Mapped[str] = mapped_column(String(255), nullable=True)
+    fecha_nacimiento: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    estado_usuario: Mapped[EstadoUsuario] = mapped_column(
+        SqlEnum(EstadoUsuario, name="estado_usuario_enum", native_enum=False, validate_strings=True),
+        default=EstadoUsuario.ACTIVO)
+    notas: Mapped[str] = mapped_column(String(1500), nullable=True)
+    datos_biometricos: Mapped[str] = mapped_column(String(1500), nullable=True)
+    fotografia_url: Mapped[str] = mapped_column(String(550), nullable=True)
+    
 # ──────────────────────────────────────────────
 #  Modelo Empleado
 # ──────────────────────────────────────────────

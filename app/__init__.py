@@ -1,12 +1,13 @@
 from __future__ import annotations
 import os
-from flask import Flask, request, current_app          # ← importa request para debug
+from flask import Flask, request, current_app, jsonify         # ← importa request para debug
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from cryptography.fernet import Fernet
 from config import Config
+import requests
 
 
 # ── extensiones globales ───────────────────────────────
@@ -92,11 +93,15 @@ def create_app(config_obj: type | object = Config) -> Flask:
     from app.routes.auth import bp as auth_bp
     from app.routes.users import bp as users_bp 
     from app.routes.devices_models import dispositivos   
+    from app.routes.verificacion import veriff_bp
     app.register_blueprint(main)
     app.register_blueprint(auth_bp)
     app.register_blueprint(users_bp) 
     app.register_blueprint(dispositivos)
+    app.register_blueprint(veriff_bp)
     
+    if __name__ == '__main__':
+        app.run(debug=True)
 
     # 6) Debug opcional: muestra cada respuesta que pasa por Flask
     @app.after_request
