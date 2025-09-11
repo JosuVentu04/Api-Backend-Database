@@ -125,7 +125,27 @@ class Usuario(db.Model):
     notas: Mapped[str] = mapped_column(String(1500), nullable=True)
     datos_biometricos: Mapped[str] = mapped_column(String(1500), nullable=True)
     fotografia_url: Mapped[str] = mapped_column(String(550), nullable=True)
-    
+
+    def serialize(self) -> dict:
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "apellido": self.apellido,
+            "correo": self.correo,
+            "numero_telefonico_adicional": self.numero_telefonico_adicional,
+            "numero_telefonico": self.numero_telefonico,
+            "tipo_identificacion": self.tipo_identificacion.value if self.tipo_identificacion else None,
+            "numero_identificacion": self.numero_identificacion,
+            "direccion": self.direccion,
+            "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
+            "estado_usuario": self.estado_usuario.value if self.estado_usuario else None,
+            "notas": self.notas,
+            "datos_biometricos": self.datos_biometricos,
+            "fotografia_url": self.fotografia_url,
+        }
+
+    def __repr__(self):
+        return f"<Usuario {self.id} – {self.nombre} {self.apellido}>"
 # ──────────────────────────────────────────────
 #  Modelo Empleado
 # ──────────────────────────────────────────────
@@ -282,3 +302,32 @@ class Catalogo_Modelos(db.Model):
 
     def __repr__(self):
         return f"<Dispositivo {self.id} – {self.modelo}>"
+    
+class consultas_verificacion(db.Model):
+    __tablename__ = "consultas_verificacion"
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    empleado_id: Mapped[int] = mapped_column(Integer, ForeignKey("empleado.id", ondelete="CASCADE"), nullable=False, index=True)
+    session_id: Mapped[str] = mapped_column(String(255), nullable=True)
+    empleado = relationship("Empleado", lazy="joined")
+    usuario_id: Mapped[int] = mapped_column(Integer, ForeignKey("usuario.id", ondelete="CASCADE"), nullable=False, index=True)
+    usuario = relationship("Usuario", lazy="joined")
+    nombre: Mapped[str] = mapped_column(String(120), nullable=False)
+    apellido: Mapped[str] = mapped_column(String(120), nullable=False)
+    fecha_consulta: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    motivo_consulta: Mapped[str] = mapped_column(String(255), nullable=True)
+    resultado_consulta: Mapped[str] = mapped_column(String(255), nullable=True)
+    
+    def serialize(self) -> dict:
+        return {
+            "id": self.id,
+            "empleado_id": self.empleado_id,
+            "usuario_id": self.usuario_id,
+            "session_id": self.session_id,  # <--- incluir este campo si es relevante
+            "fecha_consulta": self.fecha_consulta.isoformat() if self.fecha_consulta else None,
+            "motivo_consulta": self.motivo_consulta,
+            "resultado_consulta": self.resultado_consulta,
+        }
+
+    def __repr__(self):
+        return f"<ConsultaVerificacion {self.id} – Empleado {self.empleado_id} – Usuario {self.usuario_id}>"

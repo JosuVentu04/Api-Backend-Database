@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
 import threading
 from sqlalchemy.exc import SQLAlchemyError
-from app.models import Empleado, db, EstadoUsuario
+from app.models import Empleado, db, EstadoUsuario, Usuario, TipoIdentificacion
 from app.utils import generate_email_change_token, confirm_email_change_token, send_email
 from app.decoradores import roles_required
 
@@ -201,3 +201,52 @@ def modificar_empleado(empleado_id):
         "msg": "Empleado modificado correctamente",
         "empleado": empleado.serialize()
     }), 200       
+    
+# ──────────────────────────────
+# 2. CLIENTES
+# ──────────────────────────────
+
+@bp.post("/crear-cliente")
+def crear_cliente():
+    data = request.get_json() or {}
+
+    if not data.get("nombre") or not data.get("apellido") or not data.get("numero_identificacion"):
+        return jsonify({"error": "Nombre, apellido y DNI son obligatorios"}), 400
+
+    existente = Usuario.query.filter_by(numero_identificacion=data["numero_identificacion"]).first()
+    if existente:
+        return jsonify({"error": "DNI ya registrado"}), 400
+
+    nuevo_cliente = Usuario(
+        nombre=data["nombre"],
+        apellido=data["apellido"],
+        tipo_identificacion=TipoIdentificacion("id_card"),
+        numero_identificacion=data["numero_identificacion"],
+        # otros campos que tenga tu modelo Cliente
+    )
+
+    # Campos opcionales
+    if "correo" in data:
+        nuevo_cliente.correo = data["correo"]
+    if "telefono" in data:
+        nuevo_cliente.telefono = data["telefono"]
+    if "direccion" in data:
+        nuevo_cliente.direccion = data["direccion"]
+
+    try:
+        db.session.add(nuevo_cliente)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Error al crear cliente", "detalle": str(e)}), 500
+
+    return jsonify({
+        "msg": "Cliente creado exitosamente",
+        "cliente": nuevo_cliente.serialize()
+    }), 201
+    
+@bp.get("/clientes")
+def listar_clientes():
+    clientes = Usuario.query.all()
+    resultado = [cliente.serialize() for cliente in clientes]
+    return jsonify(resultado), 200

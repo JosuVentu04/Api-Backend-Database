@@ -70,7 +70,7 @@ def create_app(config_obj: type | object = Config) -> Flask:
         supports_credentials=True,
         expose_headers=["Authorization"],
         allow_headers=["Content-Type", "Authorization"],
-        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
     )
 
     # 4) Inicializar extensiones
