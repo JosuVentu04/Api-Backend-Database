@@ -58,6 +58,7 @@ def create_app(config_obj: type | object = Config) -> Flask:
         if extra_dev_url:               # solo añade si existe
             allowed_origins.append(extra_dev_url)
         allowed_origins.append("http://localhost:3000")
+        allowed_origins.append("http:// http://localhost:5173")
 
     if not allowed_origins:
         raise RuntimeError("FRONTEND_URL faltante: CORS sin origen permitido")
@@ -94,11 +95,15 @@ def create_app(config_obj: type | object = Config) -> Flask:
     from app.routes.users import bp as users_bp 
     from app.routes.devices_models import dispositivos   
     from app.routes.verificacion import veriff_bp
+    from app.routes.webAuth import webauthn_bp
+    from app.routes.contracts import contratos_bp
     app.register_blueprint(main)
     app.register_blueprint(auth_bp)
     app.register_blueprint(users_bp) 
     app.register_blueprint(dispositivos)
     app.register_blueprint(veriff_bp)
+    app.register_blueprint(webauthn_bp)
+    app.register_blueprint(contratos_bp)
     
     if __name__ == '__main__':
         app.run(debug=True)

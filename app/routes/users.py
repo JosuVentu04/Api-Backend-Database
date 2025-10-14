@@ -210,7 +210,7 @@ def modificar_empleado(empleado_id):
 def crear_cliente():
     data = request.get_json() or {}
 
-    if not data.get("nombre") or not data.get("apellido") or not data.get("numero_identificacion"):
+    if not data.get("primer_nombre") or not data.get("apellido_paterno") or not data.get("numero_identificacion"):
         return jsonify({"error": "Nombre, apellido y DNI son obligatorios"}), 400
 
     existente = Usuario.query.filter_by(numero_identificacion=data["numero_identificacion"]).first()
@@ -218,8 +218,8 @@ def crear_cliente():
         return jsonify({"error": "DNI ya registrado"}), 400
 
     nuevo_cliente = Usuario(
-        nombre=data["nombre"],
-        apellido=data["apellido"],
+        primer_nombre=data["primer_nombre"],
+        apellido_paterno=data["apellido_paterno"],
         tipo_identificacion=TipoIdentificacion("id_card"),
         numero_identificacion=data["numero_identificacion"],
         # otros campos que tenga tu modelo Cliente
@@ -250,3 +250,10 @@ def listar_clientes():
     clientes = Usuario.query.all()
     resultado = [cliente.serialize() for cliente in clientes]
     return jsonify(resultado), 200
+
+@bp.get("/cliente/<int:id>")
+def obtener_cliente(id):
+    cliente = Usuario.query.get(id)
+    if not cliente:
+        return jsonify({"error": "Cliente no encontrado"}), 404
+    return jsonify(cliente.serialize()), 200

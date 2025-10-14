@@ -61,25 +61,25 @@ def obtener_estado_veriff(session_id):
 def subir_media(session_id, image_base64, media_type):
     url = f"https://stationapi.veriff.com/v1/sessions/{session_id}/media"
     payload = {
-        "media": {
+        "image": {
             "content": image_base64,
-            "type": media_type
+            "context": media_type
         }
     }
     body = json.dumps(payload, separators=(',', ':'))
-    signature = hmac.new(
-        SHARED_SECRET.encode(),
-        body.encode(),
-        hashlib.sha256
-    ).hexdigest()
-
-    print("Signature usada:", signature)
+    signature = hmac.new(SHARED_SECRET.encode(), body.encode(), hashlib.sha256).hexdigest()
     headers = {
         "Content-Type": "application/json",
         "X-AUTH-CLIENT": API_KEY,
         "X-HMAC-SIGNATURE": signature
     }
-    response = requests.post(url, json=payload, headers=headers)
+    response = requests.post(url, data=body, headers=headers)
+    print("Clave Secreta:", SHARED_SECRET)
+    print("Payload enviado a Veriff:", json.dumps(payload, separators=(',', ':')))
+    print("Headers enviados:", headers)
+    print("Respuesta de Veriff:", response.status_code, response.text)
+    print("Respuesta completa de Veriff:", response.json())
+    print(session_id, media_type)
     return response
 
 @veriff_bp.route('/upload/front/<session_id>', methods=['POST'])
@@ -115,7 +115,14 @@ def submit_session(session_id):
         "X-HMAC-SIGNATURE": signature
     }
     try:
-        response = requests.patch(url, json=payload, headers=headers)
+        body = json.dumps(payload, separators=(',', ':'))
+        signature = generate_x_hmac_signature(payload, SHARED_SECRET)
+        headers = {
+            "Content-Type": "application/json",
+            "X-AUTH-CLIENT": API_KEY,
+            "X-HMAC-SIGNATURE": signature
+        }
+        response = requests.patch(url, data=body, headers=headers)
         response.raise_for_status()
         return jsonify(response.json()), response.status_code
     except requests.RequestException as e:
@@ -125,8 +132,8 @@ def submit_session(session_id):
 def guardar_consulta():
     data = request.get_json()
     nueva_consulta = consultas_verificacion(
-        nombre=data['nombre'],
-        apellido=data['apellido'],
+        primer_nombre=data['primer_nombre'],
+        apellido_paterno=data['apellido_paterno'],
         empleado_id=int(data['empleado_id']),
         usuario_id=int(data['usuario_id']),
         session_id=data.get('session_id'),

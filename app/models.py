@@ -1,8 +1,8 @@
 from datetime import datetime
 from enum import Enum as PyEnum
-
+from typing import Optional
 from sqlalchemy import (
-    Enum as SqlEnum, String, DateTime, Integer, ForeignKey, Boolean,
+    Enum as SqlEnum, String, DateTime, Integer, ForeignKey, Boolean, Text,
     text, func
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -14,6 +14,12 @@ from app import db   # importa la instancia creada en app/__init__.py
 # ──────────────────────────────────────────────
 #  Enumeraciones
 # ──────────────────────────────────────────────
+
+class EstadoContrato(PyEnum):
+    PENDIENTE = "PENDIENTE"
+    FIRMADO   = "FIRMADO"
+    CANCELADO = "RECHAZADO"
+    
 class EstadoUsuario(PyEnum):
     ACTIVO   = "ACTIVO"
     INACTIVO = "INACTIVO"
@@ -108,47 +114,93 @@ class Usuario(db.Model):
     __tablename__ = "usuario"
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    nombre: Mapped[str] = mapped_column(String(120), nullable=False)    
-    apellido: Mapped[str] = mapped_column(String(120), nullable=False)
+    primer_nombre: Mapped[str] = mapped_column(String(120), nullable=False)
+    apellido_paterno: Mapped[str] = mapped_column(String(120), nullable=False)
+    apellido_materno: Mapped[str] = mapped_column(String(120), nullable=True)
+    curp: Mapped[str] = mapped_column(String(18), unique=True, nullable=True)
     correo: Mapped[str] = mapped_column(String(120), unique=True, nullable=True, index=True)
+    rfc: Mapped[str] = mapped_column(String(13), unique=True, nullable=True)
+    nacionalidad: Mapped[str] = mapped_column(String(50), nullable=True)
     numero_telefonico_adicional: Mapped[str] = mapped_column(String(12), nullable=True)
     numero_telefonico: Mapped[str] = mapped_column(String(12), nullable=True)
     tipo_identificacion: Mapped[TipoIdentificacion] = mapped_column(
-        SqlEnum(TipoIdentificacion, name="tipo_identificacion_enum", native_enum=False, validate_strings=True), 
-        nullable=False)
-    numero_identificacion: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
-    direccion: Mapped[str] = mapped_column(String(255), nullable=True)
+        SqlEnum(TipoIdentificacion, name="tipo_identificacion_enum", native_enum=False, validate_strings=True),
+        nullable=True
+    )
+    numero_identificacion: Mapped[str] = mapped_column(String(50), unique=True, nullable=True)
+    fecha_registro: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     fecha_nacimiento: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     estado_usuario: Mapped[EstadoUsuario] = mapped_column(
         SqlEnum(EstadoUsuario, name="estado_usuario_enum", native_enum=False, validate_strings=True),
-        default=EstadoUsuario.ACTIVO)
+        default=EstadoUsuario.ACTIVO
+    )
     notas: Mapped[str] = mapped_column(String(1500), nullable=True)
     datos_biometricos: Mapped[str] = mapped_column(String(1500), nullable=True)
     fotografia_url: Mapped[str] = mapped_column(String(550), nullable=True)
+    
+    # Verificación
+    verificado: Mapped[bool] = mapped_column(default=False)
+    proveedor_verificacion: Mapped[str] = mapped_column(String(50), nullable=True)
+    fecha_verificacion: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    # Relación con domicilio
+    domicilios = relationship("Domicilio", back_populates="usuario", cascade="all, delete-orphan")
 
     def serialize(self) -> dict:
+        domicilio = self.domicilios[0] if self.domicilios else None
         return {
             "id": self.id,
-            "nombre": self.nombre,
-            "apellido": self.apellido,
+            "primer_nombre": self.primer_nombre,
+            "apellido_paterno": self.apellido_paterno,
+            "apellido_materno": self.apellido_materno,
+            "curp": self.curp,
+            "rfc": self.rfc,
             "correo": self.correo,
-            "numero_telefonico_adicional": self.numero_telefonico_adicional,
             "numero_telefonico": self.numero_telefonico,
+            "numero_telefonico_adicional": self.numero_telefonico_adicional,
             "tipo_identificacion": self.tipo_identificacion.value if self.tipo_identificacion else None,
             "numero_identificacion": self.numero_identificacion,
-            "direccion": self.direccion,
             "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
             "estado_usuario": self.estado_usuario.value if self.estado_usuario else None,
+            "nacionalidad": self.nacionalidad,
             "notas": self.notas,
-            "datos_biometricos": self.datos_biometricos,
+            "verificado": self.verificado,
+            "proveedor_verificacion": self.proveedor_verificacion,
+            "fecha_verificacion": self.fecha_verificacion.isoformat() if self.fecha_verificacion else None,
             "fotografia_url": self.fotografia_url,
+            "domicilio": domicilio.serialize() if domicilio else None
         }
 
     def __repr__(self):
-        return f"<Usuario {self.id} – {self.nombre} {self.apellido}>"
+        return f"<Usuario {self.id} – {self.primer_nombre} {self.apellido_paterno}>"
+
+
+class Domicilio(db.Model):
+    __tablename__ = "domicilio"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuario.id"), nullable=False)
+    direccion: Mapped[str] = mapped_column(String(255))
+    colonia: Mapped[str] = mapped_column(String(255))
+    ciudad: Mapped[str] = mapped_column(String(100))
+    estado: Mapped[str] = mapped_column(String(100))
+    codigo_postal: Mapped[str] = mapped_column(String(10))
+    tipo: Mapped[str] = mapped_column(String(50), nullable=True)  # "fiscal", "actual", etc.
+
+    usuario = relationship("Usuario", back_populates="domicilios")
+
+    def serialize(self):
+        return {
+            "direccion": self.direccion,
+            "colonia": self.colonia,
+            "ciudad": self.ciudad,
+            "estado": self.estado,
+            "codigo_postal": self.codigo_postal,
+            "tipo": self.tipo
+        }
 # ──────────────────────────────────────────────
 #  Modelo Empleado
 # ──────────────────────────────────────────────
+
 class Empleado(db.Model):
     __tablename__ = "empleado"
 
@@ -310,10 +362,10 @@ class consultas_verificacion(db.Model):
     empleado_id: Mapped[int] = mapped_column(Integer, ForeignKey("empleado.id", ondelete="CASCADE"), nullable=False, index=True)
     session_id: Mapped[str] = mapped_column(String(255), nullable=True)
     empleado = relationship("Empleado", lazy="joined")
-    usuario_id: Mapped[int] = mapped_column(Integer, ForeignKey("usuario.id", ondelete="CASCADE"), nullable=False, index=True)
+    usuario_id: Mapped[int] = mapped_column(Integer, ForeignKey("usuario.id", ondelete="CASCADE"), nullable=True, index=True)
     usuario = relationship("Usuario", lazy="joined")
-    nombre: Mapped[str] = mapped_column(String(120), nullable=False)
-    apellido: Mapped[str] = mapped_column(String(120), nullable=False)
+    primer_nombre: Mapped[str] = mapped_column(String(120), nullable=False)
+    apellido_paterno: Mapped[str] = mapped_column(String(120), nullable=False)
     fecha_consulta: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     motivo_consulta: Mapped[str] = mapped_column(String(255), nullable=True)
     resultado_consulta: Mapped[str] = mapped_column(String(255), nullable=True)
@@ -331,3 +383,37 @@ class consultas_verificacion(db.Model):
 
     def __repr__(self):
         return f"<ConsultaVerificacion {self.id} – Empleado {self.empleado_id} – Usuario {self.usuario_id}>"
+
+# ──────────────────────────────────────────────
+#  Contratos
+# ──────────────────────────────────────────────
+
+class contrato_consulta_buro(db.Model):
+    __tablename__ = "contrato_consulta_buro"
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    cliente_id: Mapped[int] = mapped_column(Integer, ForeignKey("usuario.id", ondelete="CASCADE"), nullable=False, index=True)
+    empleado_id: Mapped[int] = mapped_column(Integer, ForeignKey("empleado.id", ondelete="CASCADE"), nullable=False, index=True)
+    contrato_url: Mapped[str] = mapped_column(String(550), nullable=False)
+    hash_contrato: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    contrato_html: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    estado_contrato: Mapped[EstadoContrato] = mapped_column(
+        SqlEnum(EstadoContrato, name="estado_contrato_enum", native_enum=False, validate_strings=True),
+        default=EstadoContrato.PENDIENTE,
+        server_default=text("'PENDIENTE'")
+    )
+    fecha_firma: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    nombre: Mapped[Optional[str]] = mapped_column(String(120), nullable=True)
+    apellido: Mapped[Optional[str]] = mapped_column(String(120), nullable=True)
+    
+    def serialize(self) -> dict:
+        return {
+            "id": self.id,
+            "cliente_id": self.cliente_id,
+            "empleado_id": self.empleado_id,
+            "contrato_url": self.contrato_url,
+            "hash_contrato": self.hash_contrato,
+            "contrato_html": self.contrato_html,
+            "estado_contrato": self.estado_contrato.value if self.estado_contrato else None,
+            "fecha_firma": self.fecha_firma.isoformat() if self.fecha_firma else None,
+        }
