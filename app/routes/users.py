@@ -2,19 +2,20 @@ from flask import Blueprint, request, jsonify, current_app,redirect, url_for
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
 import threading
+import requests
 from sqlalchemy.exc import SQLAlchemyError
-from app.models import Empleado, db, EstadoUsuario, Usuario, TipoIdentificacion
+from app.models import Empleado, db, EstadoUsuario, Usuario, TipoIdentificacion, Domicilio
 from app.utils import generate_email_change_token, confirm_email_change_token, send_email
 from app.decoradores import roles_required
 
-bp = Blueprint("users", __name__, url_prefix="/users")
+users_bp = Blueprint("users", __name__, url_prefix="/users")
 
 # Función para enviar email en hilo con contexto Flask bien gestionado
 def send_email_thread(app, subject, html_body, to):
     with app.app_context():
         send_email(subject, html_body, to)
 
-@bp.post("/solicitar-cambio-correo")
+@users_bp.post("/solicitar-cambio-correo")
 @jwt_required()
 def solicitar_cambio_correo():
     user_id = get_jwt_identity()
@@ -82,7 +83,7 @@ def solicitar_cambio_correo():
     return jsonify({"msg": "Se enviaron correos de verificación a ambas direcciones."}), 200
 
 
-@bp.get("/confirmar-email-antiguo/<token>")
+@users_bp.get("/confirmar-email-antiguo/<token>")
 def confirmar_email_antiguo(token):
     correo = confirm_email_change_token(token, "old")
     if not correo:
@@ -111,7 +112,7 @@ def confirmar_email_antiguo(token):
     return redirect(url, 302)
 
 
-@bp.get("/confirmar-email-nuevo/<token>")
+@users_bp.get("/confirmar-email-nuevo/<token>")
 def confirmar_email_nuevo(token):
     correo = confirm_email_change_token(token, "new")
     if not correo:
@@ -140,7 +141,7 @@ def confirmar_email_nuevo(token):
 
 
 
-@bp.put("/perfil")
+@users_bp.put("/perfil")
 @roles_required({"VENDEDOR"})
 @jwt_required()
 def actualizar_perfil():
@@ -165,7 +166,7 @@ def actualizar_perfil():
         "empleado": empleado.serialize()
     }), 200
     
-@bp.put("/modificar-empleado/<int:empleado_id>")
+@users_bp.put("/modificar-empleado/<int:empleado_id>")
 @jwt_required()
 def modificar_empleado(empleado_id):
     data = request.get_json() or {}
@@ -206,7 +207,8 @@ def modificar_empleado(empleado_id):
 # 2. CLIENTES
 # ──────────────────────────────
 
-@bp.post("/crear-cliente")
+@users_bp.post("/crear-cliente")
+@jwt_required()
 def crear_cliente():
     data = request.get_json() or {}
 
@@ -245,15 +247,136 @@ def crear_cliente():
         "cliente": nuevo_cliente.serialize()
     }), 201
     
-@bp.get("/clientes")
+@users_bp.get("/clientes")
+@jwt_required()
 def listar_clientes():
     clientes = Usuario.query.all()
     resultado = [cliente.serialize() for cliente in clientes]
     return jsonify(resultado), 200
 
-@bp.get("/cliente/<int:id>")
+@users_bp.get("/cliente/<int:id>")
+@jwt_required()
 def obtener_cliente(id):
     cliente = Usuario.query.get(id)
     if not cliente:
         return jsonify({"error": "Cliente no encontrado"}), 404
     return jsonify(cliente.serialize()), 200
+
+@users_bp.post("/historial-crediticio")
+def historial_crediticio():
+    data = request.get_json() or {}
+    user_id = data.get("user_id")
+    if not user_id:
+        return jsonify({"error": "user_id es requerido"}), 400
+
+    usuario = Usuario.query.get(user_id)
+    if not usuario:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    domicilio = Domicilio.query.filter_by(usuario_id=user_id).first()
+    
+    #Esta parte se comenta para pruebas locales sin afectar el servicio externo
+    # Se debe descomentar para uso en producción y modificar según el API real
+    # de historial crediticio.
+    """
+     payload = {
+        "primerNombre": usuario.primer_nombre or "",
+        "apellidoPaterno": usuario.apellido_paterno or "",
+        "apellidoMaterno": usuario.apellido_materno or "",
+        "fechaNacimiento": usuario.fecha_nacimiento.isoformat() if usuario.fecha_nacimiento else "",
+        "RFC": usuario.rfc or "",
+        "nacionalidad": "MX",
+        "domicilio": {
+            "coloniaPoblacion": domicilio.colonia if domicilio else "",
+            "delegacionMunicipio": domicilio.ciudad if domicilio else "",
+            "CP": domicilio.codigo_postal if domicilio else "",
+            "direccion": domicilio.direccion if domicilio else "",
+            "tipo_domicilio": domicilio.tipo if domicilio else "personal"
+        }
+    }
+    """ 
+    payload = {
+        "primerNombre": "JUAN PRUEBA SIETE",
+        "apellidoPaterno": "PRUEBA",
+        "apellidoMaterno": "SIETE",
+        "fechaNacimiento": "1965-08-09",
+        "RFC": "PUSJ800107H2O",
+        "nacionalidad": "MX",
+        "domicilio": {
+            "direccion": "INSURGENTES SUR 1001",
+            "coloniaPoblacion": "INSURGENTES SUR",
+            "delegacionMunicipio": "CIUDAD DE MEXICO",
+            "ciudad": "CIUDAD DE MEXICO",
+            "estado": "CDMX",
+            "CP": "11230"
+        }
+    }
+    
+    current_app.logger.info(f"Payload enviado al historial crediticio: {payload}")
+
+    url = "https://services.circulodecredito.com.mx/sandbox/v1/rcficoscore"
+    headers = {
+        "Content-Type": "application/json",
+        "x-api-key": "V1SGTznV4THR8Z0vSqyW3JIgWNnSY5Zv",
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    if response.status_code == 200:
+        return jsonify({
+            "datos_usados": payload,
+            "resultado": response.json()
+        }), 200
+    else:
+        return jsonify({
+            "datos_usados": payload,
+            "error": "Error obteniendo historial crediticio",
+            "detalle": response.text
+        }), response.status_code
+    
+@users_bp.post("/agregar-domicilio")
+def agregar_domicilio():
+    data = request.get_json() or {}
+
+    user_id = data.get("user_id")
+    if not user_id:
+        return jsonify({"error": "user_id es requerido"}), 400
+    
+    existente = Domicilio.query.filter_by(usuario_id=user_id).first()
+    if existente:
+        return jsonify({"error": "Ya existe un domicilio registrado para este usuario"}), 400
+    
+    direccion = data.get("direccion")
+    colonia = data.get("colonia")
+    ciudad = data.get("ciudad")
+    estado = data.get("estado")
+    codigo_postal = data.get("codigo_postal")
+    tipo = data.get("tipo_domicilio", "personal")
+
+    # Validar campos requeridos
+    if not direccion or not colonia or not ciudad or not estado or not codigo_postal:
+        return jsonify({"error": "Todos los campos de dirección son obligatorios"}), 400
+
+    # Crear nueva instancia de domicilio (asumiendo que tienes modelo Domicilio)
+    nuevo_domicilio = Domicilio(
+        usuario_id=user_id,
+        direccion=direccion,
+        colonia=colonia,
+        ciudad=ciudad,
+        estado=estado,
+        codigo_postal=codigo_postal,
+        tipo=tipo
+    )
+
+    try:
+        db.session.add(nuevo_domicilio)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error al agregar domicilio: {e}")
+        return jsonify({"error": "No se pudo agregar el domicilio"}), 500
+
+    return jsonify({
+        "msg": "Domicilio agregado correctamente",
+        "domicilio": nuevo_domicilio.serialize()  # Asegúrate que serialize() esté definido en Domicilio
+    }), 201

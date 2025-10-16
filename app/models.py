@@ -178,7 +178,7 @@ class Usuario(db.Model):
 class Domicilio(db.Model):
     __tablename__ = "domicilio"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuario.id"), nullable=False)
+    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuario.id"), nullable=False, unique=True)
     direccion: Mapped[str] = mapped_column(String(255))
     colonia: Mapped[str] = mapped_column(String(255))
     ciudad: Mapped[str] = mapped_column(String(100))
