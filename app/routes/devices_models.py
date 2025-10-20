@@ -45,7 +45,8 @@ def crear_modelo():
             resistencia_agua=data.get("resistencia_agua"),
             resistencia_polvo=data.get("resistencia_polvo"),
             resistencia_caidas=data.get("resistencia_caidas"),
-            imagen=data.get("imagen", "")
+            imagen=data.get("imagen", ""),
+            precio=data.get("precio")
             # fecha_creacion y fecha_actualizacion no son necesarios aquí, los maneja el modelo
         )
         db.session.add(nuevo_modelo)
@@ -74,7 +75,7 @@ def editar_modelo(modelo_id):
         "resolucion_camara_trasera_principal", "resolucion_camara_frontal_principal",
         "capacidad_bateria", "carga_rapida", "huella_dactilar",
         "resistencia_salpicaduras", "resistencia_agua",
-        "resistencia_polvo", "resistencia_caidas"
+        "resistencia_polvo", "resistencia_caidas", "precio"
     ]
     for atributo in atributos_actualizables:
         if atributo in data:

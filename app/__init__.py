@@ -95,7 +95,7 @@ def create_app(config_obj: type | object = Config) -> Flask:
     from app.routes.users import users_bp 
     from app.routes.devices_models import dispositivos   
     from app.routes.verificacion import veriff_bp
-    from app.routes.webAuth import webauthn_bp
+    from app.routes.webauthn import webauthn_bp
     from app.routes.contracts import contratos_bp
     app.register_blueprint(main)
     app.register_blueprint(auth_bp)

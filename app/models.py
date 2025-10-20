@@ -14,7 +14,12 @@ from app import db   # importa la instancia creada en app/__init__.py
 # ──────────────────────────────────────────────
 #  Enumeraciones
 # ──────────────────────────────────────────────
-
+class EstadoDispositivo(PyEnum):
+    ACTIVO = "ACTIVO"
+    BLOQUEADO = "BLOQUEADO"
+    VENDIDO = "VENDIDO"
+    EN_REVISION = "EN_REVISION"
+    
 class EstadoContrato(PyEnum):
     PENDIENTE = "PENDIENTE"
     FIRMADO   = "FIRMADO"
@@ -145,6 +150,9 @@ class Usuario(db.Model):
 
     # Relación con domicilio
     domicilios = relationship("Domicilio", back_populates="usuario", cascade="all, delete-orphan")
+    
+    score_crediticio: Mapped[int] = mapped_column(Integer, nullable=True)
+    credito_aprobado: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
 
     def serialize(self) -> dict:
         domicilio = self.domicilios[0] if self.domicilios else None
@@ -168,7 +176,9 @@ class Usuario(db.Model):
             "proveedor_verificacion": self.proveedor_verificacion,
             "fecha_verificacion": self.fecha_verificacion.isoformat() if self.fecha_verificacion else None,
             "fotografia_url": self.fotografia_url,
-            "domicilio": domicilio.serialize() if domicilio else None
+            "domicilio": domicilio.serialize() if domicilio else None,
+            "score_crediticio": self.score_crediticio,
+            "credito_aprobado": self.credito_aprobado,
         }
 
     def __repr__(self):
@@ -298,6 +308,7 @@ class Catalogo_Modelos(db.Model):
     resistencia_agua: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
     resistencia_polvo: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
     resistencia_caidas: Mapped[bool] = mapped_column(default=False, server_default=text("false"), nullable=True)
+    precio: Mapped[float] = mapped_column(nullable=True)
     imagen: Mapped[str] = mapped_column(String(550), nullable=True)
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False, default=func.now())
     fecha_actualizacion: Mapped[DateTime] = mapped_column(
@@ -316,6 +327,7 @@ class Catalogo_Modelos(db.Model):
             "ram": self.ram,
             "descripcion": self.descripcion,
             "imagen": self.imagen,
+            "precio": self.precio,
         }
 
     def serialize(self) -> dict:
@@ -348,6 +360,7 @@ class Catalogo_Modelos(db.Model):
             "resistencia_polvo": self.resistencia_polvo,
             "resistencia_caidas": self.resistencia_caidas,
             "imagen": self.imagen,
+            "precio": self.precio,
             "fecha_creacion": self.fecha_creacion.isoformat() if self.fecha_creacion else None,
             "fecha_actualizacion": self.fecha_actualizacion.isoformat() if self.fecha_actualizacion else None,
         }
@@ -417,3 +430,40 @@ class contrato_consulta_buro(db.Model):
             "estado_contrato": self.estado_contrato.value if self.estado_contrato else None,
             "fecha_firma": self.fecha_firma.isoformat() if self.fecha_firma else None,
         }
+        
+class Dispositivo(db.Model):
+    __tablename__ = "dispositivo"
+
+    id = db.Column(db.Integer, primary_key=True)
+    modelo = db.Column(db.String(120), nullable=False)
+    imei = db.Column(db.String(50), unique=True, nullable=False)
+    precio = db.Column(db.Numeric(10, 2), nullable=False)
+    estado = db.Column(db.Enum(EstadoDispositivo), default=EstadoDispositivo.ACTIVO, nullable=False)
+
+    # Relaciones
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=True)
+    usuario = db.relationship("Usuario", backref=db.backref("dispositivos", lazy=True))
+
+    contrato_id = db.Column(db.Integer, db.ForeignKey("contrato.id"), nullable=True)
+    contrato = db.relationship("Contrato", backref=db.backref("dispositivo", uselist=False))
+
+    # Control interno
+    fecha_registro = db.Column(db.DateTime, server_default=db.func.now())
+    fecha_actualizacion = db.Column(db.DateTime, onupdate=db.func.now())
+
+    def __repr__(self):
+        return f"<Dispositivo {self.modelo} - IMEI: {self.imei}>"
+    
+class Contrato(db.Model):
+    __tablename__ = "contrato"
+
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
+    fecha_creacion = db.Column(db.DateTime, server_default=db.func.now())
+    detalles = db.Column(db.Text, nullable=True)
+
+    usuario = db.relationship("Usuario", backref=db.backref("contratos", lazy=True))
+
+    def __repr__(self):
+        return f"<Contrato {self.id} - Usuario ID: {self.usuario_id}>"
+

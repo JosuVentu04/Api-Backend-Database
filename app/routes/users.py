@@ -262,6 +262,50 @@ def obtener_cliente(id):
         return jsonify({"error": "Cliente no encontrado"}), 404
     return jsonify(cliente.serialize()), 200
 
+@users_bp.put("/editar-cliente/<int:id>")
+@jwt_required()
+def editar_cliente(id):
+    data = request.get_json() or {}
+    usuario = Usuario.query.get(id)
+
+    if not usuario:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    # 🔹 Lista blanca de campos que se pueden modificar
+    campos_permitidos = {
+        "primer_nombre",
+        "segundo_nombre",
+        "apellido_paterno",
+        "apellido_materno",
+        "correo",
+        "telefono",
+        "direccion",
+        "rfc",
+        "fecha_nacimiento",
+        "score_crediticio",
+        "credito_aprobado",
+        "estado_usuario",
+    }
+
+    # 🔹 Iterar sobre los campos del request
+    for campo, valor in data.items():
+        if campo in campos_permitidos:
+            setattr(usuario, campo, valor)
+        else:
+            return jsonify({"error": f"No está permitido modificar el campo '{campo}'"}), 400
+
+    try:
+        db.session.commit()
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error actualizando usuario {id}: {e}")
+        return jsonify({"error": "Error al actualizar el usuario"}), 500
+
+    return jsonify({
+        "msg": "Usuario actualizado correctamente",
+        "usuario": usuario.serialize()
+    }), 200
+
 @users_bp.post("/historial-crediticio")
 def historial_crediticio():
     data = request.get_json() or {}
