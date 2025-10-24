@@ -444,26 +444,49 @@ class Dispositivo(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=True)
     usuario = db.relationship("Usuario", backref=db.backref("dispositivos", lazy=True))
 
-    contrato_id = db.Column(db.Integer, db.ForeignKey("contrato.id"), nullable=True)
-    contrato = db.relationship("Contrato", backref=db.backref("dispositivo", uselist=False))
-
+    contrato_id = db.Column(db.Integer, db.ForeignKey("contrato_compra_venta.id"), nullable=True)
+    contrato = db.relationship("Contrato_compra_venta", back_populates="dispositivos")  
+    
     # Control interno
     fecha_registro = db.Column(db.DateTime, server_default=db.func.now())
     fecha_actualizacion = db.Column(db.DateTime, onupdate=db.func.now())
+    
+    def serialize(self) -> dict:
+        return {
+            "id": self.id,
+            "modelo": self.modelo,
+            "imei": self.imei,
+            "precio": float(self.precio),
+            "estado": self.estado.value,
+            "usuario_id": self.usuario_id,
+            "contrato_id": self.contrato_id,
+            "fecha_registro": self.fecha_registro.isoformat() if self.fecha_registro else None,
+            "fecha_actualizacion": self.fecha_actualizacion.isoformat() if self.fecha_actualizacion else None,
+        }
 
     def __repr__(self):
         return f"<Dispositivo {self.modelo} - IMEI: {self.imei}>"
     
-class Contrato(db.Model):
-    __tablename__ = "contrato"
+class Contrato_compra_venta(db.Model):
+    __tablename__ = "contrato_compra_venta"
 
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
     fecha_creacion = db.Column(db.DateTime, server_default=db.func.now())
     detalles = db.Column(db.Text, nullable=True)
 
-    usuario = db.relationship("Usuario", backref=db.backref("contratos", lazy=True))
+    precio_total = db.Column(db.Numeric(10, 2), nullable=False)
+    pago_inicial = db.Column(db.Numeric(10, 2), nullable=False)
+    
+    # Pago semanal acordado
+    pago_semanal = db.Column(db.Numeric(10, 2), nullable=True)
+    # Número total de pagos semanales o duración en semanas
+    num_pagos_semanales = db.Column(db.Integer, nullable=True)
+
+    usuario = db.relationship("Usuario", backref=db.backref("contratos_compra_venta", lazy=True))
+    dispositivos = db.relationship("Dispositivo", back_populates="contrato", cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f"<Contrato {self.id} - Usuario ID: {self.usuario_id}>"
-
+        return (f"<Contrato {self.id} - Usuario ID: {self.usuario_id} - "
+                f"Precio Total: {self.precio_total} - Pago Inicial: {self.pago_inicial} - "
+                f"Pago Semanal: {self.pago_semanal} - Num Pagos: {self.num_pagos_semanales}>")
