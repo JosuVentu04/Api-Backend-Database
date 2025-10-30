@@ -97,6 +97,8 @@ def create_app(config_obj: type | object = Config) -> Flask:
     from app.routes.verificacion import veriff_bp
     from app.routes.webauthn import webauthn_bp
     from app.routes.contracts import contratos_bp
+    from app.routes.planes import planes_bp
+    from app.routes.contratos_cv import contratos_cv_bp
     app.register_blueprint(main)
     app.register_blueprint(auth_bp)
     app.register_blueprint(users_bp) 
@@ -104,6 +106,8 @@ def create_app(config_obj: type | object = Config) -> Flask:
     app.register_blueprint(veriff_bp)
     app.register_blueprint(webauthn_bp)
     app.register_blueprint(contratos_bp)
+    app.register_blueprint(planes_bp)
+    app.register_blueprint(contratos_cv_bp)
     
     if __name__ == '__main__':
         app.run(debug=True)

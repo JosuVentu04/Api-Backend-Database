@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.models import consultas_verificacion, db, TipoIdentificacion
+from app.models import ConsultasVerificacion, db, TipoIdentificacion
 import requests
 import hmac
 import hashlib
@@ -131,7 +131,7 @@ def submit_session(session_id):
 @veriff_bp.route('/guardar-consulta', methods=['POST'])
 def guardar_consulta():
     data = request.get_json()
-    nueva_consulta = consultas_verificacion(
+    nueva_consulta = ConsultasVerificacion(
         primer_nombre=data['primer_nombre'],
         apellido_paterno=data['apellido_paterno'],
         empleado_id=int(data['empleado_id']),
@@ -146,6 +146,6 @@ def guardar_consulta():
 
 @veriff_bp.route('/historial-consultas', methods=['GET'])
 def historial_consultas():
-    consultas = consultas_verificacion.query.all()
+    consultas = ConsultasVerificacion.query.all()
     resultado = [consulta.serialize() for consulta in consultas]
     return jsonify(resultado)
