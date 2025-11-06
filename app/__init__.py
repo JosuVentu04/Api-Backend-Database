@@ -10,6 +10,7 @@ from config import Config
 import requests
 
 
+
 # ── extensiones globales ───────────────────────────────
 db      = SQLAlchemy()
 migrate = Migrate()
@@ -33,6 +34,9 @@ def create_app(config_obj: type | object = Config) -> Flask:
         "JWT_SECRET_KEY",
         os.getenv("JWT_SECRET_KEY", "dev-jwt-secret")
     )
+    from datetime import timedelta
+    app.config.setdefault("JWT_ACCESS_TOKEN_EXPIRES", timedelta(hours=9))
+    app.config.setdefault("JWT_REFRESH_TOKEN_EXPIRES", timedelta(days=30))
 
     # 3) CORS
     frontend_url = os.getenv('DEV_FRONTEND_URL')

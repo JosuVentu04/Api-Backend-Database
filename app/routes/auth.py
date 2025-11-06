@@ -66,7 +66,6 @@ def confirmar_correo(token):
 # ────────────────────────────
 # 3) Login protegido
 # ────────────────────────────
-from flask_jwt_extended import create_access_token
 
 @bp.post("/login")
 def login():

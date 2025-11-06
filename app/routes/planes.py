@@ -1,85 +1,65 @@
 from flask import Blueprint, request, jsonify
 from app import db
-from app.models import PlanPago, calcular_plan_pago
+from app.models import PlanPago
 from app.utils import calcular_plan_pago
 from decimal import Decimal
 
 planes_bp = Blueprint('planes_bp', __name__, url_prefix='/api/planes')
 
-@planes_bp.route('/crear', methods=['POST'])
-def crear_plan():
+
+@planes_bp.route('/calcular_y_actualizar', methods=['POST'])
+def calcular_y_actualizar_plan():
     data = request.get_json()
+    print("📥 Datos recibidos:", data)
 
-    # ✅ Validaciones básicas
-    nombre = data.get('nombre_plan')
-    duracion = data.get('duracion_semanas')
-    interes = data.get('tasa_interes', 0)
-    pago_inicial = data.get('pago_inicial', 0)
+    plan_id = data.get("plan_id")
+    monto_total = data.get("monto_total")
+    monto_base = data.get("monto_base")
+    pago_inicial = data.get("pago_inicial")
 
-    if not nombre or not duracion:
-        return jsonify({'error': 'Nombre del plan y duración son obligatorios'}), 400
-    if duracion <= 0:
-        return jsonify({'error': 'La duración debe ser mayor a 0'}), 400
-    if interes < 0:
-        return jsonify({'error': 'La tasa de interés no puede ser negativa'}), 400
-    if pago_inicial < 0:
-        return jsonify({'error': 'El pago inicial no puede ser negativo'}), 400
+    if not plan_id or monto_total is None:
+        return jsonify({"error": "plan_id y monto_total son requeridos"}), 400
 
-    # ✅ Crear el plan
-    plan = PlanPago(
-        nombre_plan=nombre,
-        duracion_semanas=duracion,
-        tasa_interes=interes,
-        pago_inicial=pago_inicial
-    )
-    db.session.add(plan)
-    db.session.commit()
-
-    # ✅ Respuesta
-    return jsonify({
-        'id': plan.id,
-        'nombre_plan': plan.nombre_plan,
-        'duracion_semanas': plan.duracion_semanas,
-        'tasa_interes': plan.tasa_interes,
-        'pago_inicial': plan.pago_inicial
-    }), 201
-    
-@planes_bp.route('/calcular_plan_pago', methods=['POST'])
-def calcular_plan_pago_endpoint():
-    data = request.get_json()
-    print("Datos recibidos:", data)
-
-    plan_id = data.get('plan_id')
-    monto_total = data.get('monto_total')
-    pago_inicial = data.get('pago_inicial')  # opcional
-
-    print(f"plan_id: {plan_id}, monto_total: {monto_total}, pago_inicial: {pago_inicial}")
-
-    if plan_id is None or monto_total is None:
-        print("Error: plan_id y monto_total son requeridos")
-        return jsonify({'error': 'plan_id y monto_total son requeridos'}), 400
-
+    # 🔍 Buscar plan existente
     plan = PlanPago.query.get(plan_id)
     if not plan:
-        print("Error: Plan no encontrado")
-        return jsonify({'error': 'Plan no encontrado'}), 404
-
-    print("Plan encontrado:", plan)
+        return jsonify({"error": "Plan no encontrado"}), 404
 
     try:
-        # Convertir a Decimal para evitar errores de tipos
+        # 💰 Convertir a Decimal
         monto_total_decimal = Decimal(str(monto_total))
-        pago_inicial_decimal = (
-            Decimal(str(pago_inicial)) if pago_inicial is not None else None
-        )
+        monto_base_decimal = Decimal(str(monto_base)) if monto_base else monto_total_decimal
+        pago_inicial_decimal = Decimal(str(pago_inicial)) if pago_inicial is not None else Decimal(str(plan.pago_inicial))
 
-        print("Monto total como Decimal:", monto_total_decimal)
-        print("Pago inicial como Decimal:", pago_inicial_decimal)
+        print(f"✅ Plan encontrado: {plan.nombre_plan}")
+        print(f"💵 monto_total={monto_total_decimal}, pago_inicial={pago_inicial_decimal}, monto_base={monto_base_decimal}")
 
-        resultado = calcular_plan_pago(plan, monto_total_decimal, pago_inicial_decimal)
+        # 🔢 Calcular cuotas
+        resultado = calcular_plan_pago(plan, monto_total_decimal, pago_inicial_decimal, monto_base_decimal)
+        print("📊 Resultado del cálculo:", resultado)
 
-        print("Resultado calculado:", resultado)
-        return jsonify(resultado)
+        # 🧾 Actualizar campo ultima_cuota_semanal
+        ultima_cuota = resultado["cuotas"][-1] if resultado["cuotas"] else 0
+        plan.ultima_cuota_semanal = ultima_cuota
+
+        # 💾 Guardar cambios
+        db.session.commit()
+
+        # ✅ Respuesta
+        return jsonify({
+            "success": True,
+            "plan_actualizado": {
+                "id": plan.id,
+                "nombre_plan": plan.nombre_plan,
+                "duracion_semanas": plan.duracion_semanas,
+                "tasa_interes": float(plan.tasa_interes),
+                "pago_inicial": int(plan.pago_inicial),
+                "ultima_cuota_semanal": int(plan.ultima_cuota_semanal)
+            },
+            "detalle_calculo": resultado
+        }), 200
+
     except Exception as e:
-        print("Ocurrió un error:", str(e))
-        return jsonify({'error': str(e)}), 500
+        print("❌ Error:", str(e))
+        return jsonify({"error": str(e)}), 500
+    

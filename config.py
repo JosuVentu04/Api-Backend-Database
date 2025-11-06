@@ -21,9 +21,9 @@ class Config:
     SECURITY_PASSWORD_SALT = os.getenv("SECURITY_PASSWORD_SALT", "salt-dev")
 
     # ────── JWT ──────
-    JWT_SECRET_KEY = SECRET_KEY
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "clave_dev_jwt")
     JWT_ALGORITHM = "HS256"
-    JWT_ACCESS_TOKEN_EXPIRES = 3600        # segundos
+    JWT_ACCESS_TOKEN_EXPIRES = 32400       # segundos
 
     # ────── Base de datos ──────
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///app.db")

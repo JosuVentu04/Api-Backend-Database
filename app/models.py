@@ -678,7 +678,8 @@ class ContratoCompraVenta(db.Model):
     precio_total: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     pago_inicial: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     plan_pago_id: Mapped[int] = mapped_column(ForeignKey('plan_pago.id'), nullable=False)
-    pago_semanal: Mapped[Optional[float]] = mapped_column(Numeric(10, 2), nullable=True)
+    pago_semanal: Mapped[Optional[float]] = mapped_column(Numeric, nullable=True)
+    ultimo_pago_semanal: Mapped[Optional[float]] = mapped_column(Numeric, nullable=True)
     num_pagos_semanales: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     proximo_pago_fecha: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
@@ -701,6 +702,7 @@ class ContratoCompraVenta(db.Model):
             'pago_inicial': float(self.pago_inicial),
             'plan_pago_id': self.plan_pago_id,
             'pago_semanal': float(self.pago_semanal) if self.pago_semanal is not None else None,
+            'ultimo_pago_semanal': float(self.ultimo_pago_semanal) if self.ultimo_pago_semanal is not None else None,
             'num_pagos_semanales': self.num_pagos_semanales,
             'proximo_pago_fecha': self.proximo_pago_fecha.isoformat() if self.proximo_pago_fecha else None
         }

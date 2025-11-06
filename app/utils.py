@@ -97,8 +97,8 @@ def confirm_email_change_token(token, purpose, max_age=86400):
 
 def calcular_plan_pago(plan: PlanPago, monto_total: Decimal, pago_inicial: Decimal = None, monto_base: Decimal = None):
     """
-    Calcula las cuotas de un plan de pago, permitiendo un pago inicial variable.
-    Redondea correctamente los valores para evitar errores de conversión.
+    Calcula las cuotas de un plan de pago con pagos enteros.
+    Ajusta la última cuota para que el total sea exacto.
     """
 
     # Si no se pasa pago_inicial, usar el del plan
@@ -111,38 +111,38 @@ def calcular_plan_pago(plan: PlanPago, monto_total: Decimal, pago_inicial: Decim
     if pago_inicial < 0 or pago_inicial > monto_total:
         raise ValueError("El pago inicial debe estar entre 0 y el monto total.")
 
-    # Tasa de interés
+    # Tasa de interés (ejemplo: 10 → 0.10)
     tasa_interes = Decimal(str(plan.tasa_interes)) / Decimal('100')
 
-    # Monto a financiar
-    monto_financiar = monto_base - pago_inicial
+    # Calcular el monto a financiar (usando monto_total si monto_base no se pasa)
+    monto_financiar = (monto_base) - pago_inicial
+
+    # Aplicar interés si existe
     if tasa_interes > 0:
         monto_financiar *= (Decimal('1') + tasa_interes)
 
-    # Calcular cuota base (sin redondear aún)
-    cuota_base = monto_financiar / Decimal(plan.duracion_semanas)
+    # Asegurar que trabajamos solo con enteros (redondeo normal)
+    monto_financiar = monto_financiar.to_integral_value(rounding=ROUND_HALF_UP)
 
-    # Redondear a 2 decimales (normal financiero)
-    cuota_redondeada = int(cuota_base.to_integral_value(rounding=ROUND_HALF_UP))
+    # Calcular cuota base entera
+    cuota_base = monto_financiar // plan.duracion_semanas  # división entera
+    residuo = monto_financiar % plan.duracion_semanas      # diferencia que queda
 
-    # Calcular el total de las cuotas y la diferencia
-    total_cuotas = cuota_redondeada * plan.duracion_semanas
-
-    # Ajustar la última cuota con la diferencia
-    ultima_cuota = int(monto_financiar - cuota_redondeada * (plan.duracion_semanas - 1))
-
-    # Generar la lista de cuotas
-    cuotas = [cuota_redondeada] * (plan.duracion_semanas - 1) + [ultima_cuota]
+    # Generar cuotas: todas iguales, y repartir el residuo en la última
+    cuotas = [int(cuota_base)] * plan.duracion_semanas
+    cuotas[-1] += int(residuo)  # última cuota ajustada
 
     # Resultado final
+    total_pagado = pago_inicial + sum(cuotas)
+
     return {
         "nombre_plan": plan.nombre_plan,
         "duracion_semanas": plan.duracion_semanas,
         "tasa_interes": float(plan.tasa_interes),
-        "pago_inicial": float(pago_inicial),
-        "monto_total": float(monto_total),
-        "monto_financiar": float(monto_financiar.quantize(Decimal("0.01"))),
-        "cuota_semanal": float(cuota_redondeada),
+        "pago_inicial": int(pago_inicial),
+        "monto_total": int(monto_total),
+        "monto_financiar": int(monto_financiar),
+        "cuota_semanal": int(cuota_base),
         "cuotas": cuotas,
-        "total_pagado": float(pago_inicial + sum(Decimal(str(c)) for c in cuotas)),
+        "total_pagado": int(total_pagado),
     }
