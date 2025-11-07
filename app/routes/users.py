@@ -142,7 +142,7 @@ def confirmar_email_nuevo(token):
 
 
 @users_bp.put("/perfil")
-@roles_required({"VENDEDOR"})
+@roles_required({"VENDEDOR", "GERENTE", "ADMIN", "SOPORTE"})
 @jwt_required()
 def actualizar_perfil():
     
@@ -167,6 +167,7 @@ def actualizar_perfil():
     }), 200
     
 @users_bp.put("/modificar-empleado/<int:empleado_id>")
+@roles_required({"VENDEDOR", "GERENTE", "ADMIN", "SOPORTE"})
 @jwt_required()
 def modificar_empleado(empleado_id):
     data = request.get_json() or {}
