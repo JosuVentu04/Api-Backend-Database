@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import threading
 import requests
 from sqlalchemy.exc import SQLAlchemyError
-from app.models import Empleado, db, EstadoUsuario, Usuario, TipoIdentificacion, Domicilio
+from app.models import Empleado, db, EstadoUsuario, Usuario, TipoIdentificacion, Domicilio, EstadoDeuda, ContratoCompraVenta, Pago
 from app.utils import generate_email_change_token, confirm_email_change_token, send_email
 from app.decoradores import roles_required
 
@@ -425,3 +425,61 @@ def agregar_domicilio():
         "msg": "Domicilio agregado correctamente",
         "domicilio": nuevo_domicilio.serialize()  # Asegúrate que serialize() esté definido en Domicilio
     }), 201
+    
+@users_bp.get("/saldo/<codigo>")
+def obtener_saldo(codigo):
+    # 1. Buscar usuario por su código único (ej. MP-UR6279)
+    usuario = Usuario.query.filter_by(codigo=codigo).first()
+
+    if not usuario:
+        return jsonify({"success": False, "message": "Usuario no encontrado"}), 404
+
+    # 2. Buscar contratos por cliente_id
+    contratos = ContratoCompraVenta.query.filter_by(cliente_id=usuario.id).all()
+
+    if not contratos:
+        return jsonify({
+            "success": True,
+            "codigo": usuario.codigo,     # ← agregado
+            "saldo_total": 0,
+            "message": "El cliente no tiene contratos"
+        }), 200
+
+    # 3. Calcular saldo de todos los contratos
+    saldos = [
+        {
+            "contrato_id": c.id,
+            "saldo_pendiente": c.saldo_pendiente,
+            "precio_total": float(c.precio_total)
+        }
+        for c in contratos
+    ]
+
+    saldo_total = sum(c["saldo_pendiente"] for c in saldos)
+
+    return jsonify({
+        "success": True,
+        "cliente_id": usuario.id,
+        "codigo": usuario.codigo,   # ← agregado
+        "saldos": saldos,
+        "saldo_total": saldo_total
+    }), 200
+    
+@users_bp.get("/buscar")
+def buscar_cliente():
+    codigo = request.args.get("codigo")
+    telefono = request.args.get("telefono")
+
+    query = Usuario.query
+    if codigo:
+        query = query.filter_by(codigo=codigo)
+    elif telefono:
+        query = query.filter_by(numero_telefonico=telefono)
+    else:
+        return jsonify({"message": "Debes enviar un código o teléfono"}), 400
+
+    cliente = query.first()
+    if not cliente:
+        return jsonify({"message": "Cliente no encontrado"}), 404
+
+    return jsonify(cliente.serialize()), 200

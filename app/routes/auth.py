@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, current_app, redirect, url_for
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, create_refresh_token
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 from app.utils import generate_email_token, confirm_email_token, send_email

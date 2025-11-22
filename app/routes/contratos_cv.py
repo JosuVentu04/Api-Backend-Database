@@ -42,15 +42,19 @@ def crear_contrato_compra_venta():
         monto_base_dec = Decimal(str(monto_base)) if monto_base else monto_total_dec
         pago_inicial_dec = Decimal(str(pago_inicial))
 
+        # Validación: Pago inicial menor o igual a 50% de base
         if pago_inicial_dec < 0 or pago_inicial_dec > (monto_base_dec / 2):
             return jsonify({"error": "Pago inicial inválido"}), 400
 
+        # Calcular cuotas
         resultado_plan = calcular_plan_pago(plan, monto_total_dec, pago_inicial_dec, monto_base_dec)
         ultima_cuota = resultado_plan["cuotas"][-1] if resultado_plan["cuotas"] else 0
 
+        # Actualizar plan
         plan.ultima_cuota_semanal = ultima_cuota
         db.session.commit()
 
+        # Crear contrato
         contrato = ContratoCompraVenta(
             cliente_id=cliente_id,
             precio_total=monto_total_dec,
@@ -60,7 +64,8 @@ def crear_contrato_compra_venta():
             ultimo_pago_semanal=Decimal(str(ultima_cuota)),
             num_pagos_semanales=plan.duracion_semanas,
             proximo_pago_fecha=datetime.utcnow() + timedelta(weeks=1),
-            estado_contrato="PENDIENTE"
+            estado_contrato="PENDIENTE",
+            saldo_pendiente=monto_total_dec   # 🔥 AGREGADO
         )
 
         db.session.add(contrato)

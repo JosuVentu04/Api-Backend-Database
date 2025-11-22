@@ -1,6 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 from enum import Enum as PyEnum
 from typing import Optional
+import random
+import string
 from sqlalchemy import (
     Enum as SqlEnum,
     String,
@@ -68,6 +71,31 @@ class EstadoUsuario(PyEnum):
     MOROSO = 'MOROSO'
     BLOQUEADO = 'BLOQUEADO'
     ELIMINADO = 'ELIMINADO'
+
+
+class EstadoDeuda(PyEnum):
+    PENDIENTE = 'PENDIENTE'
+    AL_DIA = 'AL_DIA'
+    ATRASADO = 'ATRASADO'
+    LIQUIDADO = 'LIQUIDADO'
+
+
+def generar_codigo_cliente():
+    letras = ''.join(random.choices(string.ascii_uppercase, k=2))
+    numeros = ''.join(random.choices(string.digits, k=4))
+    return f"MP-{letras}{numeros}"
+
+
+def actualizar_fecha_proxima_pago(contrato):
+    ciclo = contrato.ciclo_pago  # "semanal", "quincenal", "mensual"
+
+    if ciclo == 'semanal':
+        contrato.fecha_proximo_pago += timedelta(weeks=1)
+    elif ciclo == 'quincenal':
+        contrato.fecha_proximo_pago += timedelta(days=15)
+    elif ciclo == 'mensual':
+        contrato.fecha_proximo_pago += relativedelta(months=1)
+    db.session.commit()
 
 
 def calcular_plan_pago(plan: 'PlanPago', monto_total: Decimal):
@@ -187,6 +215,7 @@ class Usuario(db.Model):
     primer_nombre: Mapped[str] = mapped_column(String(120), nullable=False)
     apellido_paterno: Mapped[str] = mapped_column(String(120), nullable=False)
     apellido_materno: Mapped[str] = mapped_column(String(120), nullable=True)
+    codigo = db.Column(db.String(10), unique=True, default=generar_codigo_cliente)
     curp: Mapped[str] = mapped_column(String(18), unique=True, nullable=True)
     correo: Mapped[str] = mapped_column(
         String(120), unique=True, nullable=True, index=True
@@ -242,6 +271,7 @@ class Usuario(db.Model):
     credito_aprobado: Mapped[bool] = mapped_column(
         Boolean, default=False, server_default=text('false'), nullable=False
     )
+    contratos = db.relationship('ContratoCompraVenta', backref='usuario', lazy=True)
 
     def serialize(self) -> dict:
         domicilio = self.domicilios[0] if self.domicilios else None
@@ -533,16 +563,17 @@ class ConsultasVerificacion(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     empleado_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey('empleado.id', ondelete='CASCADE'),
-        nullable=False, index=True
+        Integer,
+        ForeignKey('empleado.id', ondelete='CASCADE'),
+        nullable=False,
+        index=True
     )
     session_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
     empleado = relationship('Empleado', lazy='joined')
 
     usuario_id: Mapped[Optional[int]] = mapped_column(
-        Integer, ForeignKey('usuario.id', ondelete='CASCADE'),
-        nullable=True, index=True
+        Integer, ForeignKey('usuario.id', ondelete='CASCADE'), nullable=True, index=True
     )
     usuario = relationship('Usuario', lazy='joined')
 
@@ -554,7 +585,9 @@ class ConsultasVerificacion(db.Model):
     )
 
     motivo_consulta: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    resultado_consulta: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    resultado_consulta: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True
+    )
 
     def serialize(self) -> dict:
         return {
@@ -562,7 +595,9 @@ class ConsultasVerificacion(db.Model):
             'empleado_id': self.empleado_id,
             'usuario_id': self.usuario_id,
             'session_id': self.session_id,
-            'fecha_consulta': self.fecha_consulta.isoformat() if self.fecha_consulta else None,
+            'fecha_consulta': self.fecha_consulta.isoformat()
+            if self.fecha_consulta
+            else None,
             'motivo_consulta': self.motivo_consulta,
             'resultado_consulta': self.resultado_consulta
         }
@@ -575,29 +610,41 @@ class ConsultasVerificacion(db.Model):
 #  Contrato Consulta Buró
 # ──────────────────────────────────────────────
 
+
 class ContratoConsultaBuro(db.Model):
     __tablename__ = 'contrato_consulta_buro'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     cliente_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey('usuario.id', ondelete='CASCADE'),
-        nullable=False, index=True
+        Integer,
+        ForeignKey('usuario.id', ondelete='CASCADE'),
+        nullable=False,
+        index=True
     )
     empleado_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey('empleado.id', ondelete='CASCADE'),
-        nullable=False, index=True
+        Integer,
+        ForeignKey('empleado.id', ondelete='CASCADE'),
+        nullable=False,
+        index=True
     )
     contrato_url: Mapped[str] = mapped_column(String(550), nullable=False)
     hash_contrato: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     contrato_html: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     estado_contrato: Mapped[EstadoContrato] = mapped_column(
-        db.Enum(EstadoContrato, name='estado_contrato_enum', native_enum=False, validate_strings=True),
+        db.Enum(
+            EstadoContrato,
+            name='estado_contrato_enum',
+            native_enum=False,
+            validate_strings=True
+        ),
         default=EstadoContrato.PENDIENTE,
         server_default=text("'PENDIENTE'")
     )
 
-    fecha_firma: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    fecha_firma: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     nombre: Mapped[Optional[str]] = mapped_column(String(120), nullable=True)
     apellido: Mapped[Optional[str]] = mapped_column(String(120), nullable=True)
 
@@ -609,7 +656,9 @@ class ContratoConsultaBuro(db.Model):
             'contrato_url': self.contrato_url,
             'hash_contrato': self.hash_contrato,
             'contrato_html': self.contrato_html,
-            'estado_contrato': self.estado_contrato.value if self.estado_contrato else None,
+            'estado_contrato': self.estado_contrato.value
+            if self.estado_contrato
+            else None,
             'fecha_firma': self.fecha_firma.isoformat() if self.fecha_firma else None
         }
 
@@ -617,6 +666,7 @@ class ContratoConsultaBuro(db.Model):
 # ──────────────────────────────────────────────
 #  Dispositivo
 # ──────────────────────────────────────────────
+
 
 class Dispositivo(db.Model):
     __tablename__ = 'dispositivo'
@@ -629,14 +679,22 @@ class Dispositivo(db.Model):
         db.Enum(EstadoDispositivo), default=EstadoDispositivo.ACTIVO, nullable=False
     )
 
-    usuario_id: Mapped[Optional[int]] = mapped_column(ForeignKey('usuario.id'), nullable=True)
+    usuario_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey('usuario.id'), nullable=True
+    )
     usuario = relationship('Usuario', backref=db.backref('dispositivos', lazy=True))
 
-    contrato_id: Mapped[Optional[int]] = mapped_column(ForeignKey('contrato_compra_venta.id'), nullable=True)
+    contrato_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey('contrato_compra_venta.id'), nullable=True
+    )
     contrato = relationship('ContratoCompraVenta', back_populates='dispositivos')
 
-    fecha_registro: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    fecha_actualizacion: Mapped[Optional[datetime]] = mapped_column(DateTime, onupdate=func.now())
+    fecha_registro: Mapped[datetime] = mapped_column(
+        DateTime, server_default=func.now()
+    )
+    fecha_actualizacion: Mapped[Optional[datetime]] = mapped_column(
+        DateTime, onupdate=func.now()
+    )
 
     def serialize(self) -> dict:
         return {
@@ -647,8 +705,12 @@ class Dispositivo(db.Model):
             'estado': self.estado.value,
             'usuario_id': self.usuario_id,
             'contrato_id': self.contrato_id,
-            'fecha_registro': self.fecha_registro.isoformat() if self.fecha_registro else None,
-            'fecha_actualizacion': self.fecha_actualizacion.isoformat() if self.fecha_actualizacion else None
+            'fecha_registro': self.fecha_registro.isoformat()
+            if self.fecha_registro
+            else None,
+            'fecha_actualizacion': self.fecha_actualizacion.isoformat()
+            if self.fecha_actualizacion
+            else None
         }
 
     def __repr__(self):
@@ -659,52 +721,93 @@ class Dispositivo(db.Model):
 #  Contrato Compra-Venta
 # ──────────────────────────────────────────────
 
+
 class ContratoCompraVenta(db.Model):
     __tablename__ = 'contrato_compra_venta'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     cliente_id: Mapped[int] = mapped_column(ForeignKey('usuario.id'), nullable=False)
-    fecha_creacion: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    fecha_creacion: Mapped[datetime] = mapped_column(
+        DateTime, server_default=func.now()
+    )
     detalles: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    empleado_id: Mapped[Optional[int]] = mapped_column(ForeignKey('empleado.id'), nullable=True)
+    empleado_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey('empleado.id'), nullable=True
+    )
     contrato_url: Mapped[Optional[str]] = mapped_column(String(550), nullable=True)
     hash_contrato: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     contrato_html: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     estado_contrato: Mapped[EstadoContrato] = mapped_column(
-        db.Enum(EstadoContrato, name='estado_contrato_enum', native_enum=False, validate_strings=True),
-        default=EstadoContrato.PENDIENTE, server_default=text("'PENDIENTE'"), nullable=False
+        db.Enum(
+            EstadoContrato,
+            name='estado_contrato_enum',
+            native_enum=False,
+            validate_strings=True
+        ),
+        default=EstadoContrato.PENDIENTE,
+        server_default=text("'PENDIENTE'"),
+        nullable=False
     )
-    fecha_firma: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    estado_deuda = db.Column(
+        db.Enum(EstadoDeuda, name='estado_deuda_enum'),
+        default=EstadoDeuda.AL_DIA,
+        nullable=False
+    )
+
+    fecha_firma: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     precio_total: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     pago_inicial: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
-    plan_pago_id: Mapped[int] = mapped_column(ForeignKey('plan_pago.id'), nullable=False)
+    plan_pago_id: Mapped[int] = mapped_column(
+        ForeignKey('plan_pago.id'), nullable=False
+    )
     pago_semanal: Mapped[Optional[float]] = mapped_column(Numeric, nullable=True)
     ultimo_pago_semanal: Mapped[Optional[float]] = mapped_column(Numeric, nullable=True)
     num_pagos_semanales: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    proximo_pago_fecha: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    proximo_pago_fecha: Mapped[Optional[datetime]] = mapped_column(
+        DateTime, nullable=True
+    )
 
-    usuario = relationship('Usuario', backref=db.backref('contratos_compra_venta', lazy=True))
-    dispositivos = relationship('Dispositivo', back_populates='contrato', cascade='all, delete-orphan')
-    
+    dispositivos = relationship(
+        'Dispositivo', back_populates='contrato', cascade='all, delete-orphan'
+    )
+    pagos = relationship('Pago', backref='contrato', cascade='all, delete-orphan')
+    saldo_pendiente = db.Column(db.Numeric(10, 2), nullable=False, default=0)
+
     def serialize(self) -> dict:
         return {
             'id': self.id,
             'cliente_id': self.cliente_id,
-            'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
+            'fecha_creacion': self.fecha_creacion.isoformat()
+            if self.fecha_creacion
+            else None,
             'detalles': self.detalles,
             'empleado_id': self.empleado_id,
             'contrato_url': self.contrato_url,
             'hash_contrato': self.hash_contrato,
             'contrato_html': self.contrato_html,
-            'estado_contrato': self.estado_contrato.value if self.estado_contrato else None,
+            'estado_deuda': self.estado_deuda.value
+            if self.estado_deuda
+            else None,
+            'estado_contrato': self.estado_contrato.value
+            if self.estado_contrato
+            else None,
             'fecha_firma': self.fecha_firma.isoformat() if self.fecha_firma else None,
             'precio_total': float(self.precio_total),
             'pago_inicial': float(self.pago_inicial),
             'plan_pago_id': self.plan_pago_id,
-            'pago_semanal': float(self.pago_semanal) if self.pago_semanal is not None else None,
-            'ultimo_pago_semanal': float(self.ultimo_pago_semanal) if self.ultimo_pago_semanal is not None else None,
+            'pago_semanal': float(self.pago_semanal)
+            if self.pago_semanal is not None
+            else None,
+            'ultimo_pago_semanal': float(self.ultimo_pago_semanal)
+            if self.ultimo_pago_semanal is not None
+            else None,
             'num_pagos_semanales': self.num_pagos_semanales,
-            'proximo_pago_fecha': self.proximo_pago_fecha.isoformat() if self.proximo_pago_fecha else None
+            'proximo_pago_fecha': self.proximo_pago_fecha.isoformat()
+            if self.proximo_pago_fecha
+            else None,
+            'saldo_pendiente': self.saldo_pendiente
         }
 
     def __repr__(self):
@@ -719,6 +822,7 @@ class ContratoCompraVenta(db.Model):
 #  Plan de Pago
 # ──────────────────────────────────────────────
 
+
 class PlanPago(db.Model):
     __tablename__ = 'plan_pago'
 
@@ -728,8 +832,12 @@ class PlanPago(db.Model):
     duracion_semanas: Mapped[int] = mapped_column(Integer, nullable=False)
     tasa_interes: Mapped[float] = mapped_column(Numeric, nullable=False)
     pago_inicial: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
-    activo: Mapped[bool] = mapped_column(db.Boolean, default=True, server_default=text('true'), nullable=False)
-    fecha_creacion: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    activo: Mapped[bool] = mapped_column(
+        db.Boolean, default=True, server_default=text('true'), nullable=False
+    )
+    fecha_creacion: Mapped[datetime] = mapped_column(
+        DateTime, server_default=func.now()
+    )
 
     tratos = relationship('ContratoCompraVenta', backref='plan_pago', lazy=True)
 
@@ -742,5 +850,37 @@ class PlanPago(db.Model):
             'tasa_interes': float(self.tasa_interes),
             'pago_inicial': str(self.pago_inicial),
             'activo': self.activo,
-            'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None
+            'fecha_creacion': self.fecha_creacion.isoformat()
+            if self.fecha_creacion
+            else None
         }
+
+
+class Pago(db.Model):
+    __tablename__ = 'pago'
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+
+    contrato_id: Mapped[int] = mapped_column(
+        ForeignKey('contrato_compra_venta.id'), nullable=False
+    )
+
+    monto: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+
+    metodo: Mapped[str] = mapped_column(String(50), nullable=False, default='EFECTIVO')
+
+    fecha: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow, nullable=False
+    )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'contrato_id': self.contrato_id,
+            'monto': float(self.monto),
+            'metodo': self.metodo,
+            'fecha': self.fecha.strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+    def __repr__(self):
+        return f"<Pago {self.id} - Contrato {self.contrato_id} - Monto {self.monto}>"
