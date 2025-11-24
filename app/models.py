@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
 from enum import Enum as PyEnum
 from typing import Optional
@@ -16,6 +16,7 @@ from sqlalchemy import (
     func,
     Numeric
 )
+from zoneinfo import ZoneInfo
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -787,9 +788,7 @@ class ContratoCompraVenta(db.Model):
             'contrato_url': self.contrato_url,
             'hash_contrato': self.hash_contrato,
             'contrato_html': self.contrato_html,
-            'estado_deuda': self.estado_deuda.value
-            if self.estado_deuda
-            else None,
+            'estado_deuda': self.estado_deuda.value if self.estado_deuda else None,
             'estado_contrato': self.estado_contrato.value
             if self.estado_contrato
             else None,
@@ -869,17 +868,20 @@ class Pago(db.Model):
 
     metodo: Mapped[str] = mapped_column(String(50), nullable=False, default='EFECTIVO')
 
-    fecha: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+    fecha = db.Column(
+        db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
     )
 
     def to_dict(self):
+        # 🔥 Aquí hacemos la conversión a hora local de México
+        fecha_mx = self.fecha.replace(tzinfo=timezone.utc).astimezone(ZoneInfo("America/Mexico_City"))
+
         return {
             'id': self.id,
             'contrato_id': self.contrato_id,
             'monto': float(self.monto),
             'metodo': self.metodo,
-            'fecha': self.fecha.strftime('%Y-%m-%d %H:%M:%S')
+            'fecha': fecha_mx.isoformat()  # <-- ya va en MX
         }
 
     def __repr__(self):
