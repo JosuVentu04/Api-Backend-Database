@@ -1,10 +1,12 @@
 from typing import Optional
 from app.models import PlanPago
 from flask import current_app
+from cryptography.fernet import Fernet
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from email.message import EmailMessage
 import smtplib, ssl
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP
+import os
 
 # ──────────────────────────────────────────────
 # 1.  TOKENS DE VERIFICACIÓN
@@ -146,3 +148,29 @@ def calcular_plan_pago(plan: PlanPago, monto_total: Decimal, pago_inicial: Decim
         "cuotas": cuotas,
         "total_pagado": int(total_pagado),
     }
+    
+def get_fernet():
+    key = os.getenv("ENCRYPTION_KEY")
+    if not key:
+        raise ValueError("ENCRYPTION_KEY no está definida")
+    return Fernet(key)
+
+
+def encrypt_data(data):
+    f = get_fernet()
+
+    if data is None:
+        return None
+
+    # convertir string a bytes
+    if isinstance(data, str):
+        data = data.encode()
+
+    return f.encrypt(data)
+
+def decrypt_data(data: bytes) -> bytes:
+    """
+    Recibe bytes encriptados y devuelve bytes desencriptados.
+    """
+    f = get_fernet()
+    return f.decrypt(data)

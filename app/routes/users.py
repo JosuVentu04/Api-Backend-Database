@@ -4,9 +4,10 @@ from datetime import datetime, timedelta
 import threading
 import requests
 from sqlalchemy.exc import SQLAlchemyError
-from app.models import Empleado, db, EstadoUsuario, Usuario, TipoIdentificacion, Domicilio, EstadoDeuda, ContratoCompraVenta, Pago
-from app.utils import generate_email_change_token, confirm_email_change_token, send_email
+from app.models import Empleado, db, EstadoUsuario, Usuario, TipoIdentificacion, Domicilio, EstadoDeuda, ContratoCompraVenta, Pago, UserDocument
+from app.utils import generate_email_change_token, confirm_email_change_token, send_email, encrypt_data, decrypt_data
 from app.decoradores import roles_required
+
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -225,6 +226,7 @@ def crear_cliente():
         apellido_paterno=data["apellido_paterno"],
         tipo_identificacion=TipoIdentificacion("id_card"),
         numero_identificacion=data["numero_identificacion"],
+        numero_telefonico=data.get("numero_telefonico"),
         # otros campos que tenga tu modelo Cliente
     )
 
@@ -483,3 +485,83 @@ def buscar_cliente():
         return jsonify({"message": "Cliente no encontrado"}), 404
 
     return jsonify(cliente.serialize()), 200
+
+@users_bp.route("/<int:user_id>/identity-documents", methods=["POST"])
+def upload_identity_documents(user_id):
+    data = request.get_json()
+
+    front_image = data.get("encrypted_data_front")
+    back_image = data.get("encrypted_data_back")
+    type = data.get("type", "INE")
+
+    if not front_image and not back_image:
+        return jsonify({"error": "Se necesita al menos una imagen"}), 400
+
+    # Encriptar imágenes
+    front_image = encrypt_data(front_image) if front_image else None
+    back_image = encrypt_data(back_image) if back_image else None
+
+    doc = UserDocument(
+        user_id=user_id,
+        type=type,
+        front_image=front_image,
+        back_image=back_image
+    )
+
+    db.session.add(doc)
+    db.session.commit()
+
+    return jsonify(doc.to_dict())
+
+@users_bp.route("/<int:user_id>/identity-documents", methods=["GET"])
+def get_identity_documents(user_id):
+    docs = UserDocument.query.filter_by(user_id=user_id).all()
+
+    response = []
+    for doc in docs:
+        front_b64 = None
+        back_b64 = None
+
+        # front_image y back_image son bytes encriptados en la BD
+        if getattr(doc, "front_image", None):
+            decrypted_front = decrypt_data(doc.front_image)   # bytes (ej: base64 string en bytes)
+            # Si almacenaste base64 antes de encriptar, conviértelo a str
+            try:
+                front_b64 = decrypted_front.decode("utf-8")
+            except Exception:
+                # si guardaste raw bytes (jpg), conviértelos a base64
+                import base64
+                front_b64 = base64.b64encode(decrypted_front).decode("utf-8")
+
+        if getattr(doc, "back_image", None):
+            decrypted_back = decrypt_data(doc.back_image)
+            try:
+                back_b64 = decrypted_back.decode("utf-8")
+            except Exception:
+                import base64
+                back_b64 = base64.b64encode(decrypted_back).decode("utf-8")
+
+        response.append({
+            "id": doc.id,
+            "user_id": doc.user_id,
+            "type": getattr(doc, "type", getattr(doc, "document_type", None)),
+            "front_image_base64": front_b64,
+            "back_image_base64": back_b64,
+            "created_at": doc.created_at.isoformat() if doc.created_at else None,
+        })
+
+    return jsonify(response)
+
+@users_bp.route("/<int:user_id>/resumen", methods=["GET"])
+def resumen_usuario(user_id):
+    user = Usuario.query.get(user_id)
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    contratos = [c.serialize() for c in user.contratos]
+
+    return jsonify({
+        "cliente": user.serialize(),   # <- AQUÍ EL CAMBIO
+        "contratos": contratos,
+        "puede_iniciar_venta": all(c.estado_deuda == "LIQUIDADO" for c in user.contratos)
+    })

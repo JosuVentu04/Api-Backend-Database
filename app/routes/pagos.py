@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
@@ -14,7 +14,9 @@ pagos_bp = Blueprint("pagos_bp", __name__, url_prefix="/pagos")
 
 
 @pagos_bp.post("/registrar")
+@jwt_required()
 def registrar_pago():
+    user_id = get_jwt_identity()
     data = request.get_json()
 
     contrato_id = data.get("contrato_id")
@@ -54,6 +56,7 @@ def registrar_pago():
     # 🟩 Registrar el pago CON FECHA DE MÉXICO
     pago = Pago(
         contrato_id=contrato.id,
+        empleado_id=user_id,
         monto=monto,
         metodo=metodo,
         fecha=datetime.now(ZoneInfo("America/Mexico_City"))

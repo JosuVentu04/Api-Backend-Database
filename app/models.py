@@ -871,6 +871,12 @@ class Pago(db.Model):
     fecha = db.Column(
         db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
     )
+    
+    empleado_id = db.Column(
+        db.Integer,
+        db.ForeignKey("empleado.id"),
+        nullable=False
+    )
 
     def to_dict(self):
         # 🔥 Aquí hacemos la conversión a hora local de México
@@ -881,8 +887,34 @@ class Pago(db.Model):
             'contrato_id': self.contrato_id,
             'monto': float(self.monto),
             'metodo': self.metodo,
+            'empleado_id': self.empleado_id,
             'fecha': fecha_mx.isoformat()  # <-- ya va en MX
         }
 
     def __repr__(self):
         return f"<Pago {self.id} - Contrato {self.contrato_id} - Monto {self.monto}>"
+
+class UserDocument(db.Model):
+    __tablename__ = 'user_documents'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+
+    # INE, PASAPORTE, etc.
+    type = db.Column(db.String(50), nullable=False)
+
+    # ENCRIPTADOS
+    front_image = db.Column(db.LargeBinary, nullable=True)
+    back_image = db.Column(db.LargeBinary, nullable=True)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "type": self.type,
+            "has_front_image": self.front_image is not None,
+            "has_back_image": self.back_image is not None,
+            "created_at": self.created_at.isoformat(),
+        }

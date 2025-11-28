@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify, send_from_directory
-from app.models import ContratoCompraVenta, Usuario, PlanPago, db
+from app.models import ContratoCompraVenta, Usuario, PlanPago, db, Pago
 from app.utils import calcular_plan_pago
 from decimal import Decimal
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+from flask_jwt_extended import jwt_required, get_jwt_identity
 import hashlib
 import os
 
@@ -18,13 +20,18 @@ os.makedirs(CONTRATOS_DIR, exist_ok=True)
 # 1️⃣ Crear contrato de compra-venta
 # ------------------------------------------------------------
 @contratos_cv_bp.route('/crear', methods=['POST'])
+@jwt_required()
 def crear_contrato_compra_venta():
+    user_id = get_jwt_identity()
     data = request.get_json()
     cliente_id = data.get("cliente_id")
     plan_id = data.get("plan_id")
     monto_base = data.get("monto_base")
     monto_total = data.get("monto_total")
     pago_inicial = data.get("pago_inicial", 0)
+    metodo_inicial = data.get("metodo_inicial", "EFECTIVO")  # 🔥 NUEVO
+    
+    
 
     if not all([cliente_id, plan_id, monto_total]):
         return jsonify({"error": "cliente_id, plan_id y monto_total son requeridos"}), 400
@@ -36,17 +43,28 @@ def crear_contrato_compra_venta():
     plan = PlanPago.query.get(plan_id)
     if not plan:
         return jsonify({"error": "Plan no encontrado"}), 404
+    
+    contrato_existente = ContratoCompraVenta.query.filter(
+        ContratoCompraVenta.cliente_id == cliente_id,
+        ContratoCompraVenta.estado_deuda != "LIQUIDADO"   # si NO está liquidado → está bloqueado
+    ).first()
+
+    if contrato_existente:
+        return jsonify({
+            "error": "El cliente ya tiene un contrato activo o no liquidado.",
+            "contrato_id": contrato_existente.id,
+            "estado": contrato_existente.estado_deuda.value
+        }), 400
 
     try:
         monto_total_dec = Decimal(str(monto_total))
         monto_base_dec = Decimal(str(monto_base)) if monto_base else monto_total_dec
         pago_inicial_dec = Decimal(str(pago_inicial))
 
-        # Validación: Pago inicial menor o igual a 50% de base
+        # Validación
         if pago_inicial_dec < 0 or pago_inicial_dec > (monto_base_dec / 2):
             return jsonify({"error": "Pago inicial inválido"}), 400
 
-        # Calcular cuotas
         resultado_plan = calcular_plan_pago(plan, monto_total_dec, pago_inicial_dec, monto_base_dec)
         ultima_cuota = resultado_plan["cuotas"][-1] if resultado_plan["cuotas"] else 0
 
@@ -65,15 +83,31 @@ def crear_contrato_compra_venta():
             num_pagos_semanales=plan.duracion_semanas,
             proximo_pago_fecha=datetime.utcnow() + timedelta(weeks=1),
             estado_contrato="PENDIENTE",
-            saldo_pendiente=monto_total_dec   # 🔥 AGREGADO
+            saldo_pendiente=monto_total_dec   # 🔥 NO SE RESTA EL INICIAL
         )
 
         db.session.add(contrato)
+        db.session.flush()  # 🔥 Necesario para obtener contrato.id antes de commit
+
+        # ---------------------------------------
+        # 🔥 REGISTRAR PAGO INICIAL SIN AFECTAR DEUDA
+        # ---------------------------------------
+        if pago_inicial_dec > 0:
+            pago = Pago(
+                contrato_id=contrato.id,
+                monto=pago_inicial_dec,
+                metodo=metodo_inicial,
+                empleado_id=user_id,  # Opcional
+                fecha=datetime.now(ZoneInfo("America/Mexico_City"))  # 🔥 FECHA LOCAL
+            )
+            db.session.add(pago)
+
         db.session.commit()
 
         return jsonify({
             "mensaje": "Contrato de compra-venta creado correctamente",
             "contrato": contrato.serialize(),
+            "pago_inicial_registrado": True if pago_inicial_dec > 0 else False,
             "plan_actualizado": {
                 "id": plan.id,
                 "nombre_plan": plan.nombre_plan,
