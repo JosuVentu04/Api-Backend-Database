@@ -274,6 +274,7 @@ class Usuario(db.Model):
     )
     contratos = db.relationship('ContratoCompraVenta', backref='usuario', lazy=True)
 
+
     def serialize(self) -> dict:
         domicilio = self.domicilios[0] if self.domicilios else None
         return {
@@ -501,6 +502,10 @@ class Catalogo_Modelos(db.Model):
     fecha_actualizacion: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), nullable=True, onupdate=func.now()
     )
+    
+    contratos: Mapped[list["ContratoCompraVenta"]] = relationship(
+    back_populates="modelo"
+)
 
     def serialize_basic(self) -> dict:
         """Serialización básica para listado"""
@@ -728,6 +733,7 @@ class ContratoCompraVenta(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     cliente_id: Mapped[int] = mapped_column(ForeignKey('usuario.id'), nullable=False)
+    modelo_id: Mapped[int] = mapped_column(ForeignKey("catalogo_modelos.id"))
     fecha_creacion: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now()
     )
@@ -774,12 +780,14 @@ class ContratoCompraVenta(db.Model):
         'Dispositivo', back_populates='contrato', cascade='all, delete-orphan'
     )
     pagos = relationship('Pago', backref='contrato', cascade='all, delete-orphan')
+    modelo: Mapped["Catalogo_Modelos"] = relationship(back_populates="contratos")
     saldo_pendiente = db.Column(db.Numeric(10, 2), nullable=False, default=0)
 
     def serialize(self) -> dict:
         return {
             'id': self.id,
             'cliente_id': self.cliente_id,
+            'modelo_id': self.modelo_id,
             'fecha_creacion': self.fecha_creacion.isoformat()
             if self.fecha_creacion
             else None,
@@ -918,3 +926,13 @@ class UserDocument(db.Model):
             "has_back_image": self.back_image is not None,
             "created_at": self.created_at.isoformat(),
         }
+        
+class PendingIdentityDocument(db.Model):
+    __tablename__ = 'pending_identity_documents'
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.String, unique=True)
+    encrypted_front = db.Column(db.LargeBinary)
+    encrypted_back = db.Column(db.LargeBinary)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    

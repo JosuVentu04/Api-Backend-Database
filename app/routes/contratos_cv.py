@@ -25,6 +25,7 @@ def crear_contrato_compra_venta():
     user_id = get_jwt_identity()
     data = request.get_json()
     cliente_id = data.get("cliente_id")
+    modelo_id = data.get("modelo_id")  # 🔥 NUEVO
     plan_id = data.get("plan_id")
     monto_base = data.get("monto_base")
     monto_total = data.get("monto_total")
@@ -75,6 +76,7 @@ def crear_contrato_compra_venta():
         # Crear contrato
         contrato = ContratoCompraVenta(
             cliente_id=cliente_id,
+            modelo_id=modelo_id,  # 🔥 NUEVO
             precio_total=monto_total_dec,
             pago_inicial=pago_inicial_dec,
             plan_pago_id=plan.id,
