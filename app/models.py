@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, date
 from dateutil.relativedelta import relativedelta
 from enum import Enum as PyEnum
 from typing import Optional
@@ -79,6 +79,13 @@ class EstadoDeuda(PyEnum):
     AL_DIA = 'AL_DIA'
     ATRASADO = 'ATRASADO'
     LIQUIDADO = 'LIQUIDADO'
+
+
+class EstadoCorte(PyEnum):
+    COMPLETO = 'COMPLETO'
+    FALTANTE = 'FALTANTE'
+    SOBRANTE = 'SOBRANTE'
+    PENDIENTE = 'PENDIENTE'
 
 
 def generar_codigo_cliente():
@@ -273,7 +280,6 @@ class Usuario(db.Model):
         Boolean, default=False, server_default=text('false'), nullable=False
     )
     contratos = db.relationship('ContratoCompraVenta', backref='usuario', lazy=True)
-
 
     def serialize(self) -> dict:
         domicilio = self.domicilios[0] if self.domicilios else None
@@ -502,10 +508,10 @@ class Catalogo_Modelos(db.Model):
     fecha_actualizacion: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), nullable=True, onupdate=func.now()
     )
-    
-    contratos: Mapped[list["ContratoCompraVenta"]] = relationship(
-    back_populates="modelo"
-)
+
+    contratos: Mapped[list['ContratoCompraVenta']] = relationship(
+        back_populates='modelo'
+    )
 
     def serialize_basic(self) -> dict:
         """Serialización básica para listado"""
@@ -733,7 +739,7 @@ class ContratoCompraVenta(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     cliente_id: Mapped[int] = mapped_column(ForeignKey('usuario.id'), nullable=False)
-    modelo_id: Mapped[int] = mapped_column(ForeignKey("catalogo_modelos.id"))
+    modelo_id: Mapped[int] = mapped_column(ForeignKey('catalogo_modelos.id'))
     fecha_creacion: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now()
     )
@@ -780,7 +786,7 @@ class ContratoCompraVenta(db.Model):
         'Dispositivo', back_populates='contrato', cascade='all, delete-orphan'
     )
     pagos = relationship('Pago', backref='contrato', cascade='all, delete-orphan')
-    modelo: Mapped["Catalogo_Modelos"] = relationship(back_populates="contratos")
+    modelo: Mapped['Catalogo_Modelos'] = relationship(back_populates='contratos')
     saldo_pendiente = db.Column(db.Numeric(10, 2), nullable=False, default=0)
 
     def serialize(self) -> dict:
@@ -879,16 +885,15 @@ class Pago(db.Model):
     fecha = db.Column(
         db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
     )
-    
-    empleado_id = db.Column(
-        db.Integer,
-        db.ForeignKey("empleado.id"),
-        nullable=False
-    )
+
+    empleado_id = db.Column(db.Integer, db.ForeignKey('empleado.id'), nullable=False)
+    sucursal_id = db.Column(db.Integer, db.ForeignKey('sucursal.id'), nullable=True)
 
     def to_dict(self):
         # 🔥 Aquí hacemos la conversión a hora local de México
-        fecha_mx = self.fecha.replace(tzinfo=timezone.utc).astimezone(ZoneInfo("America/Mexico_City"))
+        fecha_mx = self.fecha.replace(tzinfo=timezone.utc).astimezone(
+            ZoneInfo('America/Mexico_City')
+        )
 
         return {
             'id': self.id,
@@ -896,11 +901,13 @@ class Pago(db.Model):
             'monto': float(self.monto),
             'metodo': self.metodo,
             'empleado_id': self.empleado_id,
-            'fecha': fecha_mx.isoformat()  # <-- ya va en MX
+            'sucursal_id': self.sucursal_id,
+            'fecha': fecha_mx.isoformat(),  # <-- ya va en MX
         }
 
     def __repr__(self):
         return f"<Pago {self.id} - Contrato {self.contrato_id} - Monto {self.monto}>"
+
 
 class UserDocument(db.Model):
     __tablename__ = 'user_documents'
@@ -919,14 +926,15 @@ class UserDocument(db.Model):
 
     def to_dict(self):
         return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "type": self.type,
-            "has_front_image": self.front_image is not None,
-            "has_back_image": self.back_image is not None,
-            "created_at": self.created_at.isoformat(),
+            'id': self.id,
+            'user_id': self.user_id,
+            'type': self.type,
+            'has_front_image': self.front_image is not None,
+            'has_back_image': self.back_image is not None,
+            'created_at': self.created_at.isoformat()
         }
-        
+
+
 class PendingIdentityDocument(db.Model):
     __tablename__ = 'pending_identity_documents'
     id = db.Column(db.Integer, primary_key=True)
@@ -934,5 +942,79 @@ class PendingIdentityDocument(db.Model):
     encrypted_front = db.Column(db.LargeBinary)
     encrypted_back = db.Column(db.LargeBinary)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class CorteCaja(db.Model):
+    __tablename__ = 'corte_caja'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    empleado_id = db.Column(db.Integer, db.ForeignKey('empleado.id'), nullable=False)
+    sucursal_id = db.Column(db.Integer, db.ForeignKey('sucursal.id'), nullable=False)
+
+    fecha_corte = db.Column(db.Date, default=date.today, nullable=False)
+
+    # Totales calculados del sistema
+    total_efectivo = db.Column(db.Numeric(10, 2), default=0)
+    total_tarjeta = db.Column(db.Numeric(10, 2), default=0)
+    total_transferencia = db.Column(db.Numeric(10, 2), default=0)
+    total_general = db.Column(db.Numeric(10, 2), default=0)
+
+    # ❗️Cantidad de transacciones
+    trans_efectivo = db.Column(db.Integer, default=0)
+    trans_tarjeta = db.Column(db.Integer, default=0)
+    trans_transferencia = db.Column(db.Integer, default=0)
+
+    # Totales reales del vendedor
+    real_efectivo = db.Column(db.Numeric(10, 2), default=0)
+    real_tarjeta = db.Column(db.Numeric(10, 2), default=0)
+    real_transferencia = db.Column(db.Numeric(10, 2), default=0)
+
+    # Diferencias
+    dif_efectivo = db.Column(db.Numeric(10, 2), default=0)
+    dif_tarjeta = db.Column(db.Numeric(10, 2), default=0)
+    dif_transferencia = db.Column(db.Numeric(10, 2), default=0)
+
+    # Estado usando ENUM
+    estado = db.Column(
+        db.Enum(EstadoCorte),
+        default=EstadoCorte.PENDIENTE,
+        nullable=False
+    )
+
+    observaciones = db.Column(db.Text, nullable=True)
     
-    
+    confirmado_empleado = db.Column(db.Boolean, default=False)
+    confirmado_admin = db.Column(db.Boolean, default=False)
+    fecha_confirmacion_empleado = db.Column(db.DateTime)
+    fecha_cierre = db.Column(db.DateTime)
+    cerrado_por_admin_id = db.Column(db.Integer, db.ForeignKey('empleado.id'))
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "empleado_id": self.empleado_id,
+            "sucursal_id": self.sucursal_id,
+            "fecha_corte": str(self.fecha_corte),
+
+            "total_efectivo": float(self.total_efectivo),
+            "total_tarjeta": float(self.total_tarjeta),
+            "total_transferencia": float(self.total_transferencia),
+            "total_general": float(self.total_general),
+
+            # Conteos
+            "trans_efectivo": self.trans_efectivo,
+            "trans_tarjeta": self.trans_tarjeta,
+            "trans_transferencia": self.trans_transferencia,
+
+            "real_efectivo": float(self.real_efectivo),
+            "real_tarjeta": float(self.real_tarjeta),
+            "real_transferencia": float(self.real_transferencia),
+
+            "dif_efectivo": float(self.dif_efectivo),
+            "dif_tarjeta": float(self.dif_tarjeta),
+            "dif_transferencia": float(self.dif_transferencia),
+
+            "estado": self.estado.value,
+            "observaciones": self.observaciones
+        }

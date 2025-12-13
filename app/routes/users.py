@@ -265,7 +265,7 @@ def crear_cliente():
 
     # Obtener session_id del frontend
     session_id = data.get("session_id")
-    if not session_id:
+    if data.get("origen") == "veriff" and not session_id:
         return jsonify({"error": "session_id faltante"}), 400
 
     # Crear cliente (aún sin commit para poder usar su ID)
@@ -353,7 +353,7 @@ def editar_cliente(id):
         'apellido_paterno',
         'apellido_materno',
         'correo',
-        'telefono',
+        'numero_telefonico',
         'direccion',
         'rfc',
         'fecha_nacimiento',
@@ -698,7 +698,8 @@ def resumen_usuario(user_id):
             'cliente': user.serialize(),  # <- AQUÍ EL CAMBIO
             'contratos': contratos,
             'puede_iniciar_venta': all(
-                c.estado_deuda == 'LIQUIDADO' for c in user.contratos
+                str(c.estado_deuda).strip().upper().endswith('LIQUIDADO')
+                for c in user.contratos
             )
         }
     )
