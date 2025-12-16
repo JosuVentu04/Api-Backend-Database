@@ -1,6 +1,7 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta, date, time
+from werkzeug.security import check_password_hash
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from zoneinfo import ZoneInfo
@@ -8,7 +9,7 @@ from numbers import Number
 
 
 from app import db
-from app.models import Pago, ContratoCompraVenta, EstadoDeuda, CorteCaja, Empleado
+from app.models import Pago, ContratoCompraVenta, EstadoDeuda, CorteCaja, Empleado, EstadoCorte, RolesEmpleado
 
 
 pagos_bp = Blueprint('pagos_bp', __name__, url_prefix='/pagos')
@@ -21,6 +22,9 @@ CAMPOS_COMPARABLES = {
     "transacciones_tarjeta"
 }
 
+def validar_corte_editable(corte):
+    if corte.estado != EstadoCorte.PENDIENTE:
+        abort(409, description="El corte ya fue cerrado y no puede modificarse")
 
 @pagos_bp.post('/registrar')
 @jwt_required()
@@ -219,6 +223,8 @@ def comparar_corte(corte_id):
     corte = CorteCaja.query.get(corte_id)
     if not corte:
         return jsonify({'error': 'Corte de caja no encontrado'}), 404
+    
+    validar_corte_editable(corte)
 
     # 🔵 LO QUE SE TIENE (BD)
     datos_actuales = {
@@ -260,4 +266,93 @@ def comparar_corte(corte_id):
         'declarado': datos_declarados,
         'diferencias': diferencias,
         'observaciones': datos_declarados.get('observaciones')
+    })
+
+@pagos_bp.route('/corte-caja/confirmar-empleado/<int:corte_id>', methods=['POST'])
+def confirmar_corte_empleado(corte_id):
+    corte = CorteCaja.query.get_or_404(corte_id)
+    
+    validar_corte_editable(corte)
+    
+    data = request.json or {}
+
+    correo = data.get('correo')
+    password = data.get('password')
+
+    if not correo or not password:
+        return jsonify({'error': 'Correo y contraseña requeridos'}), 400
+
+    empleado = Empleado.query.filter_by(correo=correo).first()
+    if not empleado or not empleado.check_password(password):
+        return jsonify({'error': 'Credenciales inválidas'}), 401
+
+    if empleado.id != corte.empleado_id:
+        return jsonify({'error': 'Este empleado no pertenece al corte'}), 403
+
+    if corte.confirmado_empleado:
+        return jsonify({'error': 'El corte ya fue confirmado'}), 400
+
+    corte.real_efectivo = data.get('efectivo')
+    corte.real_tarjeta = data.get('tarjeta')
+    corte.real_transferencia = data.get('transferencia')
+
+    corte.dif_efectivo = corte.real_efectivo - corte.total_efectivo
+    corte.dif_tarjeta = corte.real_tarjeta - corte.total_tarjeta
+    corte.dif_transferencia = corte.real_transferencia - corte.total_transferencia
+
+    corte.observaciones = data.get('observaciones')
+    corte.confirmado_empleado = True
+    corte.fecha_confirmacion_empleado = datetime.utcnow()
+    corte.estado = EstadoCorte.DECLARADO
+
+    db.session.commit()
+
+    return jsonify({
+        "msg": "Corte confirmado por el empleado",
+        "estado": corte.estado.value
+    })
+    
+@pagos_bp.route('/corte-caja/cerrar/<int:corte_id>', methods=['POST'])
+def cerrar_corte(corte_id):
+    corte = CorteCaja.query.get_or_404(corte_id)
+
+    empleado_id = request.json.get('empleado_id')
+    if not empleado_id:
+        return jsonify({'error': 'empleado_id requerido'}), 400
+
+    empleado = Empleado.query.get_or_404(empleado_id)
+
+    if empleado.rol not in [RolesEmpleado.GERENTE, RolesEmpleado.ADMIN]:
+        return jsonify({'error': 'No autorizado'}), 403
+
+    if not corte.confirmado_empleado:
+        return jsonify({'error': 'El empleado no ha confirmado el corte'}), 400
+    
+    if empleado.id == corte.empleado_id:
+        return jsonify({"error": "No puedes cerrar tu propio corte de caja"}), 403
+    
+
+    dif_total = (
+        corte.dif_efectivo +
+        corte.dif_tarjeta +
+        corte.dif_transferencia
+    )
+
+    if dif_total == 0:
+        corte.estado = EstadoCorte.COMPLETO
+    elif dif_total < 0:
+        corte.estado = EstadoCorte.FALTANTE
+    else:
+        corte.estado = EstadoCorte.SOBRANTE
+
+    corte.confirmado_admin = True
+    corte.fecha_cierre = datetime.utcnow()
+    corte.cerrado_por_admin_id = empleado.id
+
+    db.session.commit()
+
+    return jsonify({
+        "msg": "Corte cerrado correctamente",
+        "estado": corte.estado.value,
+        "diferencia_total": float(dif_total)
     })

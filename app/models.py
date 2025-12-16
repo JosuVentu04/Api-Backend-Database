@@ -40,11 +40,6 @@ class EstadoContrato(PyEnum):
     CANCELADO = 'RECHAZADO'
 
 
-class EstadoUsuario(PyEnum):
-    ACTIVO = 'ACTIVO'
-    INACTIVO = 'INACTIVO'
-
-
 class RolesEmpleado(PyEnum):
     ADMIN = 'ADMIN'
     SOPORTE = 'SOPORTE'
@@ -82,6 +77,7 @@ class EstadoDeuda(PyEnum):
 
 
 class EstadoCorte(PyEnum):
+    DECLARADO = 'DECLARADO'
     COMPLETO = 'COMPLETO'
     FALTANTE = 'FALTANTE'
     SOBRANTE = 'SOBRANTE'
